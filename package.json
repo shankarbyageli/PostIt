@@ -1,0 +1,30 @@
+{
+  "name": "PostIt",
+  "version": "1.0.0",
+  "description": "This is a content sharing website where you can share your post with others",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "nyc mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shankarbyageli/PostIt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shankarbyageli/PostIt/issues"
+  },
+  "homepage": "https://github.com/shankarbyageli/PostIt#readme",
+  "devDependencies": {
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

@@ -1,6 +1,7 @@
 language: node
 node_js:
   - 12.18
+# safelist
 branches:
   only:
-    -master
+  - master

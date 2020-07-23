@@ -1,19 +1,20 @@
 CREATE TABLE IF NOT EXISTS users (
-  user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   username VARCHAR(50) UNIQUE NOT NULL,
   avatar_url TEXT
 );
 
 CREATE TABLE IF NOT EXISTS stories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author_id INTEGER FOREIGN KEY REFERENCES users(user_id),
+  author_id INTEGER,
   title TEXT,
   content TEXT,
-  last_modified TIMESTAMP NOT NULL
+  last_modified TIMESTAMP NOT NULL,
+  FOREIGN KEY(author_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS published_stories (
-  story_id INTEGER FOREIGN KEY REFERENCES stories (id) PRIMARY KEY,
+  FOREIGN KEY REFERENCES stories (id) PRIMARY KEY,
   published_at TIMESTAMP NOT NULL,
   cover_image_id INTEGER FOREIGN KEY REFERENCES images (image_id)
 );

@@ -8,4 +8,6 @@ const isSignedIn = function (req, res, next) {
   next();
 };
 
-module.exports = { isSignedIn };
+const publish = function (req, res) {};
+
+module.exports = { isSignedIn, publish };

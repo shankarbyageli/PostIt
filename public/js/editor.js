@@ -21,7 +21,7 @@ const getPostContent = function () {
   const data = { title };
   editor.save().then((outputData) => {
     data.content = outputData;
-    sendReq('POST', '/publish', () => {}, JSON.stringify(data));
+    sendReq('POST', '/user/publish', () => {}, JSON.stringify(data));
   });
 };
 

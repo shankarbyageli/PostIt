@@ -2,6 +2,7 @@ const queryString = require('querystring');
 const https = require('https');
 const { client_id, client_secret } = require('../config');
 const { getUserDetail } = require('./lib');
+const app = require('./app');
 
 const isSignedIn = function (req, res, next) {
   const sessions = req.app.locals.sessions;
@@ -13,7 +14,11 @@ const isSignedIn = function (req, res, next) {
   next();
 };
 
-const publish = function (req, res) {};
+const publish = function (req, res) {
+  console.log(req.body);
+
+  req.app.locals.db.addPost(req.body);
+};
 
 const signIn = function (req, res) {
   const params = `client_id=${client_id}&client_secret=${client_secret}`;

@@ -1,15 +1,9 @@
-#! /bin/bash
-
-sqlite3 $1 << 'END_SQL'
-
-DROP TABLE IF EXISTS users;
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   username VARCHAR(50) UNIQUE NOT NULL,
   avatar_url TEXT
 );
 
-DROP TABLE IF EXISTS stories;
-CREATE TABLE stories (
+CREATE TABLE IF NOT EXISTS stories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   author VARCHAR(50) UNIQUE NOT NULL,
   title TEXT,
@@ -17,28 +11,24 @@ CREATE TABLE stories (
   last_modified TIMESTAMP NOT NULL
 );
 
-DROP TABLE IF EXISTS published_stories;
-CREATE TABLE published_stories (
+CREATE TABLE IF NOT EXISTS published_stories (
   story_id INTEGER PRIMARY KEY,
   published_at TIMESTAMP NOT NULL,
   cover_image_id INTEGER 
 );
 
-DROP TABLE IF EXISTS images;
-CREATE TABLE images (
+CREATE TABLE IF NOT EXISTS images (
   image_id INTEGER PRIMARY KEY AUTOINCREMENT,
   image_path TEXT
 );
 
-DROP TABLE IF EXISTS claps;
-CREATE TABLE claps (
+CREATE TABLE IF NOT EXISTS claps (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   story_id INTEGER NOT NULL,
   clapped_by INTEGER NOT NULL
 );
 
-DROP TABLE IF EXISTS comments;
-CREATE TABLE comments (
+CREATE TABLE IF NOT EXISTS comments (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   comment_on INTEGER NOT NULL,
   comment_by INTEGER NOT NULL,
@@ -46,16 +36,12 @@ CREATE TABLE comments (
   comment TEXT NOT NULL
 );
 
-DROP TABLE IF EXISTS followers;
-CREATE TABLE followers (
+CREATE TABLE IF NOT EXISTS followers (
   user_id VARCHAR(50) UNIQUE NOT NULL,
   follower_id VARCHAR(50) UNIQUE NOT NULL
 );
 
-DROP TABLE IF EXISTS tags;
-CREATE TABLE tags (
+CREATE TABLE IF NOT EXISTS tags (
   story_id INTEGER NOT NULL,
   tag TEXT NOT NULL
 );
-
-END_SQL

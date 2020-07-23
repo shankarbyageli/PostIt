@@ -1,0 +1,121 @@
+body {
+  font-family: medium-content-sans-serif-font, 'Lucida Grande',
+    'Lucida Sans Unicode', 'Lucida Sans', Geneva, Arial, sans-serif;
+}
+#logo {
+  content: url(/images/logo.png);
+  margin-left: 150px;
+}
+#menu-bar {
+  height: fit-content;
+  display: flex;
+  justify-content: space-between;
+}
+#search {
+  content: url(/images/search.svg);
+  width: 25px;
+  height: 50px;
+  margin-right: 17px;
+}
+#actions {
+  margin-right: 180px;
+}
+#user-profile {
+  content: url(/images/avatar.png);
+  width: 37px;
+  height: 37px;
+}
+#all-posts {
+  display: flex;
+  flex-direction: column;
+}
+.post {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 800px;
+  /* height: 200px; */
+  height: fit-content;
+  margin-bottom: 25px;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 600px;
+}
+.headers {
+  display: flex;
+  flex-direction: column;
+}
+.cover-image {
+  width: 175px;
+  height: 175px;
+  margin: auto 0;
+}
+.head-line {
+  font-size: 22px;
+  font-weight: 600;
+}
+.details {
+  margin-top: 9px;
+  font-size: 17px;
+  color: #58585b;
+}
+.author-name {
+  font-size: 13px;
+  color: #555252;
+}
+.date {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #58585b;
+}
+/* --------------------------- */
+#buttonsBox,
+#actions {
+  align-items: center;
+  display: flex;
+}
+button {
+  font-size: 15px;
+  height: 25px;
+  text-align: center;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-right: 17px;
+}
+#publish > button {
+  background: #03a87c;
+}
+#draft > button {
+  background: rgb(0, 174, 255);
+}
+
+#actions {
+  display: flex;
+  justify-content: center;
+}
+
+#title {
+  outline: none;
+  border-style: none;
+  font-size: 34px;
+  margin-top: 40px;
+  margin-left: 26.5vw;
+  color: black;
+  word-wrap: break-word;
+}
+
+#title[placeholder]:empty:before {
+  content: attr(placeholder);
+  color: #b3b3b1;
+}
+
+#editorjs {
+  font-size: 18px;
+  margin-top: 20px;
+  color: #555252;
+}

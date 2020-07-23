@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/editor.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PostIt</title>
+    <script type="module" src="/js/editor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest"></script>
+  </head>
+
+  <body>
+    <div id="menu-bar">
+      <img id="logo" />
+      <div id="actions">
+        <div id="buttonsBox">
+          <span id="publish"><button>Publish</button></span>
+        </div>
+        <div id="user-profile"></div>
+      </div>
+    </div>
+    <div id="all-posts">
+      <div id="title" contenteditable="true" placeholder="Title.."></div>
+      <div id="editorjs"></div>
+    </div>
+  </body>
+</html>

@@ -4,19 +4,22 @@ const { client_id, client_secret } = require('../config');
 const { getUserDetail } = require('./lib');
 const app = require('./app');
 
-const isSignedIn = function (req, res, next) {
+const ensureLogin = function (req, res, next) {
   const sessions = req.app.locals.sessions;
   if (sessions[req.cookies.sId] !== undefined) {
     req.user = sessions[req.cookies.sId];
-    res.send(`Dash board: ${req.user}`);
+    next();
   }
   req.url = '/signIn.html';
   next();
 };
 
+const serveDashboard = function (req, res, next) {
+  res.send(`Dash board: ${req.user}`);
+};
+
 const publish = function (req, res) {
   console.log(req.body);
-
   req.app.locals.db.addPost(req.body);
 };
 
@@ -48,4 +51,10 @@ const githubCallback = function (req, res) {
   res.end();
 };
 
-module.exports = { isSignedIn, signIn, githubCallback, publish };
+module.exports = {
+  serveDashboard,
+  signIn,
+  githubCallback,
+  publish,
+  ensureLogin,
+};

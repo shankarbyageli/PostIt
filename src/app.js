@@ -8,7 +8,6 @@ const {
   serveDashboard,
   signIn,
   githubCallback,
-  publish,
   ensureLogin,
 } = require('./handlers');
 const { userRouter } = require('./userRouter');
@@ -23,11 +22,9 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/user', userRouter);
-app.use(ensureLogin);
 app.get('/', serveDashboard);
 app.use(express.static(`${__dirname}/../public`));
 app.get('/signIn', signIn);
 app.get('/callback', githubCallback);
-app.post('/publish', publish);
 
 module.exports = app;

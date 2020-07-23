@@ -15,12 +15,18 @@ const ensureLogin = function (req, res, next) {
 };
 
 const serveDashboard = function (req, res, next) {
-  res.send(`Dash board: ${req.user}`);
+  const sessions = req.app.locals.sessions;
+  if (sessions[req.cookies.sId] !== undefined) {
+    req.user = sessions[req.cookies.sId];
+    res.send(`Dash board: ${req.user}`);
+  }
+  req.url = '/signIn.html';
+  next();
 };
 
 const publish = function (req, res) {
-  console.log(req.body);
   req.app.locals.db.addPost(req.body);
+  res.send('Published');
 };
 
 const signIn = function (req, res) {

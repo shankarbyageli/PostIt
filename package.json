@@ -23,11 +23,14 @@
   },
   "homepage": "https://github.com/shankarbyageli/PostIt#readme",
   "devDependencies": {
+    "chai": "^4.2.0",
     "mocha": "^8.0.1",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "cookie-parser": "^1.4.5"
   }
 }

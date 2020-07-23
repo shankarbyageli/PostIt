@@ -14,4 +14,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', isSignedIn);
 app.use(express.static(`${__dirname}/../public`));
 
+app.post('/publish', (req, res) => {
+  const { time, content } = req.body;
+  console.log(content);
+});
+
 module.exports = app;

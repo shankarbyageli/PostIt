@@ -1,20 +1,21 @@
 CREATE TABLE IF NOT EXISTS users (
+  user_id INTEGER PRIMARY KEY AUTOINCREMENT,
   username VARCHAR(50) UNIQUE NOT NULL,
   avatar_url TEXT
 );
 
 CREATE TABLE IF NOT EXISTS stories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author VARCHAR(50) UNIQUE NOT NULL,
+  author_id INTEGER FOREIGN KEY REFERENCES users(user_id),
   title TEXT,
   content TEXT,
   last_modified TIMESTAMP NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS published_stories (
-  story_id INTEGER PRIMARY KEY,
+  story_id INTEGER FOREIGN KEY REFERENCES stories (id) PRIMARY KEY,
   published_at TIMESTAMP NOT NULL,
-  cover_image_id INTEGER 
+  cover_image_id INTEGER FOREIGN KEY REFERENCES images (image_id)
 );
 
 CREATE TABLE IF NOT EXISTS images (
@@ -24,24 +25,24 @@ CREATE TABLE IF NOT EXISTS images (
 
 CREATE TABLE IF NOT EXISTS claps (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  story_id INTEGER NOT NULL,
-  clapped_by INTEGER NOT NULL
+  story_id INTEGER INTEGER FOREIGN KEY REFERENCES stories (id) NOT NULL,
+  clapped_by INTEGER FOREIGN KEY REFERENCES users (user_id)
 );
 
 CREATE TABLE IF NOT EXISTS comments (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  comment_on INTEGER NOT NULL,
-  comment_by INTEGER NOT NULL,
+  comment_on INTEGER FOREIGN KEY REFERENCES stories (id) NOT NULL,
+  comment_by INTEGER FOREIGN KEY REFERENCES users (user_id),
   commented_at TIMESTAMP NOT NULL,
   comment TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS followers (
-  user_id VARCHAR(50) UNIQUE NOT NULL,
-  follower_id VARCHAR(50) UNIQUE NOT NULL
+  user_id INTEGER FOREIGN KEY REFERENCES users (user_id),
+  follower_id INTEGER FOREIGN KEY REFERENCES users (user_id)
 );
 
 CREATE TABLE IF NOT EXISTS tags (
-  story_id INTEGER NOT NULL,
+  story_id INTEGER INTEGER FOREIGN KEY REFERENCES stories (id) NOT NULL,
   tag TEXT NOT NULL
 );

@@ -83,6 +83,27 @@ class Database {
       );
     });
   };
+
+  getPostDetails = function (blogId) {
+    return new Promise((resolve, reject) => {
+      this.db.get(
+        'select * from stories where story_id = ?',
+        [blogId],
+        (err, row) => {
+          resolve(row);
+        }
+      );
+    });
+  };
+
+  getPosts = function (count) {
+    const query = `select * from published_stories order by published_at desc limit ${count}`;
+    return new Promise((resolve, reject) => {
+      this.db.all(query, (err, rows) => {
+        resolve(rows);
+      });
+    });
+  };
 }
 
 module.exports = Database;

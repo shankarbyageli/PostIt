@@ -31,7 +31,7 @@ describe('GET /', () => {
     request(app)
       .get('/')
       .set('Cookie', 'sId=1234')
-      .expect(/Phaneendra/, done);
+      .expect(/PostIt/, done);
   });
 });
 

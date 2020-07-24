@@ -1,0 +1,23 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  script.
+  link(rel="stylesheet" href="/user/css/dashBoard.css")
+  link(rel="stylesheet" href="/user/css/editor.css")
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title PostIt
+#menu-bar
+  img#logo
+  #actions
+    img#user-profile(src='/user/images/avatar.png')
+#all-posts
+  each value in posts 
+    .post
+      .info
+        .headers
+          a(href=`/blog/${value.story_id}`)
+            span.head-line=value.title
+        .headers
+          span.author-name=value.author
+          span.date=value.date
+      img.cover-image(src='/user/images/logo.png')

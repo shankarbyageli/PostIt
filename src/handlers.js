@@ -9,9 +9,10 @@ const ensureLogin = function (req, res, next) {
   if (sessions[req.cookies.sId] !== undefined) {
     req.user = sessions[req.cookies.sId];
     next();
+  } else {
+    req.url = '/signIn.html';
+    next();
   }
-  req.url = '/signIn.html';
-  next();
 };
 
 const serveDashboard = function (req, res, next) {
@@ -19,9 +20,10 @@ const serveDashboard = function (req, res, next) {
   if (sessions[req.cookies.sId] !== undefined) {
     req.user = sessions[req.cookies.sId];
     res.send(`Dash board: ${req.user}`);
+  } else {
+    req.url = '/signIn.html';
+    next();
   }
-  req.url = '/signIn.html';
-  next();
 };
 
 const publish = function (req, res) {
@@ -34,7 +36,7 @@ const signIn = function (req, res) {
   res.redirect(`https://github.com/login/oauth/authorize?${params}`);
 };
 
-const githubCallback = function (req, res) {
+const githubCallback = function (req, resp) {
   const code = req.url.split('=')[1];
   const params = {
     client_id,
@@ -50,11 +52,25 @@ const githubCallback = function (req, res) {
     let data = '';
     res.on('data', (chunk) => (data += chunk));
     res.on('end', () => {
-      getUserDetail(data);
+      getUserDetail(data.toString()).then(details => {
+        const user = JSON.parse(details);
+        req.app.locals.db.isUserExists(user.login)
+          .then(isUserExists => {
+            if (!isUserExists) {
+              resp.cookie('sId', '2345');
+              resp.end('Welcome');
+            } else {
+              req.app.locals.db.addUser(user.login, user.avatar_url)
+                .then(() => {
+                  resp.cookie('sId', '2345');
+                  resp.end('Welcome');
+                });
+            }
+          })
+      })
     });
   });
   httpsReq.end(queryString.stringify(params));
-  res.end();
 };
 
 module.exports = {

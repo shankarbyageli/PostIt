@@ -4,14 +4,14 @@ const sqlite = require('sqlite3');
 const Database = require('./database');
 const app = express();
 const cookieParser = require('cookie-parser');
+const { userRouter } = require('./userRouter');
 const {
   serveDashboard,
   signIn,
-  githubCallback,
-  ensureLogin,
+  githubCallback
 } = require('./handlers');
-const { userRouter } = require('./userRouter');
-const db = new sqlite.Database(`${process.env.db}`);
+
+const db = new sqlite.Database(`database/${process.env.db}`);
 
 app.locals.sessions = {};
 app.locals.db = new Database(db);

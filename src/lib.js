@@ -10,12 +10,14 @@ const getUserDetail = (tokenDetails) => {
       Authorization: `token ${token}`,
     },
   };
-  const req = https.request(options, (res) => {
-    let data = '';
-    res.on('data', (chunk) => (data += chunk));
-    res.on('end', () => console.log(data.toString()));
-  });
-  req.end();
+  return new Promise((resolve, reject) => {
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => (data += chunk));
+      res.on('end', () => resolve(data.toString()));
+    });
+    req.end();
+  })
 };
 
 module.exports = { getUserDetail };

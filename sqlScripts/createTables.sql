@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS claps (
   clapped_by INTEGER ,
   FOREIGN KEY(story_id) REFERENCES stories(id),
   FOREIGN KEY(clapped_by) REFERENCES users(user_id)
-
 );
 
 CREATE TABLE IF NOT EXISTS comments (
@@ -43,7 +42,6 @@ CREATE TABLE IF NOT EXISTS comments (
   comment TEXT NOT NULL,
   FOREIGN KEY(comment_on) REFERENCES stories(id),
   FOREIGN KEY(comment_by) REFERENCES users(user_id)
-
 );
 
 CREATE TABLE IF NOT EXISTS followers (
@@ -57,5 +55,5 @@ CREATE TABLE IF NOT EXISTS tags (
   story_id INTEGER INTEGER,
   tag TEXT NOT NULL,
   FOREIGN KEY(story_id) REFERENCES stories(id)
-
 );
+

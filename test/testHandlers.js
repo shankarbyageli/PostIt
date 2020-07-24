@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../src/app');
-const { set } = require('../src/app');
 
 describe('GET', () => {
   it('should serve the static html and css files', (done) => {
@@ -8,6 +7,14 @@ describe('GET', () => {
       .get('/')
       .expect('Content-type', /text\/html/)
       .expect(/POST\-IT/, done);
+  });
+
+  it('should serve the static html and css files', (done) => {
+    request(app)
+      .get('/css/signIn.css')
+      .set('Accept', '*/*')
+      .expect('Content-type', /text\/css/)
+      .expect(/body/, done);
   });
 });
 
@@ -18,6 +25,7 @@ describe('GET /', () => {
       .expect('Content-type', /text\/html/)
       .expect(/POST\-IT/, done);
   });
+
   it('should serve dashboard if signed in', (done) => {
     app.locals.sessions = { '1234': 'Phaneendra' };
     request(app)
@@ -55,3 +63,4 @@ describe('POST /publish', () => {
       .expect(200, done);
   });
 });
+

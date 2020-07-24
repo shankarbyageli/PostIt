@@ -37,6 +37,16 @@ const publish = function (req, res) {
   res.send('Published');
 };
 
+const getBlog = function (req, res, next) {
+  const { id } = req.params;
+  req.app.locals.db.getPost(id).then((data) => {
+    res.render('readBlog', {
+      data: data.content,
+      title_text: data.title,
+    });
+  });
+};
+
 const signIn = function (req, res) {
   const params = `client_id=${client_id}&client_secret=${client_secret}`;
   res.redirect(`https://github.com/login/oauth/authorize?${params}`);
@@ -89,4 +99,5 @@ module.exports = {
   publish,
   ensureLogin,
   serveEditor,
+  getBlog,
 };

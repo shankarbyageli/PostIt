@@ -5,7 +5,12 @@ const Database = require('./database');
 const app = express();
 const cookieParser = require('cookie-parser');
 const { userRouter } = require('./userRouter');
-const { serveDashboard, signIn, githubCallback } = require('./handlers');
+const {
+  serveDashboard,
+  signIn,
+  githubCallback,
+  getBlog,
+} = require('./handlers');
 
 const db = new sqlite.Database(`database/${process.env.db}`);
 
@@ -23,6 +28,7 @@ app.get('/dashBoard', (req, res) => {
   res.render('dashBoard', {});
 });
 app.use('/user', userRouter);
+app.get('/blog/:id', getBlog);
 app.get('/', serveDashboard);
 app.use(express.static(`${__dirname}/../public`));
 app.get('/signIn', signIn);

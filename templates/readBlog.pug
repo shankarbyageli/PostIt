@@ -1,0 +1,43 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  link(rel='stylesheet' href='/css/editor.css')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title PostIt
+  script.
+    const render = function(data) {
+    let editor = new EditorJS({
+    holderId: 'editorjs',
+    data,
+    autofocus: true,
+    tools: {
+    paragraph: {
+    class: Paragraph,
+    config: {
+    placeholder: 'Lets write ! ',
+    inlineToolbar: true,
+    },
+    },
+    Lists: {
+    class: List,
+    inlineToolbar: true,
+    },
+    },
+    });
+    }
+  script(src='https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest')
+  script(src='https://cdn.jsdelivr.net/npm/@editorjs/header@latest')
+  script(src='https://cdn.jsdelivr.net/npm/@editorjs/list@latest')
+  script(src='https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest')
+
+body(onload=`render(${data})`)  
+#menu-bar
+  img#logo
+  #actions
+    #buttonsBox
+      span#publish
+        button Publish
+    img#user-profile
+#all-posts
+  #title=title_text
+  #editorjs

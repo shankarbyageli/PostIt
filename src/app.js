@@ -13,7 +13,7 @@ app.locals.sessions = {};
 app.locals.db = new Database(db);
 
 app.set('view engine', 'pug');
-app.set('views', `${__dirname}/../views`);
+app.set('views', `${__dirname}/../templates`);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());

@@ -3,8 +3,9 @@ class Database {
     this.db = db;
   }
 
-  addPost(data) {
-    const query = `INSERT INTO stories (title,content,last_modified) values (
+  addPost(data, user_id) {
+    const query = `INSERT INTO stories (author_id,title,content,last_modified) values (
+      '${user_id}',
       '${data.title}','${JSON.stringify(data.content)}',
       '${data.content.time}');`;
     return new Promise((resolve, reject) => {

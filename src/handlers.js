@@ -31,7 +31,7 @@ const serveEditor = function (req, res) {
 };
 
 const publish = function (req, res) {
-  req.app.locals.db.addPost(req.body);
+  req.app.locals.db.addPost(req.body, req.user);
   res.send('Published');
 };
 
@@ -59,7 +59,7 @@ const githubCallback = function (req, resp) {
       getUserDetail(data.toString()).then((details) => {
         const user = JSON.parse(details);
         req.app.locals.db.getUser(user.login).then((userDetails) => {
-        const sId = Date.now();
+          const sId = Date.now();
           if (userDetails) {
             req.app.locals.sessions[sId] = userDetails.user_id;
             resp.cookie('sId', sId);

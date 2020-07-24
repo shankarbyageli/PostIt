@@ -16,12 +16,20 @@ let editor = new EditorJS({
   },
 });
 
-const getPostContent = function () {
+const getPostContent = async function () {
   const title = document.getElementById('title').innerText;
   const data = { title };
-  editor.save().then((outputData) => {
-    data.content = outputData;
-    sendReq('POST', '/user/publish', () => {}, JSON.stringify(data));
+  editor.save().then((content) => {
+    data.content = content;
+    const response = fetch('/user/publish', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((response) => {
+      window.location.href = '/';
+    });
   });
 };
 

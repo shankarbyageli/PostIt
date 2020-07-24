@@ -2,7 +2,6 @@ const queryString = require('querystring');
 const https = require('https');
 const { client_id, client_secret } = require('../config');
 const { getUserDetail } = require('./lib');
-const app = require('./app');
 
 const ensureLogin = function (req, res, next) {
   const sessions = req.app.locals.sessions;

@@ -9,22 +9,20 @@ head
     let editor = new EditorJS({
     holderId: 'editorjs',
     data,
-    autofocus: true,
     tools: {
     paragraph: {
     class: Paragraph,
-    config: {
-    placeholder: 'Lets write ! ',
-    inlineToolbar: true,
-    },
     },
     Lists: {
     class: List,
-    inlineToolbar: true,
     },
     },
+    onReady : disableEdit,
     });
     }
+    const disableEdit = () => {
+      document.querySelectorAll('[contenteditable=true]')
+    };
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/header@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/list@latest')

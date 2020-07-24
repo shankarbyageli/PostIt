@@ -13,12 +13,15 @@ app.locals.sessions = {};
 app.locals.db = new Database(db);
 
 app.set('view engine', 'pug');
-app.set('views', './templates');
+app.set('views', `${__dirname}/../views`);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/dashBoard', (req, res) => {
+  res.render('dashBoard', {});
+});
 app.use('/user', userRouter);
 app.get('/', serveDashboard);
 app.use(express.static(`${__dirname}/../public`));

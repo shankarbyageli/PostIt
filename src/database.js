@@ -19,6 +19,16 @@ class Database {
     });
   }
 
+  getAvatar(user_id) {
+    const query = `select avatar_url from users where user_id = ${user_id}`;
+    return new Promise((resolve, reject) => {
+      this.db.get(query, (err, rows) => {
+        err && reject(err);
+        resolve(rows);
+      });
+    });
+  }
+
   addUser(user_details) {
     const query = `INSERT INTO users (username, avatar_url) values (
       '${user_details.login}', '${user_details.avatar_url}')

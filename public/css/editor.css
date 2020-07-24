@@ -21,8 +21,9 @@ body {
   margin-right: 180px;
 }
 #user-profile {
-  width: 37px;
-  height: 37px;
+  width: 50px;
+  border-radius: 50%;
+  height: 50px;
 }
 #all-posts {
   display: flex;

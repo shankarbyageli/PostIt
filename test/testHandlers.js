@@ -76,7 +76,21 @@ describe('Ensure login', () => {
     request(app).get('/css/editor.css').expect(200, done);
   });
 
-  it('should get redirected to signin page if cookie are not there ', (done) => {
-    request(app).get('/css/editor.css').expect(200, done);
+  it('should give signin if cookie are not there', (done) => {
+    request(app)
+      .get('/user/editor')
+      .expect(/Dive deeper on topics that matter to you/)
+      .expect(200, done);
+  });
+});
+
+describe('GET /user/editor', () => {
+  it('should get editor', (done) => {
+    app.locals.sessions = { '1234': '1' };
+    request(app)
+      .get('/user/editor')
+      .set('Cookie', 'sId=1234')
+      .expect(/<button>Publish/)
+      .expect(200, done);
   });
 });

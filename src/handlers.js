@@ -27,7 +27,9 @@ const serveDashboard = function (req, res, next) {
 };
 
 const serveEditor = function (req, res) {
-  res.render('editor', { avatar_url: '/user/images/avatar.png' });
+  req.app.locals.db.getAvatar(req.user).then(({ avatar_url }) => {
+    res.render('editor', { avatar_url });
+  });
 };
 
 const publish = function (req, res) {

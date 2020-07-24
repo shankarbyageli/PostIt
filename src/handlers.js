@@ -14,20 +14,13 @@ const ensureLogin = function (req, res, next) {
   }
 };
 
-const getLatestPosts = async function (req) {
-  const stories = [];
-  const posts = await req.app.locals.db.getPosts(10);
-  for (const post of posts) {
-    stories.push(await getPostDetails(post.story_id));
-  }
-  return stories;
-};
-
 const serveDashboard = async function (req, res, next) {
   const sessions = req.app.locals.sessions;
   if (sessions[req.cookies.sId] !== undefined) {
     req.user = sessions[req.cookies.sId];
-    res.render('dashBoard', { posts: await getLatestPosts(req) });
+    res.render('dashBoard', {
+      posts: await req.app.locals.db.getLatestPosts(10),
+    });
   } else {
     req.url = '/signIn.html';
     next();

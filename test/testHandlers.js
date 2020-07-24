@@ -45,7 +45,7 @@ describe('GET /', () => {
 describe('GET /signIn', () => {
   afterEach(() => {
     app.locals.sessions = {};
-  })
+  });
   it('should redirect to github authentication', (done) => {
     request(app).get('/signIn').expect(302, done);
   });
@@ -54,7 +54,7 @@ describe('GET /signIn', () => {
 describe('POST /publish', () => {
   afterEach(() => {
     app.locals.sessions = {};
-  })
+  });
   const data = {
     title: 'my title',
     content: {
@@ -130,8 +130,8 @@ describe('GET /blog/id', () => {
     request(app)
       .get('/blog/1')
       .expect(/signIn/)
-      .expect(/First post/, done)
-  })
+      .expect(/First post/, done);
+  });
 
   it('should return the blog content if the blog is published', (done) => {
     app.locals.sessions = { '1234': 1 };
@@ -139,6 +139,6 @@ describe('GET /blog/id', () => {
       .get('/blog/1')
       .set('Cookie', 'sId=1234')
       .expect(/user-profile/)
-      .expect(/First post/, done)
-  })
+      .expect(/First post/, done);
+  });
 });

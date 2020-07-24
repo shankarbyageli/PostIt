@@ -52,25 +52,23 @@ const githubCallback = function (req, resp) {
     let data = '';
     res.on('data', (chunk) => (data += chunk));
     res.on('end', () => {
-      getUserDetail(data.toString()).then(details => {
+      getUserDetail(data.toString()).then((details) => {
         const user = JSON.parse(details);
-        req.app.locals.db.isUserExists(user.login)
-          .then(isUserExists => {
-            const sId = Date.now();
-            req.app.locals.sessions[sId] = user.login;
-            console.log(req.app.locals.sessions);
-            if (!isUserExists) {
+        req.app.locals.db.isUserExists(user.login).then((isUserExists) => {
+          const sId = Date.now();
+          req.app.locals.sessions[sId] = user.login;
+          console.log(req.app.locals.sessions);
+          if (!isUserExists) {
+            resp.cookie('sId', sId);
+            resp.redirect('/');
+          } else {
+            req.app.locals.db.addUser(user.login, user.avatar_url).then(() => {
               resp.cookie('sId', sId);
-              resp.end('Welcome');
-            } else {
-              req.app.locals.db.addUser(user.login, user.avatar_url)
-                .then(() => {
-                  resp.cookie('sId', sId);
-                  resp.end('Welcome');
-                });
-            }
-          })
-      })
+              resp.redirect('/');
+            });
+          }
+        });
+      });
     });
   });
   httpsReq.end(queryString.stringify(params));

@@ -35,6 +35,12 @@ describe('GET /', () => {
   });
 });
 
+describe('GET /signIn', () => {
+  it('should redirect to github authentication', (done) => {
+    request(app).get('/signIn').expect(302, done);
+  });
+});
+
 describe('POST /publish', () => {
   app.locals.sessions = { '1234': 'Phaneendra' };
   const data = {

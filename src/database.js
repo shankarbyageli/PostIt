@@ -14,14 +14,14 @@ class Database {
         } else {
           resolve(true);
         }
-      })
+      });
     });
   }
 
   addUser(user_details) {
     const query = `INSERT INTO users (username, avatar_url) values (
       '${user_details.login}', '${user_details.avatar_url}')
-    ;`
+    ;`;
     return new Promise((resolve, reject) => {
       this.db.run(query, (err) => {
         if (err) {
@@ -29,15 +29,39 @@ class Database {
         } else {
           resolve(true);
         }
-      })
+      });
     });
   }
 
-  isUserExists() {
+  execute = function (query) {
+    return new Promise(resolve, (reject) => {
+      this.db.run(query, (err) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(true);
+      });
+    });
+  };
+
+  isUserExists = function (username) {
     return new Promise((resolve, reject) => {
-      resolve(false);
-    })
-  }
+      this.db.get(
+        'select * from users where username=?',
+        [username],
+        (err, row) => {
+          if (err) {
+            reject(err);
+          }
+          if (row) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        }
+      );
+    });
+  };
 }
 
 module.exports = Database;

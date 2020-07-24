@@ -9,15 +9,15 @@ head
 #menu-bar
   img#logo
   #actions
-    img#user-profile(src='/user/images/avatar.png')
+    img#user-profile(src=avatar_url)
 #all-posts
   each value in posts 
     .post
       .info
         .headers
-          a(href=`/blog/${value.story_id}`)
+          a(href=`/blog/${value.id}`)
             span.head-line=value.title
         .headers
-          span.author-name=value.author
-          span.date=value.date
+          span.author-name=value.username
+          span.date=new Date(value.last_modified)
       img.cover-image(src='/user/images/logo.png')

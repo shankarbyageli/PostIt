@@ -18,8 +18,13 @@ const serveDashboard = async function (req, res, next) {
   const sessions = req.app.locals.sessions;
   if (sessions[req.cookies.sId] !== undefined) {
     req.user = sessions[req.cookies.sId];
+    const { avatar_url, username } = await req.app.locals.db.getUserById(
+      req.user
+    );
     res.render('dashBoard', {
       posts: await req.app.locals.db.getLatestPosts(10),
+      avatar_url,
+      username,
     });
   } else {
     req.url = '/signIn.html';
@@ -28,7 +33,7 @@ const serveDashboard = async function (req, res, next) {
 };
 
 const serveEditor = function (req, res) {
-  req.app.locals.db.getAvatar(req.user).then(({ avatar_url }) => {
+  req.app.locals.db.getUserById(req.user).then(({ avatar_url }) => {
     res.render('editor', { avatar_url });
   });
 };

@@ -29,8 +29,8 @@ class Database {
     });
   }
 
-  getAvatar(user_id) {
-    const query = `select avatar_url from users where user_id = ${user_id}`;
+  getUserById(user_id) {
+    const query = `select * from users where user_id = ${user_id}`;
     return new Promise((resolve, reject) => {
       this.db.get(query, (err, rows) => {
         err && reject(err);
@@ -85,10 +85,15 @@ class Database {
   };
 
   getLatestPosts = function (count) {
-    const query = `select * from stories limit 10`;
+    const posts = [];
+    const query = `select * from stories limit ${count}`;
     return new Promise((resolve, reject) => {
-      this.db.all(query, (err, rows) => {
-        resolve(rows);
+      this.db.all(query, async (err, rows) => {
+        for (const row of rows) {
+          const user_details = await this.getUserById(row.id);
+          posts.push({ username: user_details.username, ...row });
+        }
+        resolve(posts);
       });
     });
   };

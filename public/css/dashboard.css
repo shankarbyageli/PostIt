@@ -16,32 +16,22 @@ li {
   white-space: nowrap;
   list-style: none;
 }
-#logo {
-  content: url(./logo.png);
-  margin-top: -51px;
-  margin-left: 180px;
-  height: 186px;
-  width: 186px;
-}
-#menu-bar {
+
+/* #menu-bar {
   display: flex;
   justify-content: space-between;
-}
-#search {
+} */
+/* #search {
   content: url(./search.svg);
   width: 25px;
   height: 50px;
   margin-right: 17px;
-}
-#actions {
+} */
+/* #actions {
   margin-right: 180px;
   margin-top: 16px;
-}
-#user-profile {
-  /* content: url(./avatar.png); */
-  width: 47px;
-  height: 50px;
-}
+} */
+
 .user-options {
   margin-top: 20px;
   border-radius: 3px;
@@ -51,10 +41,10 @@ li {
   left: 1050.5px;
   width: 250px;
 }
-#all-posts {
+/* #all-posts {
   display: flex;
   flex-direction: column;
-}
+} */
 .post {
   margin: 0 auto;
   display: flex;

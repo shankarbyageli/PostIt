@@ -27,7 +27,7 @@ describe('GET /', () => {
   });
 
   it('should serve dashboard if signed in', (done) => {
-    app.locals.sessions = { '1234': 'Phaneendra' };
+    app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/')
       .set('Cookie', 'sId=1234')

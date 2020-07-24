@@ -63,4 +63,3 @@ describe('POST /publish', () => {
       .expect(200, done);
   });
 });
-

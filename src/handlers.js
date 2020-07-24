@@ -56,13 +56,16 @@ const githubCallback = function (req, resp) {
         const user = JSON.parse(details);
         req.app.locals.db.isUserExists(user.login)
           .then(isUserExists => {
+            const sId = Date.now();
+            req.app.locals.sessions[sId] = user.login;
+            console.log(req.app.locals.sessions);
             if (!isUserExists) {
-              resp.cookie('sId', '2345');
+              resp.cookie('sId', sId);
               resp.end('Welcome');
             } else {
               req.app.locals.db.addUser(user.login, user.avatar_url)
                 .then(() => {
-                  resp.cookie('sId', '2345');
+                  resp.cookie('sId', sId);
                   resp.end('Welcome');
                 });
             }

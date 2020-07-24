@@ -44,7 +44,7 @@ class Database {
     });
   };
 
-  isUserExists = function (username) {
+  getUser = function (username) {
     return new Promise((resolve, reject) => {
       this.db.get(
         'select * from users where username=?',
@@ -54,7 +54,7 @@ class Database {
             reject(err);
           }
           if (row) {
-            resolve(true);
+            resolve(row);
           } else {
             resolve(false);
           }

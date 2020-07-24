@@ -29,13 +29,16 @@ head
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest')
 
 body(onload=`render(${data})`)  
-#menu-bar
+.header
   img#logo
   #actions
-    #buttonsBox
-      span#publish
-        button Publish
-    img#user-profile
+  if avatar_url
+    img#user-profile(src=avatar_url)
+  else
+   a#link_text(href='/signIn')
+    span.sign_in Sign in
+
+
 #all-posts
   #title=title_text
   #editorjs

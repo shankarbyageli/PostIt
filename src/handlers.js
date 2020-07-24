@@ -45,12 +45,26 @@ const publish = function (req, res) {
 
 const getBlog = function (req, res, next) {
   const { id } = req.params;
-  req.app.locals.db.getPost(id).then((data) => {
-    res.render('readBlog', {
-      data: data.content,
-      title_text: data.title,
+  const user_id = req.app.locals.sessions[req.cookies.sId];
+  if (user_id) {
+    req.app.locals.db.getPost(id).then((data) => {
+      req.app.locals.db.getAvatar(user_id).then(({ avatar_url }) => {
+        res.render('readBlog', {
+          data: data.content,
+          title_text: data.title,
+          avatar_url,
+        });
+      });
     });
-  });
+  } else {
+    req.app.locals.db.getPost(id).then((data) => {
+      res.render('readBlog', {
+        data: data.content,
+        title_text: data.title,
+        avatar_url: false,
+      });
+    });
+  }
 };
 
 const signIn = function (req, res) {

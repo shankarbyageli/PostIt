@@ -90,7 +90,7 @@ describe('GET /user/editor', () => {
     request(app)
       .get('/user/editor')
       .set('Cookie', 'sId=1234')
-      .expect(/<button>Publish/)
+      .expect(/id="publish">Publish/)
       .expect(200, done);
   });
 });

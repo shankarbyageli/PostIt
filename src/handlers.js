@@ -26,6 +26,10 @@ const serveDashboard = function (req, res, next) {
   }
 };
 
+const serveEditor = function (req, res) {
+  res.render('editor', { avatar_url: '/user/images/avatar.png' });
+};
+
 const publish = function (req, res) {
   req.app.locals.db.addPost(req.body);
   res.send('Published');
@@ -82,4 +86,5 @@ module.exports = {
   githubCallback,
   publish,
   ensureLogin,
+  serveEditor,
 };

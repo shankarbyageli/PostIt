@@ -69,3 +69,14 @@ describe('POST /publish', () => {
       .expect(200, done);
   });
 });
+
+describe('Ensure login', () => {
+  it('should get css file if session is there', (done) => {
+    app.locals.sessions = { '1234': 'Phaneendra' };
+    request(app).get('/css/editor.css').expect(200, done);
+  });
+
+  it('should get redirected to signin page if cookie are not there ', (done) => {
+    request(app).get('/css/editor.css').expect(200, done);
+  });
+});

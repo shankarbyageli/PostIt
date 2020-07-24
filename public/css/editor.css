@@ -21,7 +21,6 @@ body {
   margin-right: 180px;
 }
 #user-profile {
-  content: url(/images/avatar.png);
   width: 37px;
   height: 37px;
 }

@@ -5,17 +5,15 @@ const Database = require('./database');
 const app = express();
 const cookieParser = require('cookie-parser');
 const { userRouter } = require('./userRouter');
-const {
-  serveDashboard,
-  signIn,
-  githubCallback
-} = require('./handlers');
+const { serveDashboard, signIn, githubCallback } = require('./handlers');
 
 const db = new sqlite.Database(`database/${process.env.db}`);
 
 app.locals.sessions = {};
 app.locals.db = new Database(db);
 
+app.set('view engine', 'pug');
+app.set('views', './templates');
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());

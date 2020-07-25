@@ -1,7 +1,5 @@
-const queryString = require('querystring');
-const https = require('https');
 const { clientId, clientSecret } = require('../config');
-const { getUserDetail } = require('./lib');
+const { getUserDetail, makeRequest } = require('./lib');
 
 const ensureLogin = function (req, res, next) {
   const sessions = req.app.locals.sessions;
@@ -84,32 +82,24 @@ const githubCallback = function (req, resp) {
     path: '/login/oauth/access_token',
     method: 'POST',
   };
-  const httpsReq = https.request(url, (res) => {
-    let data = '';
-    res.on('data', (chunk) => (data += chunk));
-    res.on('end', () => {
-      getUserDetail(data.toString()).then((details) => {
-        const user = JSON.parse(details);
-        req.app.locals.db.getUser(user.login).then((userDetails) => {
-          const sId = Date.now();
-          if (userDetails) {
-            req.app.locals.sessions[sId] = userDetails.user_id;
-            resp.cookie('sId', sId);
-            resp.redirect('/');
-          } else {
-            req.app.locals.db.addUser(user).then(() => {
-              req.app.locals.db.getUser(user.login).then((userDetails) => {
-                req.app.locals.sessions[sId] = userDetails.user_id;
-                resp.cookie('sId', sId);
-                resp.redirect('/');
-              });
-            });
-          }
-        });
-      });
+  makeRequest(url, params)
+    .then(getUserDetail)
+    .then(async details => {
+      const user = JSON.parse(details);
+      const userDetails = await req.app.locals.db.getUser(user.login)
+      const sId = Date.now();
+      if (userDetails) {
+        req.app.locals.sessions[sId] = userDetails.user_id;
+        resp.cookie('sId', sId);
+        resp.redirect('/');
+      } else {
+        await req.app.locals.db.addUser(user)
+        const userDetails = await req.app.locals.db.getUser(user.login);
+        req.app.locals.sessions[sId] = userDetails.user_id;
+        resp.cookie('sId', sId);
+        resp.redirect('/');
+      }
     });
-  });
-  httpsReq.end(queryString.stringify(params));
 };
 
 module.exports = {

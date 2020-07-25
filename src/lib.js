@@ -1,4 +1,5 @@
 const https = require('https');
+const queryString = require('querystring');
 
 const getUserDetail = (tokenDetails) => {
   const token = tokenDetails.split('&')[0].split('=')[1];
@@ -20,4 +21,17 @@ const getUserDetail = (tokenDetails) => {
   });
 };
 
-module.exports = { getUserDetail };
+const makeRequest = function (options, params) {
+  return new Promise((resolve, reject) => {
+    const request = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => (data += chunk));
+      res.on('end', () => {
+        resolve(data.toString());
+      });
+    });
+    request.end(queryString.stringify(params));
+  })
+};
+
+module.exports = { getUserDetail, makeRequest };

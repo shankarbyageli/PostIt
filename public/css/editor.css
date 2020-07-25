@@ -9,17 +9,17 @@ body {
   flex-direction: column;
 }
 
-#publish {
+.ce-block__content {
+  width: 800px;
 }
 
 #title {
   outline: none;
   border-style: none;
-  font-size: 42px;
-  margin-top: 40px;
-  margin-left: 26.5vw;
+  font-size: 40px;
+  max-width: 650px;
+  margin: 30px 387px;
   color: black;
-  word-wrap: break-word;
 }
 
 #title[placeholder]:empty:before {
@@ -29,7 +29,6 @@ body {
 
 #editorjs {
   font-size: 19px;
-  margin-top: 20px;
   color: #555252;
 }
 

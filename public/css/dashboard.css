@@ -41,10 +41,7 @@ li {
   left: 1050.5px;
   width: 250px;
 }
-/* #all-posts {
-  display: flex;
-  flex-direction: column;
-} */
+
 .post {
   margin: 0 auto;
   display: flex;

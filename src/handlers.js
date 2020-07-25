@@ -1,9 +1,6 @@
 const queryString = require('querystring');
 const https = require('https');
-const {
-  clientId: client_id,
-  clientSecret: client_secret,
-} = require('../config');
+const { clientId, clientSecret } = require('../config');
 const { getUserDetail } = require('./lib');
 const { use } = require('./app');
 
@@ -63,15 +60,15 @@ const getBlog = async function (req, res, next) {
 };
 
 const signIn = function (req, res) {
-  const params = `client_id=${client_id}&client_secret=${client_secret}`;
+  const params = `client_id=${clientId}&client_secret=${clientSecret}`;
   res.redirect(`https://github.com/login/oauth/authorize?${params}`);
 };
 
 const githubCallback = function (req, resp) {
   const code = req.url.split('=')[1];
   const params = {
-    client_id,
-    client_secret,
+    clientId,
+    clientSecret,
     code,
   };
   const url = {

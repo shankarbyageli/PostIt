@@ -49,13 +49,16 @@ const getBlog = async function (req, res, next) {
   const avatar_url = user_id
     ? (await req.app.locals.db.getUserById(user_id)).avatar_url
     : false;
-  req.app.locals.db.getPost(id).then((data) => {
+  const response = req.app.locals.db.getPost(id);
+  if (await response) {
     res.render('readBlog', {
-      data: data.content,
-      title_text: data.title,
+      data: await response.content,
+      title_text: await response.title,
       avatar_url,
     });
-  });
+  } else {
+    res.render('error');
+  }
 };
 
 const signIn = function (req, res) {

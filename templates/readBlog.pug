@@ -38,7 +38,8 @@ body(onload=`render(${data})`)
 
 #menu-bar
   #logoBox
-    img#logo
+    a(href="/")
+      img#logo
   #actions
     if avatar_url
       img#user-profile(src=avatar_url)

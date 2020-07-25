@@ -37,7 +37,8 @@ body {
   justify-content: space-between;
   height: 65px;
   padding: 0px 200px;
-  background: aliceblue;
+  background: white;
+  box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
   position: sticky;
   top: 0;
   z-index: 2;

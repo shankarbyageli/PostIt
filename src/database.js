@@ -4,7 +4,8 @@ class Database {
   }
 
   addPost(data, user_id) {
-    const query = `INSERT INTO stories (author_id,title,content,last_modified) values (
+    const query = `INSERT INTO stories (is_published,author_id,title,content,last_modified) values (
+      ${1},
       '${user_id}',
       '${data.title}','${JSON.stringify(data.content)}',
       '${data.content.time}');`;

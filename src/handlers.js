@@ -2,6 +2,7 @@ const queryString = require('querystring');
 const https = require('https');
 const { client_id, client_secret } = require('../config');
 const { getUserDetail } = require('./lib');
+const { use } = require('./app');
 
 const ensureLogin = function (req, res, next) {
   const sessions = req.app.locals.sessions;
@@ -43,28 +44,19 @@ const publish = function (req, res) {
   res.send('Published');
 };
 
-const getBlog = function (req, res, next) {
+const getBlog = async function (req, res, next) {
   const { id } = req.params;
   const user_id = req.app.locals.sessions[req.cookies.sId];
-  if (user_id) {
-    req.app.locals.db.getPost(id).then((data) => {
-      req.app.locals.db.getUserById(user_id).then(({ avatar_url }) => {
-        res.render('readBlog', {
-          data: data.content,
-          title_text: data.title,
-          avatar_url,
-        });
-      });
+  const avatar_url = user_id
+    ? (await req.app.locals.db.getUserById(user_id)).avatar_url
+    : false;
+  req.app.locals.db.getPost(id).then((data) => {
+    res.render('readBlog', {
+      data: data.content,
+      title_text: data.title,
+      avatar_url,
     });
-  } else {
-    req.app.locals.db.getPost(id).then((data) => {
-      res.render('readBlog', {
-        data: data.content,
-        title_text: data.title,
-        avatar_url: false,
-      });
-    });
-  }
+  });
 };
 
 const signIn = function (req, res) {

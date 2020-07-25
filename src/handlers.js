@@ -45,6 +45,7 @@ const publish = function (req, res) {
 
 const getBlog = async function (req, res, next) {
   const { id } = req.params;
+  if (!+id) return next();
   const user_id = req.app.locals.sessions[req.cookies.sId];
   const avatar_url = user_id
     ? (await req.app.locals.db.getUserById(user_id)).avatar_url

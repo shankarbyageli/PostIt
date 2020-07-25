@@ -140,10 +140,18 @@ describe('GET /blog/id', () => {
       .expect(/user-profile/, done);
   });
 
-  it('should return the blog content if the blog is published', (done) => {
+  it('should return page not found for invalid blogId', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/blog/100')
+      .set('Cookie', 'sId=1234')
+      .expect(/404 : Page Not Found/, done);
+  });
+
+  it('should return not found for string as blog Id ', (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/blog/1string')
       .set('Cookie', 'sId=1234')
       .expect(/404 : Page Not Found/, done);
   });

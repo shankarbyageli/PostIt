@@ -1,6 +1,9 @@
 const queryString = require('querystring');
 const https = require('https');
-const { client_id, client_secret } = require('../config');
+const {
+  clientId: client_id,
+  clientSecret: client_secret,
+} = require('../config');
 const { getUserDetail } = require('./lib');
 const { use } = require('./app');
 

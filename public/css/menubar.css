@@ -40,6 +40,7 @@ body {
   background: aliceblue;
   position: sticky;
   top: 0;
+  z-index: 2;
 }
 
 #user-profile {

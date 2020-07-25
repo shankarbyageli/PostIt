@@ -24,9 +24,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/dashBoard', (req, res) => {
-  res.render('dashBoard', {});
-});
 app.use('/user', userRouter);
 app.get('/blog/:id', getBlog);
 app.get('/', serveDashboard);

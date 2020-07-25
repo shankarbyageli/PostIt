@@ -2,6 +2,10 @@ const request = require('supertest');
 const app = require('../src/app');
 
 describe('GET', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
   it('should serve the static html and css files', (done) => {
     request(app)
       .get('/')
@@ -19,6 +23,9 @@ describe('GET', () => {
 });
 
 describe('GET /', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
   it('should serve sign in page if not signed in', (done) => {
     request(app)
       .get('/')
@@ -36,13 +43,18 @@ describe('GET /', () => {
 });
 
 describe('GET /signIn', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  })
   it('should redirect to github authentication', (done) => {
     request(app).get('/signIn').expect(302, done);
   });
 });
 
 describe('POST /publish', () => {
-  app.locals.sessions = { '1234': 'Phaneendra' };
+  afterEach(() => {
+    app.locals.sessions = {};
+  })
   const data = {
     title: 'my title',
     content: {
@@ -59,7 +71,9 @@ describe('POST /publish', () => {
       version: '2.11.10',
     },
   };
+
   it('Should publish the post', (done) => {
+    app.locals.sessions = { '1234': '1' };
     request(app)
       .post('/user/publish')
       .set('Cookie', 'sId=1234')
@@ -71,12 +85,20 @@ describe('POST /publish', () => {
 });
 
 describe('Ensure login', () => {
-  it('should get css file if session is there', (done) => {
-    app.locals.sessions = { '1234': 'Phaneendra' };
-    request(app).get('/css/editor.css').expect(200, done);
+  afterEach(() => {
+    app.locals.sessions = {};
   });
 
-  it('should give signin if cookie are not there', (done) => {
+  it('should get css file if session is there', (done) => {
+    app.locals.sessions = { '1234': '1' };
+    request(app)
+      .get('/user/css/editor.css')
+      .set('Cookie', 'sId=1234')
+      .expect('Content-type', /text\/css/)
+      .expect(200, done);
+  });
+
+  it('should give sign in if cookie are not there', (done) => {
     request(app)
       .get('/user/editor')
       .expect(/Dive deeper on topics that matter to you/)
@@ -85,6 +107,10 @@ describe('Ensure login', () => {
 });
 
 describe('GET /user/editor', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
   it('should get editor', (done) => {
     app.locals.sessions = { '1234': '1' };
     request(app)
@@ -93,4 +119,26 @@ describe('GET /user/editor', () => {
       .expect(/id="publish">Publish/)
       .expect(200, done);
   });
+});
+
+describe('GET /blog/id', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
+  it('should return the blog content if the blog is published', (done) => {
+    request(app)
+      .get('/blog/1')
+      .expect(/signIn/)
+      .expect(/First post/, done)
+  })
+
+  it('should return the blog content if the blog is published', (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/blog/1')
+      .set('Cookie', 'sId=1234')
+      .expect(/user-profile/)
+      .expect(/First post/, done)
+  })
 });

@@ -55,17 +55,6 @@ class Database {
     });
   }
 
-  execute = function (query) {
-    return new Promise(resolve, (reject) => {
-      this.db.run(query, (err) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(true);
-      });
-    });
-  };
-
   getUser = function (username) {
     return new Promise((resolve, reject) => {
       this.db.get(
@@ -86,15 +75,13 @@ class Database {
   };
 
   getLatestPosts = function (count) {
-    const posts = [];
-    const query = `select * from stories limit ${count}`;
+    const query = `select * from stories join users on stories.author_id = users.user_id order by stories.id desc limit ${count}`;
     return new Promise((resolve, reject) => {
       this.db.all(query, async (err, rows) => {
-        for (const row of rows) {
-          const user_details = await this.getUserById(row.id);
-          posts.push({ username: user_details.username, ...row });
+        if (err) {
+          reject(err);
         }
-        resolve(posts);
+        resolve(rows);
       });
     });
   };

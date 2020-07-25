@@ -6,14 +6,17 @@ head
   link(rel="stylesheet" href="/user/css/editor.css")
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
+
 #menu-bar
-  img#logo
+  #logoBox
+    img#logo
   #actions
     #buttonsBox
-      a(href=`/user/editor`)
+      a#link_text(href='/user/editor')
         span#publish
           button Write a post
     img#user-profile(src=avatar_url)
+
 #all-posts
   each value in posts 
     .post

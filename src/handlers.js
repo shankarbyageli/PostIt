@@ -48,7 +48,7 @@ const getBlog = function (req, res, next) {
   const user_id = req.app.locals.sessions[req.cookies.sId];
   if (user_id) {
     req.app.locals.db.getPost(id).then((data) => {
-      req.app.locals.db.getAvatar(user_id).then(({ avatar_url }) => {
+      req.app.locals.db.getUserById(user_id).then(({ avatar_url }) => {
         res.render('readBlog', {
           data: data.content,
           title_text: data.title,

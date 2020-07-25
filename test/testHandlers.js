@@ -6,7 +6,7 @@ describe('GET', () => {
     request(app)
       .get('/')
       .expect('Content-type', /text\/html/)
-      .expect(/POST\-IT/, done);
+      .expect(/Dive deeper on topics that matter to you/, done);
   });
 
   it('should serve the static html and css files', (done) => {
@@ -23,7 +23,7 @@ describe('GET /', () => {
     request(app)
       .get('/')
       .expect('Content-type', /text\/html/)
-      .expect(/POST\-IT/, done);
+      .expect(/Dive deeper on topics that matter to you/, done);
   });
 
   it('should serve dashboard if signed in', (done) => {

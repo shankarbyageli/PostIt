@@ -1,6 +1,5 @@
 let editor = new EditorJS({
   holderId: 'editorjs',
-  autofocus: true,
   tools: {
     paragraph: {
       class: Paragraph,

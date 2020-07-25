@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-const sqlite = require('sqlite3');
+const sqlite = require('sqlite3').verbose();
 const Database = require('./database');
 const app = express();
 const cookieParser = require('cookie-parser');

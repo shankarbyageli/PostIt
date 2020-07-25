@@ -8,7 +8,7 @@ class Database {
       ${1},
       '${user_id}',
       '${data.title}','${JSON.stringify(data.content)}',
-      '${data.content.time}', 1);`;
+      '${data.content.time}');`;
     return new Promise((resolve, reject) => {
       this.db.run(query, (err) => {
         if (err) {

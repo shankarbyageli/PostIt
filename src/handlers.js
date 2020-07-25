@@ -2,7 +2,6 @@ const queryString = require('querystring');
 const https = require('https');
 const { clientId, clientSecret } = require('../config');
 const { getUserDetail } = require('./lib');
-const { use } = require('./app');
 
 const ensureLogin = function (req, res, next) {
   const sessions = req.app.locals.sessions;
@@ -67,8 +66,8 @@ const signIn = function (req, res) {
 const githubCallback = function (req, resp) {
   const code = req.url.split('=')[1];
   const params = {
-    clientId,
-    clientSecret,
+    client_id: clientId,
+    client_secret: clientSecret,
     code,
   };
   const url = {

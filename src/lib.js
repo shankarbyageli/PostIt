@@ -17,7 +17,7 @@ const getUserDetail = (tokenDetails) => {
       res.on('end', () => resolve(data.toString()));
     });
     req.end();
-  })
+  });
 };
 
 module.exports = { getUserDetail };

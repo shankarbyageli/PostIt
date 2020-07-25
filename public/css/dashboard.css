@@ -17,21 +17,6 @@ li {
   list-style: none;
 }
 
-/* #menu-bar {
-  display: flex;
-  justify-content: space-between;
-} */
-/* #search {
-  content: url(./search.svg);
-  width: 25px;
-  height: 50px;
-  margin-right: 17px;
-} */
-/* #actions {
-  margin-right: 180px;
-  margin-top: 16px;
-} */
-
 .user-options {
   margin-top: 20px;
   border-radius: 3px;
@@ -43,33 +28,39 @@ li {
 }
 
 .post {
-  margin: 0 auto;
+  margin: 1rem auto;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  width: 800px;
-  /* height: 200px; */
+  width: 60%;
   height: fit-content;
-  margin-bottom: 25px;
+  margin-bottom: 1.5rem;
+  border: 1px solid gray;
+  padding: 0.3rem;
 }
 .info {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 600px;
+  width: 70%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .headers {
   display: flex;
   flex-direction: column;
+  width: 80%;
 }
 .cover-image {
-  width: 175px;
-  height: 175px;
+  width: 20%;
+  height: auto;
   margin: auto 0;
 }
 .head-line {
   font-size: 22px;
   font-weight: 600;
+  width: 80%;
 }
 .details {
   margin-top: 9px;

@@ -4,6 +4,8 @@ head
   script.
   link(rel="stylesheet" href="/user/css/dashBoard.css")
   link(rel='stylesheet' href='/user/css/menubar.css')
+  link(rel="stylesheet" href="/user/css/post.css")
+  link(rel="stylesheet" href="/user/css/editor.css")
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
 
@@ -14,18 +16,17 @@ head
   #actions
     #buttonsBox
       a#link_text(href='/user/editor')
-        span
-          button.action-button Write a post
+        button#publish Write a post
     img#user-profile(src=avatar_url)
 
 #all-posts
   each value in posts 
-    .post
-      .info
-        .headers
-          a(href=`/blog/${value.id}`)
-            span.head-line=value.title
-        .headers
-          span.author-name=value.username
-          span.date=new Date(value.last_modified)
-      img.cover-image(src='/user/images/logo.png')
+    .container-post
+      .data-post
+        #title-post(title=value.title)
+          a(href=`/blog/${value.id}`)=value.title
+        br
+        #info-post
+          p.author-details-post=value.username
+          p.author-details-post=new Date(value.last_modified).toLocaleString()
+      img.cover-image-post(src='/images/cricket.jpeg' alt='No image')

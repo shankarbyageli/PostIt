@@ -1,0 +1,19 @@
+.user {
+  display: flex;
+  flex-direction: row;
+  outline: none;
+  max-width: 650px;
+  margin: 10px 0px 33px 397px;
+  color: black;
+}
+
+.userInfo {
+  margin: auto 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+#date {
+  font-size: 0.7rem;
+  margin-top: 3px;
+}

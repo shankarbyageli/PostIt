@@ -50,9 +50,13 @@ const getBlog = async function (req, res, next) {
     : false;
   const response = await req.app.locals.db.getPost(id);
   if (response) {
+    const author = await req.app.locals.db.getUserById(response.author_id);
     res.render('readBlog', {
       data: response.content,
       title_text: response.title,
+      author_avatar: author.avatar_url,
+      date: response.last_modified,
+      author: author.username,
       avatar_url,
     });
   } else {

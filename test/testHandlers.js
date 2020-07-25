@@ -143,7 +143,7 @@ describe('GET /blog/id', () => {
   it('should return page not found for invalid blogId', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
-      .get('/blog/100')
+      .get('/blog/104540')
       .set('Cookie', 'sId=1234')
       .expect(/404 : Page Not Found/, done);
   });

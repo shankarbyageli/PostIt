@@ -49,16 +49,21 @@ const getBlog = async function (req, res, next) {
   const avatar_url = user_id
     ? (await req.app.locals.db.getUserById(user_id)).avatar_url
     : false;
-  const response = req.app.locals.db.getPost(id);
-  if (await response) {
+  const response = await req.app.locals.db.getPost(id);
+  if (response) {
     res.render('readBlog', {
-      data: await response.content,
-      title_text: await response.title,
+      data: response.content,
+      title_text: response.title,
       avatar_url,
     });
   } else {
-    res.render('error');
+    next();
   }
+};
+
+const serveErrorPage = function (req, res) {
+  res.status(404);
+  res.render('error');
 };
 
 const signIn = function (req, res) {
@@ -114,4 +119,5 @@ module.exports = {
   ensureLogin,
   serveEditor,
   getBlog,
+  serveErrorPage,
 };

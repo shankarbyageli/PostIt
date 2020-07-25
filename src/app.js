@@ -9,6 +9,7 @@ const {
   serveDashboard,
   signIn,
   githubCallback,
+  serveErrorPage,
   getBlog,
 } = require('./handlers');
 
@@ -30,5 +31,6 @@ app.get('/', serveDashboard);
 app.use(express.static(`${__dirname}/../public`));
 app.get('/signIn', signIn);
 app.get('/callback', githubCallback);
+app.use(serveErrorPage);
 
 module.exports = app;

@@ -1,6 +1,6 @@
 a {
   text-decoration: none;
-  color: #58585b;
+  color: black;
   text-align: left;
   width: 100%;
   white-space: nowrap;
@@ -39,7 +39,7 @@ a {
   margin: 0.7rem 0;
 }
 
-#title-post {
+.title-post {
   font-size: 2rem;
   font-weight: lighter;
   overflow: hidden;
@@ -50,4 +50,17 @@ a {
 .author-details-post {
   font-size: 1rem;
   font-weight: normal;
+  color: #3c3c41;
+}
+
+.info-post {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.date {
+  margin-top: 7px;
+  font-size: 13px;
+  color: #58585b;
 }

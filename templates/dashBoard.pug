@@ -23,10 +23,10 @@ head
   each value in posts 
     .container-post
       .data-post
-        #title-post(title=value.title)
+        .title-post(title=value.title)
           a(href=`/blog/${value.id}`)=value.title
         br
-        #info-post
-          p.author-details-post=value.username
-          p.author-details-post=new Date(value.last_modified).toLocaleString()
+        .info-post
+          span.author-details-post=value.username
+          span.date=new Date(value.last_modified).toDateString()
       img.cover-image-post(src='/images/cricket.jpeg' alt='No image')

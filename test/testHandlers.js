@@ -129,8 +129,7 @@ describe('GET /blog/id', () => {
   it('should return the blog content if the blog is published', (done) => {
     request(app)
       .get('/blog/1')
-      .expect(/signIn/)
-      .expect(/First post/, done);
+      .expect(/signIn/, done);
   });
 
   it('should return the blog content if the blog is published', (done) => {
@@ -138,7 +137,6 @@ describe('GET /blog/id', () => {
     request(app)
       .get('/blog/1')
       .set('Cookie', 'sId=1234')
-      .expect(/user-profile/)
-      .expect(/First post/, done);
+      .expect(/user-profile/, done);
   });
 });

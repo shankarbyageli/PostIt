@@ -2,7 +2,7 @@ const Database = require('../src/database');
 const assert = require('assert');
 
 describe('addPost', () => {
-  it('should add the post to database', (done) => {
+  it('should give error if database failure', (done) => {
     const db = { run: (query, callback) => callback('error') };
     const database = new Database(db);
     database.addPost({ id: 1, title: 'title', content: { time: '1' } }, 2)
@@ -24,7 +24,7 @@ describe('addPost', () => {
 });
 
 describe('getPost', () => {
-  it('should add the post to database', (done) => {
+  it('should give error if database failure', (done) => {
     const db = { get: (query, callback) => callback('error') };
     const database = new Database(db);
     database.getPost(2)
@@ -34,7 +34,7 @@ describe('getPost', () => {
       })
   });
 
-  it('should add the post to database', (done) => {
+  it('should get the post from database', (done) => {
     const db = { get: (query, callback) => callback(null, true) };
     const database = new Database(db);
     database.getPost(2)
@@ -46,7 +46,7 @@ describe('getPost', () => {
 });
 
 describe('getUserById', () => {
-  it('should add the post to database', (done) => {
+  it('should give error if database failure', (done) => {
     const db = { get: (query, callback) => callback('error') };
     const database = new Database(db);
     database.getUserById(2)
@@ -56,7 +56,7 @@ describe('getUserById', () => {
       })
   });
 
-  it('should add the post to database', (done) => {
+  it('should get the user details of given id', (done) => {
     const db = { get: (query, callback) => callback(null, { username: 'ramu' }) };
     const database = new Database(db);
     database.getUserById(2)
@@ -68,7 +68,7 @@ describe('getUserById', () => {
 });
 
 describe('addUser', () => {
-  it('should add the post to database', (done) => {
+  it('should give error if database failure', (done) => {
     const db = { run: (query, callback) => callback('error') };
     const database = new Database(db);
     database.addUser({ login: 'kaka', avatar_url: 'https://img.com' })
@@ -78,7 +78,7 @@ describe('addUser', () => {
       })
   });
 
-  it('should add the post to database', (done) => {
+  it('should add the given user details to users table and return true', (done) => {
     const db = { run: (query, callback) => callback(null, true) };
     const database = new Database(db);
     database.addUser({ login: 'kaka', avatar_url: 'https://img.com' })
@@ -90,7 +90,7 @@ describe('addUser', () => {
 });
 
 describe('getUser', () => {
-  it('should add the post to database', (done) => {
+  it('should give error if database failure', (done) => {
     const db = { get: (query, params, callback) => callback('error') };
     const database = new Database(db);
     database.getUser('mama')
@@ -100,7 +100,7 @@ describe('getUser', () => {
       })
   });
 
-  it('should add the post to database', (done) => {
+  it('should get user details of given id', (done) => {
     const db = { get: (query, params, callback) => callback(null, { user_id: 7 }) };
     const database = new Database(db);
     database.getUser('mama')
@@ -110,7 +110,7 @@ describe('getUser', () => {
       }, null)
   });
 
-  it('should add the post to database', (done) => {
+  it('should return false if user id doesn\'t exist', (done) => {
     const db = { get: (query, params, callback) => callback(null, null) };
     const database = new Database(db);
     database.getUser('mama')
@@ -123,7 +123,7 @@ describe('getUser', () => {
 
 
 describe('getLatestPosts', () => {
-  it('should add the post to database', (done) => {
+  it('should give error if database failure', (done) => {
     const db = { all: (query, callback) => callback('error') };
     const database = new Database(db);
     database.getLatestPosts(5)
@@ -133,7 +133,7 @@ describe('getLatestPosts', () => {
       })
   });
 
-  it('should add the post to database', (done) => {
+  it('should get the latest posts', (done) => {
     const db = { all: (query, callback) => callback(null, [{ username: 'ramu', id: 7 }]) };
     const database = new Database(db);
     database.getLatestPosts(5)

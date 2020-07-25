@@ -139,4 +139,12 @@ describe('GET /blog/id', () => {
       .set('Cookie', 'sId=1234')
       .expect(/user-profile/, done);
   });
+
+  it('should return the blog content if the blog is published', (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/blog/100')
+      .set('Cookie', 'sId=1234')
+      .expect(/404 : Page Not Found/, done);
+  });
 });

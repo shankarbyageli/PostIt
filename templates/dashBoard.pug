@@ -3,7 +3,7 @@ head
   meta(charset='UTF-8')
   script.
   link(rel="stylesheet" href="/user/css/dashBoard.css")
-  link(rel="stylesheet" href="/user/css/editor.css")
+  link(rel='stylesheet' href='/user/css/menubar.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
 
@@ -13,8 +13,8 @@ head
   #actions
     #buttonsBox
       a#link_text(href='/user/editor')
-        span#publish
-          button Write a post
+        span
+          button.action-button Write a post
     img#user-profile(src=avatar_url)
 
 #all-posts

@@ -20,8 +20,13 @@ head
     onReady : disableEdit,
     });
     }
-    const disableEdit = () => {
-      document.querySelectorAll('[contenteditable=true]')
+    var disableEdit = () => {
+      let editable_elements = document.querySelectorAll("[contenteditable=true]");
+      editable_elements.forEach(el => el.removeAttribute("contenteditable"))
+      let icon_settings = document.querySelectorAll('.ce-toolbar__settings-btn');
+      icon_settings.forEach(el => el.remove())
+      let blockElements = document.getElementById("editorjs"); // id of editor element
+      blockElements.style.pointerEvents = "none";
     };
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/header@latest')

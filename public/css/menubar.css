@@ -38,6 +38,8 @@ body {
   height: 65px;
   padding: 0px 200px;
   background: aliceblue;
+  position: sticky;
+  top: 0;
 }
 
 #user-profile {

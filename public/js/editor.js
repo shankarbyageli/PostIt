@@ -1,42 +1,27 @@
-let editor = new EditorJS({
-  holderId: 'editorjs',
-  tools: {
-    paragraph: {
-      class: Paragraph,
-      config: {
-        placeholder: 'Lets write ! ',
-        inlineToolbar: true,
-      },
-    },
-    Lists: {
-      class: List,
-      inlineToolbar: true,
-    },
-  },
-});
-
-const getPostContent = async function () {
-  const title = document.getElementById('title').innerText;
-  const data = { title };
+const getPostContent = async function (editor) {
   editor.save().then((content) => {
-    data.content = content;
-    const response = fetch('/user/publish', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      window.location.href = '/';
-    });
+    const title = document.getElementById('title').innerText;
+    const data = JSON.stringify({ content, title });
+    sendReq('POST', '/user/publish', () => (window.location.href = '/'), data);
   });
 };
-
-const addListeners = function () {
-  const saveBtn = document.getElementById('publish');
-  saveBtn.addEventListener('click', getPostContent);
+const getEditorOptions = function () {
+  return {
+    holderId: 'editorjs',
+    tools: {
+      paragraph: {
+        class: Paragraph,
+        config: { placeholder: 'Lets write ! ', inlineToolbar: true },
+      },
+      Lists: { class: List, inlineToolbar: true },
+    },
+  };
 };
-
+const addListeners = function () {
+  let editor = new EditorJS(getEditorOptions());
+  const publishBtn = document.getElementById('publish');
+  publishBtn.addEventListener('click', getPostContent.bind(null, editor));
+};
 const sendReq = function (method, url, callback, content) {
   const xhr = new XMLHttpRequest();
   xhr.onload = function () {
@@ -49,5 +34,4 @@ const sendReq = function (method, url, callback, content) {
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(content);
 };
-
 window.onload = addListeners;

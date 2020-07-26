@@ -6,34 +6,11 @@ head
   link(rel='stylesheet' href='/css/readBlog.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
-  script.
-    const render = function(data) {
-    let editor = new EditorJS({
-    holderId: 'editorjs',
-    data,
-    tools: {
-    paragraph: {
-    class: Paragraph,
-    },
-    Lists: {
-    class: List,
-    },
-    },
-    onReady : disableEdit,
-    });
-    }
-    var disableEdit = () => {
-      let editable_elements = document.querySelectorAll("[contenteditable=true]");
-      editable_elements.forEach(el => el.removeAttribute("contenteditable"))
-      let icon_settings = document.querySelectorAll('.ce-toolbar__settings-btn');
-      icon_settings.forEach(el => el.remove())
-      let blockElements = document.getElementById("editorjs"); // id of editor element
-      blockElements.style.pointerEvents = "none";
-    };
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/header@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/list@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest')
+  script(src='/js/readBlog.js')
 
 body(onload=`render(${data})`)  
 

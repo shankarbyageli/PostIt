@@ -12,6 +12,7 @@ const {
   serveErrorPage,
   getBlog,
   ensureLogin,
+  getLoggedInDetails,
 } = require('./handlers');
 
 const db = new sqlite.Database(`database/${process.env.db}`);
@@ -26,13 +27,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(getLoggedInDetails);
 app.use('/user', userRouter);
 app.get('/blog/:id', getBlog);
 app.get('/', serveDashboard);
 app.use(express.static(`${__dirname}/../public`));
 app.get('/signIn', signIn);
 app.get('/callback', githubCallback);
-app.use(ensureLogin);
 app.use(serveErrorPage);
 
 module.exports = app;

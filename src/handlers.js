@@ -1,7 +1,7 @@
 const { clientId, clientSecret } = require('../config');
 const { getUserDetail, makeRequest } = require('./lib');
 
-const ensureLogin = async function (req, res, next) {
+const getLoggedInDetails = async function (req, res, next) {
   const sessions = req.app.locals.sessions;
   if (sessions[req.cookies.sId] !== undefined) {
     req.user = sessions[req.cookies.sId];
@@ -10,6 +10,12 @@ const ensureLogin = async function (req, res, next) {
     );
     req.avatar_url = avatar_url;
     req.username = username;
+  }
+  next();
+};
+
+const ensureLogin = async function (req, res, next) {
+  if (req.user !== undefined) {
     next();
   } else {
     req.url = '/signIn.html';
@@ -18,16 +24,11 @@ const ensureLogin = async function (req, res, next) {
 };
 
 const serveDashboard = async function (req, res, next) {
-  const sessions = req.app.locals.sessions;
-  if (sessions[req.cookies.sId] !== undefined) {
-    req.user = sessions[req.cookies.sId];
-    const { avatar_url, username } = await req.app.locals.db.getUserById(
-      req.user
-    );
+  if (req.user !== undefined) {
     res.render('dashBoard', {
       posts: await req.app.locals.db.getLatestPosts(10),
-      avatar_url,
-      username,
+      avatar_url: req.avatar_url,
+      username: req.username,
     });
   } else {
     req.url = '/signIn.html';
@@ -47,10 +48,7 @@ const publish = function (req, res) {
 const getBlog = async function (req, res, next) {
   const { id } = req.params;
   if (!+id) return next();
-  const user_id = req.app.locals.sessions[req.cookies.sId];
-  const avatar_url = user_id
-    ? (await req.app.locals.db.getUserById(user_id)).avatar_url
-    : false;
+  const avatar_url = req.user ? req.avatar_url : false;
   const response = await req.app.locals.db.getPost(id);
   if (response) {
     const author = await req.app.locals.db.getUserById(response.author_id);
@@ -118,4 +116,5 @@ module.exports = {
   serveEditor,
   getBlog,
   serveErrorPage,
+  getLoggedInDetails,
 };

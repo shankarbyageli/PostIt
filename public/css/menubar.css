@@ -25,6 +25,9 @@ body {
   border-radius: 5px;
   font-size: 15px;
   height: 28px;
+}
+
+#buttonsBox {
   margin-right: 17px;
 }
 

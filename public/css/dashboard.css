@@ -71,3 +71,7 @@ li {
   font-size: 13px;
   color: #555252;
 }
+
+button:hover {
+  cursor: pointer;
+}

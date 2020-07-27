@@ -6,11 +6,6 @@ head
       const element = document.getElementById('drop-down');
       element.classList.toggle("show");
     }
-
-    const hideMenu = function() {
-      const element = document.getElementById('drop-down');
-      element.classList.remove('show')
-    }
   link(rel='stylesheet' href='/css/menubar.css')
   script(src="/js/menubar.js")
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
@@ -30,4 +25,4 @@ head
           span.sign_in Sign in
 .dropdown#drop-down
   a.menu(href="/user/editor") Write New story
-  a.menu(href="/user/editor") Sign out 
+  a.menu(href="/user/signOut") Sign out 

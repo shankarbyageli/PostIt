@@ -156,3 +156,13 @@ describe('GET /blog/id', () => {
       .expect(/404 : Page Not Found/, done);
   });
 });
+
+describe('GET /user/signOut', () => {
+  it('user should be redirected to the signIn page after signOut', (done) => {
+    app.locals.sessions = { '1234': '1' };
+    request(app)
+      .get('/user/signOut')
+      .set('Cookie', 'sId=1234')
+      .expect(302, done);
+  });
+});

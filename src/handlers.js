@@ -21,6 +21,15 @@ const ensureLogin = async function (req, res, next) {
   }
 };
 
+const signOut = function (req, res, next) {
+  const sessions = req.app.locals.sessions;
+  console.log(sessions);
+  delete sessions[req.cookies.sId];
+  console.log(sessions);
+
+  res.redirect('/');
+};
+
 const serveDashboard = async function (req, res, next) {
   if (req.user !== undefined) {
     res.render('dashBoard', {
@@ -115,4 +124,5 @@ module.exports = {
   getBlog,
   serveErrorPage,
   getLoggedInDetails,
+  signOut,
 };

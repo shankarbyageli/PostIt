@@ -24,8 +24,9 @@ head
       .data-post
         .title-post(title=value.title)
           a(href=`/blog/${value.id}`)=value.title
+        .data=JSON.parse(value.content).blocks[0].data.text
         br
         .info-post
           span.author-details-post=value.username
           span.date=new Date(value.last_modified).toDateString()
-      img.cover-image-post(src='/images/cricket.jpeg' alt='No image')
+      //- img.cover-image-post(src='/images/cricket.jpeg' alt='No image')

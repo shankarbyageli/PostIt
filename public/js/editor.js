@@ -1,7 +1,7 @@
 const isAbleToPublish = function () {
   const title = document.getElementById('title').innerText;
   const publishBtn = document.querySelector('#publish');
-  if (title === '') {
+  if (title.trim() === '') {
     publishBtn.setAttribute('style', 'background-color: #c5cac9');
     return;
   }
@@ -10,7 +10,7 @@ const isAbleToPublish = function () {
 
 const getPostContent = async function (editor) {
   const title = document.getElementById('title').innerText;
-  if (title === '') return;
+  if (title.trim() === '') return;
   editor.save().then((content) => {
     const data = JSON.stringify({ content, title });
     sendReq('POST', '/user/publish', () => (window.location.href = '/'), data);

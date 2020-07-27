@@ -11,6 +11,7 @@ const {
   githubCallback,
   serveErrorPage,
   getBlog,
+  ensureLogin,
 } = require('./handlers');
 
 const db = new sqlite.Database(`database/${process.env.db}`);
@@ -31,6 +32,7 @@ app.get('/', serveDashboard);
 app.use(express.static(`${__dirname}/../public`));
 app.get('/signIn', signIn);
 app.get('/callback', githubCallback);
+app.use(ensureLogin);
 app.use(serveErrorPage);
 
 module.exports = app;

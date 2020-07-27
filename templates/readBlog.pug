@@ -1,6 +1,7 @@
 doctype html
 head
   meta(charset='UTF-8')
+  include ./menubar.pug
   link(rel='stylesheet' href='/css/editor.css')
   link(rel='stylesheet' href='/css/menubar.css')
   link(rel='stylesheet' href='/css/readBlog.css')
@@ -14,17 +15,7 @@ head
 
 body(onload=`render(${data})`)  
 
-#menu-bar
-  #logoBox
-    a(href="/")
-      img#logo
-  #actions
-    if avatar_url
-      img#user-profile(src=avatar_url)
-    else
-      #buttonsBox
-        a#link_text(href='/signIn')
-          span.sign_in Sign in
+
 #post
   #title=title_text
   .user

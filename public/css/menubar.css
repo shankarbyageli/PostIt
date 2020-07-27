@@ -1,6 +1,7 @@
 body {
   margin: 0px;
 }
+
 #logo {
   content: url(/images/logo.png);
   height: 22px;
@@ -50,4 +51,15 @@ body {
 #user-profile {
   width: 42px;
   border-radius: 50%;
+}
+
+.sign_in {
+  width: 9%;
+  height: 2.3rem;
+  background-color: #03a87c;
+  color: whitesmoke;
+  border: none;
+  border-radius: 0.2rem;
+  text-align: center;
+  padding: 0.7rem 2rem;
 }

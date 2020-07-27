@@ -1,10 +1,15 @@
 const { clientId, clientSecret } = require('../config');
 const { getUserDetail, makeRequest } = require('./lib');
 
-const ensureLogin = function (req, res, next) {
+const ensureLogin = async function (req, res, next) {
   const sessions = req.app.locals.sessions;
   if (sessions[req.cookies.sId] !== undefined) {
     req.user = sessions[req.cookies.sId];
+    const { avatar_url, username } = await req.app.locals.db.getUserById(
+      req.user
+    );
+    req.avatar_url = avatar_url;
+    req.username = username;
     next();
   } else {
     req.url = '/signIn.html';
@@ -31,9 +36,7 @@ const serveDashboard = async function (req, res, next) {
 };
 
 const serveEditor = function (req, res) {
-  req.app.locals.db.getUserById(req.user).then(({ avatar_url }) => {
-    res.render('editor', { avatar_url });
-  });
+  res.render('editor', { avatar_url: req.avatar_url });
 };
 
 const publish = function (req, res) {
@@ -66,7 +69,7 @@ const getBlog = async function (req, res, next) {
 
 const serveErrorPage = function (req, res) {
   res.status(404);
-  res.render('error');
+  res.render('error', { avatar_url: req.avatar_url });
 };
 
 const signIn = function (req, res) {
@@ -88,16 +91,16 @@ const githubCallback = function (req, resp) {
   };
   makeRequest(url, params)
     .then(getUserDetail)
-    .then(async details => {
+    .then(async (details) => {
       const user = JSON.parse(details);
-      const userDetails = await req.app.locals.db.getUser(user.login)
+      const userDetails = await req.app.locals.db.getUser(user.login);
       const sId = Date.now();
       if (userDetails) {
         req.app.locals.sessions[sId] = userDetails.user_id;
         resp.cookie('sId', sId);
         resp.redirect('/');
       } else {
-        await req.app.locals.db.addUser(user)
+        await req.app.locals.db.addUser(user);
         const userDetails = await req.app.locals.db.getUser(user.login);
         req.app.locals.sessions[sId] = userDetails.user_id;
         resp.cookie('sId', sId);

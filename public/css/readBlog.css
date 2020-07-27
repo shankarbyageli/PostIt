@@ -17,3 +17,8 @@
   font-size: 0.7rem;
   margin-top: 3px;
 }
+
+#user-profile {
+  width: 42px;
+  border-radius: 50%;
+}

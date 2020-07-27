@@ -1,0 +1,19 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  script.
+  link(rel='stylesheet' href='/css/menubar.css')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title PostIt
+
+#menu-bar
+  #logoBox
+    a(href="/")
+      img#logo
+  #actions
+    if avatar_url
+      img#user-profile(src=avatar_url)
+    else
+      #buttonsBox
+        a#link_text(href='/signIn')
+          span.sign_in Sign in

@@ -1,8 +1,18 @@
 doctype html
 head
   meta(charset='UTF-8')
-  script.
+  script. 
+    const showMenu = function() {
+      const element = document.getElementById('drop-down');
+      element.classList.toggle("show");
+    }
+
+    const hideMenu = function() {
+      const element = document.getElementById('drop-down');
+      element.classList.remove('show')
+    }
   link(rel='stylesheet' href='/css/menubar.css')
+  script(src="/js/menubar.js")
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
 
@@ -10,10 +20,14 @@ head
   #logoBox
     a(href="/")
       img#logo
+  
   #actions
     if avatar_url
-      img#user-profile(src=avatar_url)
+      img#user-profile(src=avatar_url onclick="showMenu()")
     else
       #buttonsBox
         a#link_text(href='/signIn')
           span.sign_in Sign in
+.dropdown#drop-down
+  a.menu(href="/user/editor") Write New story
+  a.menu(href="/user/editor") Sign out 

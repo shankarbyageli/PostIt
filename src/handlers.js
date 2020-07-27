@@ -5,11 +5,9 @@ const getLoggedInDetails = async function (req, res, next) {
   const sessions = req.app.locals.sessions;
   if (sessions[req.cookies.sId] !== undefined) {
     req.user = sessions[req.cookies.sId];
-    const { avatar_url, username } = await req.app.locals.db.getUserById(
-      req.user
-    );
-    req.avatar_url = avatar_url;
-    req.username = username;
+    const userDetails = await req.app.locals.db.getUserById(req.user);
+    req.avatar_url = userDetails.avatar_url;
+    req.username = userDetails.username;
   }
   next();
 };

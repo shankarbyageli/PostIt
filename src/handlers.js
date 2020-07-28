@@ -77,10 +77,18 @@ const serveComments = async function (req, res, next) {
     comments: await req.app.locals.db.getComments(blogId),
   };
   if (req.user) {
+    renderOptions.blogId = blogId;
     renderOptions.currentUser = req.username;
-    renderOptions.userAvatar_url = req.avatar_url;
+    renderOptions.avatar_url = req.avatar_url;
   }
   res.render('comments', renderOptions);
+};
+
+const publishComment = function (req, res, next) {
+  const { comment, blogId } = req.body;
+  const date = new Date().valueOf();
+  req.app.locals.db.addComment(comment, blogId, req.user, date);
+  res.send('Published Comment');
 };
 
 const serveErrorPage = function (req, res) {
@@ -128,4 +136,5 @@ module.exports = {
   getLoggedInDetails,
   signOut,
   serveComments,
+  publishComment,
 };

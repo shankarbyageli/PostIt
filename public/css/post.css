@@ -10,7 +10,6 @@
   justify-content: space-between;
   width: 60%;
   height: 30%;
-  /* border: 1px solid black; */
   padding: 0 1rem;
   margin-left: 16rem;
   margin-top: 0.5rem;
@@ -33,7 +32,7 @@
 }
 
 .title-post {
-  font-size: 2rem;
+  font-size: 1.7rem;
   font-weight: lighter;
   overflow: hidden;
   white-space: nowrap;

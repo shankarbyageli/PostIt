@@ -75,13 +75,28 @@ class Database {
   };
 
   getComments(blogId) {
-    const query = `select * from comments join users on comments.comment_by = users.user_id where id = ${blogId}`;
+    const query = `select * from comments join users on comments.comment_by = users.user_id where comment_on = ${blogId} order by comments.id desc`;
     return new Promise((resolve, reject) => {
       this.db.all(query, async (err, rows) => {
         if (err) {
           reject(err);
         }
         resolve(rows);
+      });
+    });
+  }
+
+  addComment(comment, blogId, userId, date) {
+    const query = `INSERT INTO comments 
+      (comment_on,comment_by,commented_at,comment) VALUES
+      (${blogId},${userId},${date},'${comment}')`;
+    return new Promise((resolve, reject) => {
+      this.db.run(query, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(true);
+        }
       });
     });
   }

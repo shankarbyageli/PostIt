@@ -2,16 +2,17 @@ doctype html
 head
   meta(charset='UTF-8')
   link(rel='stylesheet' href='/css/comments.css')
+  script(src="/user/js/comment.js")
   include ./menubar.pug
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Comments
-  if userAvatar_url
+  if avatar_url
     #newComment
       .user-details
-        img.user-profile(src=userAvatar_url )
+        img.user-profile(src=avatar_url )
         span.username=currentUser
       p#new-comment.commentText(contenteditable='true' placeholder='Write your thoughts here ...')
-      button#publish Publish
+      button#publish(onclick=`publishComment(${blogId})`) Publish
 
 each value in comments
   .comment-box
@@ -19,6 +20,3 @@ each value in comments
       img.user-profile(src=value.avatar_url)
       span.username=value.username
     p.commentText=value.comment
-   
-
-   

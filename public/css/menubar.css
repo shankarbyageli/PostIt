@@ -1,4 +1,6 @@
 body {
+  font-family: medium-content-sans-serif-font, 'Lucida Grande',
+    'Lucida Sans Unicode', 'Lucida Sans', Geneva, Arial, sans-serif;
   margin: 0px;
 }
 
@@ -75,7 +77,7 @@ body {
   min-width: 180px;
   background-color: white;
   color: #fff;
-  border-radius: 6px;
+  border-radius: 3px;
   padding: 8px 0;
   position: absolute;
   z-index: 1;
@@ -111,7 +113,7 @@ body {
 
 .popup .show {
   visibility: visible;
-  animation: fadeIn 1s;
+  animation: fadeIn 0.2s;
 }
 
 @-webkit-keyframes fadeIn {

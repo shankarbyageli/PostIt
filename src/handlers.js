@@ -74,7 +74,7 @@ const getBlog = async function (req, res, next) {
 const serveComments = async function (req, res, next) {
   const { blogId } = req.params;
   const renderOptions = {
-    comments: JSON.stringify(await req.app.locals.db.getComments(blogId)),
+    comments: await req.app.locals.db.getComments(blogId),
   };
   if (req.user) {
     renderOptions.currentUser = req.username;

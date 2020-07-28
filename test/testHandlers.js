@@ -174,6 +174,7 @@ describe('GET /seeAllComments/:blogId', () => {
     request(app)
       .get('/seeAllComments/1')
       .set('Cookie', 'sId=1234')
+      .expect(/superb/)
       .expect(200, done);
   });
 });

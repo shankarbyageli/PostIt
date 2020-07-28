@@ -146,5 +146,5 @@ module.exports = {
   signOut,
   serveComments,
   publishComment,
-  autoSave
+  autoSave,
 };

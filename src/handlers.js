@@ -1,5 +1,5 @@
 const { clientId, clientSecret } = require('../config');
-const { getUserDetail, makeRequest } = require('./lib');
+const { getUserDetail, makeRequest, addUserDetails } = require('./lib');
 
 const getLoggedInDetails = async function (req, res, next) {
   const sessions = req.app.locals.sessions;
@@ -23,10 +23,8 @@ const ensureLogin = async function (req, res, next) {
 
 const signOut = function (req, res, next) {
   const sessions = req.app.locals.sessions;
-  console.log(sessions);
   delete sessions[req.cookies.sId];
-  console.log(sessions);
-
+  res.clearCookie('sId');
   res.redirect('/');
 };
 
@@ -82,7 +80,7 @@ const signIn = function (req, res) {
   res.redirect(`https://github.com/login/oauth/authorize?${params}`);
 };
 
-const githubCallback = function (req, resp) {
+const githubCallback = function (req, res) {
   const code = req.url.split('=')[1];
   const params = {
     client_id: clientId,
@@ -96,21 +94,12 @@ const githubCallback = function (req, resp) {
   };
   makeRequest(url, params)
     .then(getUserDetail)
-    .then(async (details) => {
-      const user = JSON.parse(details);
-      const userDetails = await req.app.locals.db.getUser(user.login);
+    .then((details) => addUserDetails(req, details))
+    .then(userDetails => {
       const sId = Date.now();
-      if (userDetails) {
-        req.app.locals.sessions[sId] = userDetails.user_id;
-        resp.cookie('sId', sId);
-        resp.redirect('/');
-      } else {
-        await req.app.locals.db.addUser(user);
-        const userDetails = await req.app.locals.db.getUser(user.login);
-        req.app.locals.sessions[sId] = userDetails.user_id;
-        resp.cookie('sId', sId);
-        resp.redirect('/');
-      }
+      req.app.locals.sessions[sId] = userDetails.user_id;
+      res.cookie('sId', sId);
+      res.redirect('/');
     });
 };
 

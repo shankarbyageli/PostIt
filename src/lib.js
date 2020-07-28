@@ -11,15 +11,18 @@ const getUserDetail = (tokenDetails) => {
       Authorization: `token ${token}`,
     },
   };
-  return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', (chunk) => (data += chunk));
-      res.on('end', () => resolve(data.toString()));
-    });
-    req.end();
-  });
+  return makeRequest(options, {});
 };
+
+const addUserDetails = async function (req, details) {
+  const user = JSON.parse(details);
+  let userDetails = await req.app.locals.db.getUser(user.login);
+  if (!userDetails) {
+    await req.app.locals.db.addUser(user);
+    userDetails = await req.app.locals.db.getUser(user.login);
+  }
+  return userDetails;
+}
 
 const makeRequest = function (options, params) {
   return new Promise((resolve, reject) => {
@@ -34,4 +37,4 @@ const makeRequest = function (options, params) {
   })
 };
 
-module.exports = { getUserDetail, makeRequest };
+module.exports = { getUserDetail, makeRequest, addUserDetails };

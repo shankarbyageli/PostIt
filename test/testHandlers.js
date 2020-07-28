@@ -1,5 +1,7 @@
 const request = require('supertest');
 const app = require('../src/app');
+const sinon = require('sinon');
+let { makeRequest } = require('../src/lib');
 
 describe('GET', () => {
   afterEach(() => {
@@ -73,7 +75,7 @@ describe('POST /publish', () => {
   };
 
   it('Should publish the post', (done) => {
-    app.locals.sessions = { '1234': '1' };
+    app.locals.sessions = { '1234': 1 };
     request(app)
       .post('/user/publish')
       .set('Cookie', 'sId=1234')
@@ -90,7 +92,7 @@ describe('Ensure login', () => {
   });
 
   it('should get css file if session is there', (done) => {
-    app.locals.sessions = { '1234': '1' };
+    app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/user/css/editor.css')
       .set('Cookie', 'sId=1234')
@@ -112,7 +114,7 @@ describe('GET /user/editor', () => {
   });
 
   it('should get editor', (done) => {
-    app.locals.sessions = { '1234': '1' };
+    app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/user/editor')
       .set('Cookie', 'sId=1234')
@@ -159,7 +161,7 @@ describe('GET /blog/id', () => {
 
 describe('GET /user/signOut', () => {
   it('user should be redirected to the signIn page after signOut', (done) => {
-    app.locals.sessions = { '1234': '1' };
+    app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/user/signOut')
       .set('Cookie', 'sId=1234')

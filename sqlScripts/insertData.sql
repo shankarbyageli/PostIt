@@ -6,4 +6,4 @@ VALUES
 INSERT INTO stories
   (is_published, author_id, title, content, last_modified)
 VALUES
-  (1, 1, 'First post', 'Sample content', 1552744582955);
+  (1, 1, 'Sample Post', '{"type":"paragraph","blocks":[{"data":{"text":"First post"}}]}', 1552744582955);

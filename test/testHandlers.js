@@ -216,7 +216,7 @@ describe('POST /autosave', () => {
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
       .expect(/id/)
-      .expect(/2/, done)
+      .expect(/2/, done);
   });
 
   it('should return back id of the already drafted post on autosave', (done) => {
@@ -243,7 +243,7 @@ describe('POST /autosave', () => {
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
       .expect(/id/)
-      .expect(/2/, done)
+      .expect(/2/, done);
   });
 
   it('should return back id of the already drafted post on autosave', (done) => {
@@ -253,6 +253,20 @@ describe('POST /autosave', () => {
       .set('Cookie', 'sId=1234')
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
-      .expect(/404/, done)
-  })
+      .expect(/404/, done);
+  });
+});
+
+describe('/user/publishComment', () => {
+  it('should publish the given comment', (done) => {
+    app.locals.sessions = { '1234': 1 };
+    const data = { comment: 'hiii', blogId: 1 };
+    request(app)
+      .post('/user/publishComment/')
+      .set('Cookie', 'sId=1234')
+      .set('Content-type', 'application/json')
+      .send(JSON.stringify(data))
+      .expect('Published Comment')
+      .expect(200, done);
+  });
 });

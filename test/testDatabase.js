@@ -3,7 +3,10 @@ const assert = require('assert');
 
 describe('addPost', () => {
   it('should give error if database failure', (done) => {
-    const db = { run: (query, callback) => callback('error'), serialize: (callback) => callback(run) };
+    const db = {
+      run: (query, callback) => callback('error'),
+      serialize: (callback) => callback(run),
+    };
     const database = new Database(db);
     database
       .addPost({ id: 1, title: 'title', content: { time: '1' } }, 2)
@@ -17,36 +20,39 @@ describe('addPost', () => {
     const db = {
       get: (query, callback) => callback(null, { id: 1 }),
       run: (query, callback) => callback(null),
-      serialize: (callback) => callback()
+      serialize: (callback) => callback(),
     };
     const database = new Database(db);
-    database.addPost({ title: 'title', content: { time: '1' } }, 2)
+    database
+      .addPost({ title: 'title', content: { time: '1' } }, 2)
       .then((actual) => {
-        assert.equal(actual, 1)
+        assert.equal(actual, 1);
         done();
-      }, null)
-  })
+      }, null);
+  });
 });
 
 describe('updatePost', () => {
   it('should give error if database failure', (done) => {
     const db = { run: (query, callback) => callback('error') };
     const database = new Database(db);
-    database.updatePost(1, { title: 'title', content: { time: '1' } })
+    database
+      .updatePost(1, { title: 'title', content: { time: '1' } })
       .then(null, (actual) => {
         assert.equal(actual, 'error');
         done();
-      })
+      });
   });
 
   it('should update the content of given post id', (done) => {
     const db = { run: (query, callback) => callback(null, true) };
     const database = new Database(db);
-    database.updatePost(1, { title: 'title', content: { time: '1' } })
+    database
+      .updatePost(1, { title: 'title', content: { time: '1' } })
       .then((actual) => {
         assert.ok(actual);
         done();
-      }, null)
+      }, null);
   });
 });
 
@@ -54,21 +60,19 @@ describe('publishPost', () => {
   it('should give error if database failure', (done) => {
     const db = { run: (query, callback) => callback('error') };
     const database = new Database(db);
-    database.publishPost(1)
-      .then(null, (actual) => {
-        assert.equal(actual, 'error');
-        done();
-      })
+    database.publishPost(1).then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
   });
 
   it('should publish the drafted post given the id', (done) => {
     const db = { run: (query, callback) => callback(null, true) };
     const database = new Database(db);
-    database.publishPost(1)
-      .then((actual) => {
-        assert.ok(actual)
-        done();
-      }, null)
+    database.publishPost(1).then((actual) => {
+      assert.ok(actual);
+      done();
+    }, null);
   });
 });
 
@@ -85,11 +89,10 @@ describe('getPost', () => {
   it('should get the post from database', (done) => {
     const db = { get: (query, callback) => callback(null, true) };
     const database = new Database(db);
-    database.getPost(2)
-      .then((actual) => {
-        assert.ok(actual)
-        done();
-      }, null)
+    database.getPost(2).then((actual) => {
+      assert.ok(actual);
+      done();
+    }, null);
   });
 });
 
@@ -201,4 +204,37 @@ describe('getComments', () => {
       done();
     }, null);
   });
+
+  it('should give error for database failure ', () => {
+    const db = { all: (query, callback) => callback('error') };
+    const database = new Database(db);
+    database.getComments('ab').then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+});
+
+describe('addComment', () => {
+  it('should give error if database failure', (done) => {
+    const db = { run: (query, callback) => callback('error') };
+    const database = new Database(db);
+    database
+      .addComment({ comment: 'Hi user !', blogId: 'sdd' })
+      .then(null, (actual) => {
+        assert.equal(actual, 'error');
+        done();
+      });
+  });
+
+  // it('should add the given user details to users table and return true', (done) => {
+  //   const db = { run: (query, callback) => callback(null, true) };
+  //   const database = new Database(db);
+  //   database
+  //     .addUser({ login: 'kaka', avatar_url: 'https://img.com' })
+  //     .then((actual) => {
+  //       assert.ok(actual);
+  //       done();
+  //     }, null);
+  // });
 });

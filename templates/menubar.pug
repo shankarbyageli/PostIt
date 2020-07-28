@@ -4,13 +4,22 @@ head
   script. 
     const showMenu = function() {
       const popup = document.getElementById("drop-down");
-      popup.classList.toggle("show");
+      popup.classList.add("show");
+    }
+
+    const hideMenu = function() {
+      const popup = document.getElementById("drop-down");
+      popup.classList.remove("show");
     }
     window.onclick = function(event) {
-     if (!event.target.matches('#user-profile')) {
+      console.log(event.target.id);
+     if (event.target.id =='user-profile' ) {
        showMenu();
+     } else {
+       hideMenu();
      }
     }
+
   link(rel='stylesheet' href='/css/menubar.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
@@ -21,8 +30,8 @@ head
       img#logo
   #actions
     if avatar_url
-      .popup(onclick='showMenu()')
-        img#user-profile(src=avatar_url)
+      .popup
+        img#user-profile(src=avatar_url onclick='showMenu()')
         #drop-down.drop-down-container
           a.menu(href='/user/editor') Write new story
           a.menu(href='/user/signOut') Sign out

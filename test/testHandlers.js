@@ -159,6 +159,10 @@ describe('GET /blog/id', () => {
 });
 
 describe('GET /user/signOut', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
   it('user should be redirected to the signIn page after signOut', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
@@ -169,6 +173,10 @@ describe('GET /user/signOut', () => {
 });
 
 describe('GET /seeAllComments/:blogId', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
   it('user should be redirected to the signIn page after signOut', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
@@ -177,4 +185,74 @@ describe('GET /seeAllComments/:blogId', () => {
       .expect(/superb/)
       .expect(200, done);
   });
+});
+
+describe('POST /autosave', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
+  it('should return back id of the new drafted post if request id is -1', (done) => {
+    app.locals.sessions = { '1234': 1 };
+    const data = {
+      title: 'my title',
+      content: {
+        time: 1552744582955,
+        blocks: [
+          {
+            type: 'text',
+            data: {
+              text:
+                'https://cdn.pixabay.com/photo/2017/09/01/21/53/blue-2705642_1280.jpg',
+            },
+          },
+        ],
+        version: '2.11.10',
+      },
+    };
+    request(app)
+      .post('/user/autosave/-1')
+      .set('Cookie', 'sId=1234')
+      .set('Content-type', 'application/json')
+      .send(JSON.stringify(data))
+      .expect(/id/)
+      .expect(/2/, done)
+  });
+
+  it('should return back id of the already drafted post on autosave', (done) => {
+    app.locals.sessions = { '1234': 1 };
+    const data = {
+      title: 'my title',
+      content: {
+        time: 1552744582955,
+        blocks: [
+          {
+            type: 'text',
+            data: {
+              text:
+                'https://cdn.pixabay.com/photo/2017/09/01/21/53/blue-2705642_1280.jpg',
+            },
+          },
+        ],
+        version: '2.11.10',
+      },
+    };
+    request(app)
+      .post('/user/autosave/2')
+      .set('Cookie', 'sId=1234')
+      .set('Content-type', 'application/json')
+      .send(JSON.stringify(data))
+      .expect(/id/)
+      .expect(/2/, done)
+  });
+
+  it('should return back id of the already drafted post on autosave', (done) => {
+    const data = {};
+    request(app)
+      .post('/user/autosave/2')
+      .set('Cookie', 'sId=1234')
+      .set('Content-type', 'application/json')
+      .send(JSON.stringify(data))
+      .expect(/404/, done)
+  })
 });

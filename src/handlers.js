@@ -1,4 +1,5 @@
 const { clientId, clientSecret } = require('../config');
+
 const { getUserDetail, makeRequest, addUserDetails } = require('./lib');
 
 const getLoggedInDetails = async function (req, res, next) {
@@ -34,6 +35,7 @@ const serveDashboard = async function (req, res, next) {
       posts: await req.app.locals.db.getLatestPosts(10),
       avatar_url: req.avatar_url,
       username: req.username,
+      takeMoment,
     });
   } else {
     req.url = '/signIn.html';

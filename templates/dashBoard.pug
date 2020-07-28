@@ -18,5 +18,5 @@ head
         br
         .info-post
           span.author-details-post=value.username
-          span.date=new Date(value.last_modified).toDateString()
+          span.date=takeMoment(value.last_modified)
       //- img.cover-image-post(src='/images/cricket.jpeg' alt='No image')

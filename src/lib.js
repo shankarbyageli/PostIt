@@ -1,5 +1,10 @@
 const https = require('https');
 const queryString = require('querystring');
+const moment = require('moment');
+
+takeMoment = function (date) {
+  return moment(date).fromNow();
+};
 
 const getUserDetail = (tokenDetails) => {
   const token = tokenDetails.split('&')[0].split('=')[1];
@@ -22,7 +27,7 @@ const addUserDetails = async function (req, details) {
     userDetails = await req.app.locals.db.getUser(user.login);
   }
   return userDetails;
-}
+};
 
 const makeRequest = function (options, params) {
   return new Promise((resolve, reject) => {
@@ -34,7 +39,7 @@ const makeRequest = function (options, params) {
       });
     });
     request.end(queryString.stringify(params));
-  })
+  });
 };
 
 module.exports = { getUserDetail, makeRequest, addUserDetails };

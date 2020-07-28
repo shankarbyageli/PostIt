@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../src/app');
-const sinon = require('sinon');
 let { makeRequest } = require('../src/lib');
 
 describe('GET', () => {

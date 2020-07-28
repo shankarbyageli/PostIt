@@ -13,7 +13,7 @@ head
     .container-post
       .data-post
         .title-post(title=value.title)
-          a(href=`/blog/${value.id}`)=value.title
+          a#title(href=`/blog/${value.id}`)=value.title
         .data=JSON.parse(value.content).blocks[0].data.text
         br
         .info-post

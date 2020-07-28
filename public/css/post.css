@@ -1,11 +1,3 @@
-a {
-  text-decoration: none;
-  color: black;
-  text-align: left;
-  width: 100%;
-  white-space: nowrap;
-}
-
 #all-posts {
   display: flex;
   flex-direction: column;

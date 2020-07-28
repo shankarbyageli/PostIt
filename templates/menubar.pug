@@ -3,11 +3,15 @@ head
   meta(charset='UTF-8')
   script. 
     const showMenu = function() {
-      const element = document.getElementById('drop-down');
-      element.classList.toggle("show");
+      const popup = document.getElementById("drop-down");
+      popup.classList.toggle("show");
+    }
+    window.onclick = function(event) {
+     if (!event.target.matches('#user-profile')) {
+       showMenu();
+     }
     }
   link(rel='stylesheet' href='/css/menubar.css')
-  script(src="/js/menubar.js")
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
 
@@ -15,14 +19,14 @@ head
   #logoBox
     a(href="/")
       img#logo
-  
   #actions
     if avatar_url
-      img#user-profile(src=avatar_url onclick="showMenu()")
+      .popup(onclick='showMenu()')
+        img#user-profile(src=avatar_url)
+        #drop-down.drop-down-container
+          a.menu(href='/user/editor') Write new story
+          a.menu(href='/user/signOut') Sign out
     else
       #buttonsBox
         a#link_text(href='/signIn')
           span.sign_in Sign in
-.dropdown#drop-down
-  a.menu(href="/user/editor") Write New story
-  a.menu(href="/user/signOut") Sign out 

@@ -64,10 +64,23 @@ const getBlog = async function (req, res, next) {
       date: response.last_modified,
       author: author.username,
       avatar_url,
+      blog_id: response.id,
     });
   } else {
     next();
   }
+};
+
+const serveComments = async function (req, res, next) {
+  const { blogId } = req.params;
+  const renderOptions = {
+    comments: JSON.stringify(await req.app.locals.db.getComments(blogId)),
+  };
+  if (req.user) {
+    renderOptions.currentUser = req.username;
+    renderOptions.userAvatar_url = req.avatar_url;
+  }
+  res.render('comments', renderOptions);
 };
 
 const serveErrorPage = function (req, res) {
@@ -95,7 +108,7 @@ const githubCallback = function (req, res) {
   makeRequest(url, params)
     .then(getUserDetail)
     .then((details) => addUserDetails(req, details))
-    .then(userDetails => {
+    .then((userDetails) => {
       const sId = Date.now();
       req.app.locals.sessions[sId] = userDetails.user_id;
       res.cookie('sId', sId);
@@ -114,4 +127,5 @@ module.exports = {
   serveErrorPage,
   getLoggedInDetails,
   signOut,
+  serveComments,
 };

@@ -74,6 +74,19 @@ class Database {
     });
   };
 
+  getComments(blogId) {
+    const query = `select * from comments join users on comments.comment_by = users.user_id where id = ${blogId}`;
+    return new Promise((resolve, reject) => {
+      this.db.all(query, async (err, rows) => {
+        if (err) {
+          reject(err);
+        }
+        console.log(rows);
+        resolve(rows);
+      });
+    });
+  }
+
   getLatestPosts = function (count) {
     const query = `select * from stories join users on stories.author_id = users.user_id order by stories.id desc limit ${count}`;
     return new Promise((resolve, reject) => {

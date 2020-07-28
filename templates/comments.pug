@@ -2,32 +2,23 @@ doctype html
 head
   meta(charset='UTF-8')
   link(rel='stylesheet' href='/css/comments.css')
+  include ./menubar.pug
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Comments
 #newComment
-  .user-details
-    img.user-profile(src='https://avatars1.githubusercontent.com/u/58026823?s=60&v=4')
-    span.username Anuja Chaitanya
-  p#new-comment.comment(contenteditable='true' placeholder='Write your thoughts here ...')
-  button#publish Publish
-.comment-box
-  .user-details
-    img.user-profile(src='https://avatars1.githubusercontent.com/u/58026823?s=60&v=4')
-    span.username Anuja Chaitanya
-  p.comment
-    | These are my some comments These are my some comments These are my some
-    | comments These are my some comments These are my some comments These are
-    | my some comments These are my some comments These are my some comments
-    | These are my some comments These are my some comments These are my some
-    | comments These are my some comments These are my some comments These are
-    | my some commentsThese are my some comments These are my some comments
-    | These are my some comments These are my some comments These are my some
-    | commentsThese are my some comments
-.comment-box
-  .user-details
-    img.user-profile(src='https://avatars1.githubusercontent.com/u/58026823?s=60&v=4')
-    span.username Anuja Chaitanya
-  p.comment
-    | These are my some comments These are my some comments These are my some
-    | comments These are my some comments These are my some comments These are
-    | my some comments
+  if userAvatar_url
+    .user-details
+      img.user-profile(src=userAvatar_url )
+      span.username=currentUser
+    p#new-comment.comment(contenteditable='true' placeholder='Write your thoughts here ...')
+    button#publish Publish
+
+each value in comments
+  .comment-box
+    .user-details
+      img.user-profile(src=avatar_url)
+      span.username=username
+    p.commentText=comment
+   
+
+   

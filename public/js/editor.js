@@ -33,8 +33,10 @@ const getEditorOptions = function () {
 const callback = function (res) {
   const postId = document.getElementsByClassName('post')[0].id;
   if (postId == "") {
+
     document.getElementsByClassName('post')[0].id = res.id;
   }
+  document.getElementById('status').innerText = 'Saved';
 };
 
 const addListeners = function () {
@@ -45,10 +47,11 @@ const addListeners = function () {
     element.addEventListener('keydown', () => {
       clearTimeout(editorTimeout);
       editorTimeout = setTimeout(async () => {
+        document.getElementById('status').innerText = 'Saving...';
         const data = await getPostContent(editor);
         const postId = document.getElementsByClassName('post')[0].id;
         sendReq('POST', `/user/autosave/${postId || -1}`, callback, JSON.stringify(data));
-      }, 2000);
+      }, 1000);
     });
   });
 

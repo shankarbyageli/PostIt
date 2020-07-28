@@ -105,7 +105,9 @@ class Database {
   };
 
   getComments(blogId) {
-    const query = `select * from comments join users on comments.comment_by = users.user_id where comment_on = ${blogId} order by comments.id desc`;
+    const query = `select * from comments 
+      join users on comments.comment_by = users.user_id
+      where comment_on = ${blogId} order by comments.id desc`;
     return new Promise((resolve, reject) => {
       this.db.all(query, async (err, rows) => {
         if (err) {

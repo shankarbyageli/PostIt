@@ -87,8 +87,11 @@ const getBlog = async function (req, res, next) {
 
 const serveComments = async function (req, res, next) {
   const { blogId } = req.params;
+  const blog = await req.app.locals.db.getPost(blogId);
   const renderOptions = {
     comments: await req.app.locals.db.getComments(blogId),
+    title_text: blog.title,
+    takeMoment,
   };
   if (req.user) {
     renderOptions.blogId = blogId;

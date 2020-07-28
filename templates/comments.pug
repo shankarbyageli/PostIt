@@ -6,17 +6,22 @@ head
   include ./menubar.pug
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Comments
-  if avatar_url
-    #newComment
-      .user-details
-        img.user-profile(src=avatar_url )
-        span.username=currentUser
-      p#new-comment.commentText(contenteditable='true' placeholder='Write your thoughts here ...')
-      button#publish(onclick=`publishComment(${blogId})`) Publish
+
+#title=title_text
+if avatar_url
+  #newComment
+    .user-details
+      img.user-profile(src=avatar_url )
+      span.username=currentUser
+    p#new-comment.commentText(contenteditable='true' placeholder='Write your thoughts here ...' onkeyup='isAbleToPublish()')
+    button#publish(onclick=`publishComment(${blogId})`) Publish
 
 each value in comments
   .comment-box
     .user-details
       img.user-profile(src=value.avatar_url)
-      span.username=value.username
+      div.details
+        span.username=value.username
+        br
+        span.date=takeMoment(value.commented_at)
     p.commentText=value.comment

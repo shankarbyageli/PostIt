@@ -226,15 +226,4 @@ describe('addComment', () => {
         done();
       });
   });
-
-  // it('should add the given user details to users table and return true', (done) => {
-  //   const db = { run: (query, callback) => callback(null, true) };
-  //   const database = new Database(db);
-  //   database
-  //     .addUser({ login: 'kaka', avatar_url: 'https://img.com' })
-  //     .then((actual) => {
-  //       assert.ok(actual);
-  //       done();
-  //     }, null);
-  // });
 });

@@ -1,6 +1,6 @@
 const publishComment = async function (blogId) {
   const newComment = document.getElementById('new-comment').innerText;
-  const response = await fetch('/user/publishComment', {
+  await fetch('/user/publishComment', {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',

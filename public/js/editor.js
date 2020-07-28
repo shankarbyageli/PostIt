@@ -14,7 +14,7 @@ const getPostContent = function (editor) {
     editor.save().then((content) => {
       resolve({ content, title });
     });
-  })
+  });
 };
 
 const getEditorOptions = function () {
@@ -32,7 +32,7 @@ const getEditorOptions = function () {
 
 const callback = function (res) {
   const postId = document.getElementsByClassName('post')[0].id;
-  if (postId == "") {
+  if (postId == '') {
     document.getElementsByClassName('post')[0].id = res.id;
   }
   document.getElementById('status').innerText = 'Saved';
@@ -50,7 +50,12 @@ const addListeners = function () {
         document.getElementById('status').innerText = 'Saving...';
         const data = await getPostContent(editor);
         const postId = document.getElementsByClassName('post')[0].id;
-        sendReq('POST', `/user/autosave/${postId || -1}`, callback, JSON.stringify(data));
+        sendReq(
+          'POST',
+          `/user/autosave/${postId || -1}`,
+          callback,
+          JSON.stringify(data)
+        );
       }, 1000);
     });
   });
@@ -59,7 +64,12 @@ const addListeners = function () {
   publishBtn.addEventListener('click', async () => {
     const data = await getPostContent(editor);
     const postId = document.getElementsByClassName('post')[0].id;
-    sendReq('POST', `/user/publish/${postId}`, () => (window.location.href = '/'), JSON.stringify(data));
+    sendReq(
+      'POST',
+      `/user/publish/${postId}`,
+      () => (window.location.href = '/'),
+      JSON.stringify(data)
+    );
   });
 };
 

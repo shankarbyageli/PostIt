@@ -76,7 +76,7 @@ describe('POST /publish', () => {
   it('Should publish the post', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
-      .post('/user/publish')
+      .post('/user/publish/1')
       .set('Cookie', 'sId=1234')
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))

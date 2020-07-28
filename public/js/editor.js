@@ -8,13 +8,13 @@ const isAbleToPublish = function () {
   publishBtn.setAttribute('style', 'background-color: #03a87c;cursor: pointer');
 };
 
-const getPostContent = async function (editor) {
+const getPostContent = function (editor) {
   const title = document.getElementById('title').innerText;
-  if (title.trim() === '') return;
-  editor.save().then((content) => {
-    const data = JSON.stringify({ content, title });
-    sendReq('POST', '/user/publish', () => (window.location.href = '/'), data);
-  });
+  return new Promise((resolve, reject) => {
+    editor.save().then((content) => {
+      resolve({ content, title });
+    });
+  })
 };
 
 const getEditorOptions = function () {
@@ -30,10 +30,34 @@ const getEditorOptions = function () {
   };
 };
 
+const callback = function (res) {
+  const postId = document.getElementsByClassName('post')[0].id;
+  if (postId == "") {
+    document.getElementsByClassName('post')[0].id = res.id;
+  }
+};
+
 const addListeners = function () {
   let editor = new EditorJS(getEditorOptions());
+
+  let editorTimeout = null;
+  Array.from(document.getElementsByClassName('content')).forEach((element) => {
+    element.addEventListener('keydown', () => {
+      clearTimeout(editorTimeout);
+      editorTimeout = setTimeout(async () => {
+        const data = await getPostContent(editor);
+        const postId = document.getElementsByClassName('post')[0].id;
+        sendReq('POST', `/user/autosave/${postId || -1}`, callback, JSON.stringify(data));
+      }, 2000);
+    });
+  });
+
   const publishBtn = document.getElementById('publish');
-  publishBtn.addEventListener('click', getPostContent.bind(null, editor));
+  publishBtn.addEventListener('click', async () => {
+    const data = await getPostContent(editor);
+    const postId = document.getElementsByClassName('post')[0].id;
+    sendReq('POST', `/user/publish/${postId}`, () => (window.location.href = '/'), JSON.stringify(data));
+  });
 };
 
 const sendReq = function (method, url, callback, content) {

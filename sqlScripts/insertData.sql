@@ -6,9 +6,10 @@ VALUES
 INSERT INTO stories
   (is_published, author_id, title, content, last_modified)
 VALUES
-  (1, 1, 'Sample Post', '{"type":"paragraph","blocks":[{"data":{"text":"First post"}}]}', 1552744582955);
+  (0, 1, 'Sample Post', '{"type":"paragraph","blocks":[{"data":{"text":"First post"}}]}', 1552744582955);
 
 
-INSERT INTO comments 
-  (comment_on,comment_by,commented_at,comment) VALUES
-  (1,1,1552744582955,'superb!')
+INSERT INTO comments
+  (comment_on,comment_by,commented_at,comment)
+VALUES
+  (1, 1, 1552744582955, 'superb!');

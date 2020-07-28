@@ -18,6 +18,6 @@ head
     #buttonsBox
       button.action-button#publish Publish
     img#user-profile(src=avatar_url)
-#post
-  #title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')
-  #editorjs
+.post(id=id)
+  .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')
+  .content#editorjs

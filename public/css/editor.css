@@ -1,4 +1,10 @@
-#post {
+body {
+  font-family: medium-content-sans-serif-font, 'Lucida Grande',
+    'Lucida Sans Unicode', 'Lucida Sans', Geneva, Arial, sans-serif;
+  margin: 0px;
+}
+
+.post {
   display: flex;
   flex-direction: column;
 }

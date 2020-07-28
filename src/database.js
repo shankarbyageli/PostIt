@@ -5,10 +5,27 @@ class Database {
 
   addPost(data, user_id) {
     const query = `INSERT INTO stories (is_published,author_id,title,content,last_modified) values (
-      ${1},
+      ${0},
       '${user_id}',
       '${data.title}','${JSON.stringify(data.content)}',
       '${data.content.time}');`;
+    return new Promise((resolve, reject) => {
+      this.db.serialize(() => {
+        this.db.run(query, (err) => {
+          if (err) reject(err);
+        });
+        this.db.get('select id from stories order by id desc', (err, row) => {
+          if (err) reject(err);
+          else resolve(row.id);
+        });
+      })
+    });
+  };
+
+  updatePost(id, data) {
+    const query = `UPDATE stories SET title = '${data.title}', 
+      content = '${JSON.stringify(data.content)}',
+      last_modified = '${data.content.time}' where id = ${id};`;
     return new Promise((resolve, reject) => {
       this.db.run(query, (err) => {
         if (err) {
@@ -17,15 +34,28 @@ class Database {
           resolve(true);
         }
       });
-    });
-  }
+    })
+  };
+
+  publishPost(postId) {
+    const query = `UPDATE stories SET is_published = 1 where id = ${postId}`;
+    return new Promise((resolve, reject) => {
+      this.db.run(query, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(true);
+        }
+      })
+    })
+  };
 
   getPost(id) {
-    const query = `select * from stories where id = ${id}`;
+    const query = `select * from stories where id = ${id} AND is_published = 1`;
     return new Promise((resolve, reject) => {
-      this.db.get(query, (err, rows) => {
+      this.db.get(query, (err, row) => {
         err && reject(err);
-        resolve(rows);
+        resolve(row);
       });
     });
   }
@@ -33,9 +63,9 @@ class Database {
   getUserById(user_id) {
     const query = `select * from users where user_id = ${user_id}`;
     return new Promise((resolve, reject) => {
-      this.db.get(query, (err, rows) => {
+      this.db.get(query, (err, row) => {
         err && reject(err);
-        resolve(rows);
+        resolve(row);
       });
     });
   }
@@ -102,7 +132,7 @@ class Database {
   }
 
   getLatestPosts = function (count) {
-    const query = `select * from stories join users on stories.author_id = users.user_id order by stories.id desc limit ${count}`;
+    const query = `select * from stories join users on stories.author_id = users.user_id where is_published = 1 order by stories.id desc limit ${count}`;
     return new Promise((resolve, reject) => {
       this.db.all(query, async (err, rows) => {
         if (err) {

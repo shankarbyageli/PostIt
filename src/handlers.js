@@ -45,8 +45,18 @@ const serveEditor = function (req, res) {
   res.render('editor', { avatar_url: req.avatar_url });
 };
 
-const publish = function (req, res) {
-  req.app.locals.db.addPost(req.body, req.user);
+const autoSave = async function (req, res) {
+  let id = req.params.id;
+  if (id == -1) {
+    const postId = await req.app.locals.db.addPost(req.body, req.user);
+    id = postId;
+  }
+  await req.app.locals.db.updatePost(id, req.body);
+  res.send(JSON.stringify({ id }));
+};
+
+const publish = async function (req, res) {
+  await req.app.locals.db.publishPost(req.params.id);
   res.send('Published');
 };
 
@@ -137,4 +147,5 @@ module.exports = {
   signOut,
   serveComments,
   publishComment,
+  autoSave
 };

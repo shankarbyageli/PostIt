@@ -1,6 +1,10 @@
 const { clientId, clientSecret } = require('../config');
-
-const { getUserDetail, makeRequest, addUserDetails } = require('./lib');
+const {
+  getUserDetail,
+  makeRequest,
+  addUserDetails,
+  takeMoment,
+} = require('./lib');
 
 const getLoggedInDetails = async function (req, res, next) {
   const sessions = req.app.locals.sessions;

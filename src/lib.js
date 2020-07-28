@@ -2,7 +2,7 @@ const https = require('https');
 const queryString = require('querystring');
 const moment = require('moment');
 
-takeMoment = function (date) {
+const takeMoment = function (date) {
   return moment(date).fromNow();
 };
 
@@ -42,4 +42,4 @@ const makeRequest = function (options, params) {
   });
 };
 
-module.exports = { getUserDetail, makeRequest, addUserDetails };
+module.exports = { getUserDetail, makeRequest, addUserDetails, takeMoment };

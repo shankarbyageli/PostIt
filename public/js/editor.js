@@ -2,7 +2,10 @@ const isAbleToPublish = function () {
   const title = document.getElementById('title').innerText;
   const publishBtn = document.querySelector('#publish');
   if (title.trim() === '') {
-    publishBtn.setAttribute('style', 'background-color: #c5cac9');
+    publishBtn.setAttribute(
+      'style',
+      'background-color: #c5cac9;cursor: default;'
+    );
     return;
   }
   publishBtn.setAttribute('style', 'background-color: #03a87c;cursor: pointer');

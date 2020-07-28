@@ -24,7 +24,7 @@ const isAbleToPublish = function () {
   if (newComment.trim()) {
     publishBtn.setAttribute(
       'style',
-      'background-color: #03a87c;cursor: pointer'
+      'background-color: #03a87c;cursor: pointer;'
     );
     return;
   }

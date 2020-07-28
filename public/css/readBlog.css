@@ -22,3 +22,25 @@
   width: 42px;
   border-radius: 50%;
 }
+
+.user-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 58%;
+  margin: 0 auto;
+  margin-top: -12rem;
+}
+
+.user-action {
+  border: solid #03a87c 0.5px;
+  height: 46px;
+  color: #03a87c;
+  font-size: 17px;
+  background: white;
+  width: 250px;
+  outline: none;
+  border-radius: 3px;
+  text-decoration: none;
+  align-items: center;
+}

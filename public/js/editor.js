@@ -33,7 +33,6 @@ const getEditorOptions = function () {
 const callback = function (res) {
   const postId = document.getElementsByClassName('post')[0].id;
   if (postId == "") {
-
     document.getElementsByClassName('post')[0].id = res.id;
   }
   document.getElementById('status').innerText = 'Saved';
@@ -45,6 +44,7 @@ const addListeners = function () {
   let editorTimeout = null;
   Array.from(document.getElementsByClassName('content')).forEach((element) => {
     element.addEventListener('keydown', () => {
+      document.getElementById('status').innerText = '';
       clearTimeout(editorTimeout);
       editorTimeout = setTimeout(async () => {
         document.getElementById('status').innerText = 'Saving...';

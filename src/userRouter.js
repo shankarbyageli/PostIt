@@ -7,7 +7,8 @@ const {
   serveEditor,
   signOut,
   publishComment,
-  autoSave
+  autoSave,
+  serveErrorPage
 } = require('./handlers');
 
 userRouter.use(ensureLogin);
@@ -17,5 +18,6 @@ userRouter.get('/editor', serveEditor);
 userRouter.post('/publishComment', publishComment);
 userRouter.post('/autosave/:id', autoSave);
 userRouter.post('/publish/:id', publish);
+userRouter.use(serveErrorPage);
 
 module.exports = { userRouter };

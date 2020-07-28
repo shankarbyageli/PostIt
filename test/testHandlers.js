@@ -102,8 +102,8 @@ describe('Ensure login', () => {
   it('should give sign in if cookie are not there', (done) => {
     request(app)
       .get('/user/editor')
-      .expect(/Dive deeper on topics that matter to you/)
-      .expect(200, done);
+      .expect('Location', '/')
+      .expect(302, done);
   });
 });
 
@@ -253,7 +253,8 @@ describe('POST /autosave', () => {
       .set('Cookie', 'sId=1234')
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
-      .expect(/404/, done);
+      .expect('Location', '/')
+      .expect(302, done);
   });
 });
 

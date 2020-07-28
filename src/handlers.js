@@ -21,8 +21,7 @@ const ensureLogin = async function (req, res, next) {
   if (req.user !== undefined) {
     next();
   } else {
-    req.url = '/signIn.html';
-    next();
+    res.redirect('/');
   }
 };
 

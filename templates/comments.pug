@@ -10,7 +10,7 @@ head
       .user-details
         img.user-profile(src=userAvatar_url )
         span.username=currentUser
-      p#new-comment.comment(contenteditable='true' placeholder='Write your thoughts here ...')
+      p#new-comment.commentText(contenteditable='true' placeholder='Write your thoughts here ...')
       button#publish Publish
 
 each value in comments

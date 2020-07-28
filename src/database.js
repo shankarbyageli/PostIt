@@ -81,7 +81,6 @@ class Database {
         if (err) {
           reject(err);
         }
-        console.log(rows);
         resolve(rows);
       });
     });

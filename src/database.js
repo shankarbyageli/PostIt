@@ -18,9 +18,9 @@ class Database {
           if (err) reject(err);
           else resolve(row.id);
         });
-      })
+      });
     });
-  };
+  }
 
   updatePost(id, data) {
     const query = `UPDATE stories SET title = '${data.title}', 
@@ -34,8 +34,8 @@ class Database {
           resolve(true);
         }
       });
-    })
-  };
+    });
+  }
 
   publishPost(postId) {
     const query = `UPDATE stories SET is_published = 1 where id = ${postId}`;
@@ -46,12 +46,12 @@ class Database {
         } else {
           resolve(true);
         }
-      })
-    })
-  };
+      });
+    });
+  }
 
   getPost(id) {
-    const query = `select * from stories where id = ${id} AND is_published = 1`;
+    const query = `select * from stories join users on stories.author_id = users.user_id where id = ${id} AND is_published = 1`;
     return new Promise((resolve, reject) => {
       this.db.get(query, (err, row) => {
         err && reject(err);

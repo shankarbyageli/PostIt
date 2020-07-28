@@ -66,13 +66,12 @@ const getBlog = async function (req, res, next) {
   const avatar_url = req.user ? req.avatar_url : false;
   const response = await req.app.locals.db.getPost(id);
   if (response) {
-    const author = await req.app.locals.db.getUserById(response.author_id);
     res.render('readBlog', {
       data: response.content,
       title_text: response.title,
-      author_avatar: author.avatar_url,
+      author_avatar: response.avatar_url,
       date: response.last_modified,
-      author: author.username,
+      author: response.username,
       avatar_url,
       blog_id: response.id,
     });

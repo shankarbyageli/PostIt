@@ -13,16 +13,16 @@ head
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest')
   script(src='/js/readBlog.js')
 
-body(onload=`render(${data})`)
+body(onload=`render(${post.content})`)
 +generateMenuBar(avatar_url)
 #post
-  #title=title_text
+  #title=post.title
   .user
-    img#user-profile(src=author_avatar)
+    img#user-profile(src=post.avatar_url)
     div.userInfo
-      #name=author
-      #date=new Date(date).toDateString()
+      a.author_url(href=`/profile/${post.user_id}`)#name=post.username
+      #date=new Date(post.last_modified).toDateString()
   #editorjs
   .user-actions
-      a(href=`/comments/${blog_id}`) 
+      a(href=`/comments/${post.id}`) 
         button.user-action Comments

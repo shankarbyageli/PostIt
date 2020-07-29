@@ -3,22 +3,21 @@ include ./lib/lib.pug
 head
   meta(charset='UTF-8')
   script.
-  link(rel="stylesheet" href="/user/css/dashBoard.css")
   link(rel="stylesheet" href="/user/css/post.css")
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
 
 +generateMenuBar(avatar_url)
-#all-posts
-  each value in posts 
-    .container-post
-      .data-post
-        .title-post(title=value.title)
-          a#title(href=`/blog/${value.id}`)=value.title
-        .data=JSON.parse(value.content).blocks[0].data.text
-        br
-        .info-post
-          span.author-details-post
-            a.author_url(href=`/profile/${value.author_id}`)=value.username
-          span.date=takeMoment(value.last_modified)
+.all-posts
+  each post in posts
+    .post
+      .user-details
+        img.author-profile(src=post.avatar_url)
+        .details
+          span.author-name
+            a.author_url( href=`/profile/${post.user_id}`)=post.username
+          span.date=takeMoment(post.last_modified)
+      .title-text
+        a.title(href=`/blog/${post.id}`)=post.title
+      .data=JSON.parse(post.content).blocks[0].data.text
       //- img.cover-image-post(src='/images/cricket.jpeg' alt='No image')

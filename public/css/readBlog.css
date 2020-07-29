@@ -44,3 +44,12 @@
   text-decoration: none;
   align-items: center;
 }
+
+.author_url {
+  text-decoration: none;
+  color: black;
+}
+
+.author_url:hover {
+  text-decoration: underline;
+}

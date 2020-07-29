@@ -110,13 +110,8 @@ const getBlog = async function (req, res, next) {
   const response = await req.app.locals.db.getPost(id, 1);
   if (response) {
     res.render('readBlog', {
-      data: response.content,
-      title_text: response.title,
-      author_avatar: response.avatar_url,
-      date: response.last_modified,
-      author: response.username,
+      post: response,
       avatar_url,
-      blog_id: response.id,
     });
   } else {
     next();

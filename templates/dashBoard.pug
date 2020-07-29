@@ -11,13 +11,13 @@ head
 .all-posts
   each post in posts
     .post
+      .title-text
+        a.title(href=`/blog/${post.id}`)=post.title
+      .data=JSON.parse(post.content).blocks[0].data.text
       .user-details
         img.author-profile(src=post.avatar_url)
         .details
           span.author-name
             a.author_url( href=`/profile/${post.user_id}`)=post.username
           span.date=takeMoment(post.last_modified)
-      .title-text
-        a.title(href=`/blog/${post.id}`)=post.title
-      .data=JSON.parse(post.content).blocks[0].data.text
       //- img.cover-image-post(src='/images/cricket.jpeg' alt='No image')

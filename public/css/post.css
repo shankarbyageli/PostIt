@@ -3,13 +3,10 @@
   flex-direction: column;
   justify-content: space-around;
 }
-
 .post {
   justify-content: space-between;
   margin-bottom: 0.5rem;
-  border-radius: 5px;
-  border: 1px solid rgba(230, 230, 230, 1);
-  box-shadow: 0 1px 4px rgba(230, 230, 230, 1);
+  border-bottom: slategrey solid 0.3px;
   display: flex;
   flex-direction: column;
   width: 58%;
@@ -45,7 +42,25 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding-left: 26px;
+}
+
+.author-profile {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin: 23px 11px 0px 0px;
+}
+
+.data {
+  font-size: 16px;
+  color: #58585b;
+  width: 97%;
+  margin-top: 5px;
+  font-weight: lighter;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 10px 14px 10px 1px;
 }
 
 .title {
@@ -55,29 +70,10 @@
   width: 100%;
 }
 
-.data {
-  font-size: 16px;
-  color: #58585b;
-  width: 95%;
-  margin-top: 5px;
-  font-weight: lighter;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  margin: 10px 14px 22px 29px;
-}
-
-.author-profile {
-  width: 35px;
-  border-radius: 50%;
-  margin: 21px;
-}
-
 .author_url {
   text-decoration: none;
   color: black;
 }
-
 .author_url:hover {
   text-decoration: underline;
 }

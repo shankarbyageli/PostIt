@@ -6,6 +6,7 @@ const disableEdit = () => {
   let blockElements = document.getElementById('editorjs'); // id of editor element
   blockElements.style.pointerEvents = 'none';
 };
+
 const render = function (data) {
   new EditorJS({
     holderId: 'editorjs',

@@ -50,8 +50,8 @@ class Database {
     });
   };
 
-  getDrafts(user_id) {
-    const query = `SELECT * from stories where author_id = ${user_id} AND is_published = 0`;
+  getAllPosts(user_id, post_type) {
+    const query = `SELECT * from stories where author_id = ${user_id} AND is_published = ${post_type}`;
     return new Promise((resolve, reject) => {
       this.db.all(query, (err, rows) => {
         if (err) {
@@ -63,8 +63,10 @@ class Database {
     })
   };
 
-  getPost(id) {
-    const query = `select * from stories join users on stories.author_id = users.user_id where id = ${id} AND is_published = 1`;
+  getPost(id, post_type) {
+    const query = `
+      select * from stories join users on stories.author_id = users.user_id where id = ${id} AND is_published = ${post_type}
+      `;
     return new Promise((resolve, reject) => {
       this.db.get(query, (err, row) => {
         err && reject(err);

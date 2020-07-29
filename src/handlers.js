@@ -46,8 +46,26 @@ const serveDashboard = async function (req, res, next) {
   }
 };
 
-const serveEditor = function (req, res) {
-  res.render('editor', { avatar_url: req.avatar_url });
+const serveEditor = async function (req, res) {
+  const { id } = req.params;
+  if (id == undefined) {
+    res.render('editor', {
+      data: "{}",
+      title_text: "",
+      avatar_url: req.avatar_url,
+      id: -1
+    });
+  } else {
+    const response = await req.app.locals.db.getPost(id, 0);
+    if (response) {
+      res.render('editor', {
+        data: response.content,
+        title_text: response.title,
+        avatar_url: req.avatar_url,
+        id: response.id,
+      });
+    }
+  }
 };
 
 const autoSave = async function (req, res) {
@@ -61,8 +79,13 @@ const autoSave = async function (req, res) {
 };
 
 const serveDraftedPosts = async function (req, res) {
-  const drafts = await req.app.locals.db.getDrafts(req.user);
-  res.render('posts', { posts: drafts, avatar_url: req.avatar_url });
+  const drafts = await req.app.locals.db.getAllPosts(req.user, 0);
+  res.render('posts', { posts: drafts, avatar_url: req.avatar_url, type: 0, takeMoment });
+};
+
+const servePublishedPosts = async function (req, res) {
+  const published = await req.app.locals.db.getAllPosts(req.user, 1);
+  res.render('posts', { posts: published, avatar_url: req.avatar_url, type: 1, takeMoment });
 };
 
 const publish = async function (req, res) {
@@ -74,7 +97,7 @@ const getBlog = async function (req, res, next) {
   const { id } = req.params;
   if (!+id) return next();
   const avatar_url = req.user ? req.avatar_url : false;
-  const response = await req.app.locals.db.getPost(id);
+  const response = await req.app.locals.db.getPost(id, 1);
   if (response) {
     res.render('readBlog', {
       data: response.content,
@@ -92,7 +115,7 @@ const getBlog = async function (req, res, next) {
 
 const serveComments = async function (req, res, next) {
   const { blogId } = req.params;
-  const blog = await req.app.locals.db.getPost(blogId);
+  const blog = await req.app.locals.db.getPost(blogId, 1);
   const renderOptions = {
     comments: await req.app.locals.db.getComments(blogId),
     title_text: blog.title,
@@ -160,5 +183,6 @@ module.exports = {
   serveComments,
   publishComment,
   autoSave,
-  serveDraftedPosts
+  serveDraftedPosts,
+  servePublishedPosts
 };

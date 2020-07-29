@@ -4,18 +4,28 @@ link(rel="stylesheet", href="/css/allPosts.css")
   #container
     p.your_posts  Your Posts 
     .post-types
-      a(href='')
       p#drafted.type
-        | Drafted 
-        span#draft-count  0 
-      p.type  | 
+        if(type == 0)
+          a.highlight(href='/user/posts/drafts')
+            | Drafted 
+          span#draft-count=posts.length
+        else
+          a.normal(href='/user/posts/drafts')
+            | Drafted 
+      p.type  |
       p#published.type
-        | Published 
-        span#publish-count  0 
-    hr
-  each value in posts 
-    .container-post
-      .data-post
-        .title-post(title=value.title)
-      .info-post
-        span.date=takeMoment(value.last_modified)
+        if(type == 1)
+          a.highlight(href='/user/posts/published')
+            | Published 
+          span#publish-count=posts.length
+        else 
+          a.normal(href='/user/posts/published')
+            | Published 
+    hr.line
+    each value in posts 
+      .container-post
+        .data-post
+          .title-post(title=value.title)
+            a.post-title(href=`/user/draft/${value.id}`)=value.title
+          .info-post
+            span.date=takeMoment(value.last_modified)

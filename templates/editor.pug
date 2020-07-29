@@ -10,6 +10,9 @@ head
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/list@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest')
   script( src='/user/js/editor.js')
+
+body(onload=`addListeners(${id}, ${data})`)
+
 #menu-bar
   #logoBox
     a(href="/")
@@ -20,5 +23,5 @@ head
       button.action-button#publish Publish
     img#user-profile(src=avatar_url)
 .post(id=id)
-  .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')
+  .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')=title_text
   .content#editorjs

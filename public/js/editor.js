@@ -20,7 +20,7 @@ const getPostContent = function (editor) {
   });
 };
 
-const getEditorOptions = function () {
+const getEditorOptions = function (data) {
   return {
     holderId: 'editorjs',
     tools: {
@@ -30,19 +30,33 @@ const getEditorOptions = function () {
       },
       Lists: { class: List, inlineToolbar: true },
     },
+    data
   };
+};
+
+const modifyPublishBtn = function (id) {
+  const publishBtn = document.querySelector('.action-button');
+  console.log("id", id);
+  if (id == -1) {
+    publishBtn.style.background = "#c5cac9";
+    publishBtn.disabled = true;
+  } else {
+    publishBtn.disabled = false;
+  }
 };
 
 const callback = function (res) {
   const postId = document.getElementsByClassName('post')[0].id;
-  if (postId == '') {
+  if (postId == -1) {
     document.getElementsByClassName('post')[0].id = res.id;
   }
+  document.querySelector('.action-button').disabled = false;
   document.getElementById('status').innerText = 'Saved';
 };
 
-const addListeners = function () {
-  let editor = new EditorJS(getEditorOptions());
+const addListeners = function (id, data) {
+  let editor = new EditorJS(getEditorOptions(data));
+  modifyPublishBtn(id);
 
   let editorTimeout = null;
   Array.from(document.getElementsByClassName('content')).forEach((element) => {
@@ -88,5 +102,3 @@ const sendReq = function (method, url, callback, content) {
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.send(content);
 };
-
-window.onload = addListeners;

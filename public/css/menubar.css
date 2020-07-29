@@ -28,6 +28,7 @@ body {
   border-radius: 5px;
   font-size: 15px;
   height: 28px;
+  cursor: pointer;
 }
 
 #buttonsBox {

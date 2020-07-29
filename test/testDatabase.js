@@ -80,7 +80,7 @@ describe('getPost', () => {
   it('should give error if database failure', (done) => {
     const db = { get: (query, callback) => callback('error') };
     const database = new Database(db);
-    database.getPost(2).then(null, (actual) => {
+    database.getPost(2, 1).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
     });
@@ -89,8 +89,28 @@ describe('getPost', () => {
   it('should get the post from database', (done) => {
     const db = { get: (query, callback) => callback(null, true) };
     const database = new Database(db);
-    database.getPost(2).then((actual) => {
+    database.getPost(2, 1).then((actual) => {
       assert.ok(actual);
+      done();
+    }, null);
+  });
+});
+
+describe('getAllPosts', () => {
+  it('should give error if database failure', (done) => {
+    const db = { all: (query, callback) => callback('error') };
+    const database = new Database(db);
+    database.getAllPosts(1, 1).then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it('should get all the posts of given type from database', (done) => {
+    const db = { all: (query, callback) => callback(null, [{}, {}]) };
+    const database = new Database(db);
+    database.getAllPosts(1, 1).then((actual) => {
+      assert.deepStrictEqual(actual, [{}, {}]);
       done();
     }, null);
   });

@@ -1,12 +1,14 @@
+include ./lib/lib.pug
+
 head
   meta(charset='UTF-8')
   script.
-  include ./menubar.pug
   link(rel="stylesheet" href="/user/css/dashBoard.css")
   link(rel="stylesheet" href="/user/css/post.css")
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
 
++generateMenuBar(avatar_url)
 #all-posts
   each value in posts 
     .container-post

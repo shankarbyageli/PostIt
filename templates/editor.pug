@@ -1,7 +1,8 @@
+include ./lib/lib.pug
+
 doctype html
 head
   meta(charset='UTF-8')
-  link(rel='stylesheet' href='/user/css/menubar.css')
   link(rel='stylesheet' href='/user/css/editor.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
@@ -21,7 +22,7 @@ body(onload=`addListeners(${id}, ${data})`)
   #actions
     #buttonsBox
       button.action-button#publish Publish
-    img#user-profile(src=avatar_url)
+    +generatePop(avatar_url)
 .post(id=id)
   .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')=title_text
   .content#editorjs

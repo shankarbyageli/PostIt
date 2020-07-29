@@ -1,12 +1,14 @@
+include ./lib/lib.pug
+
 doctype html
 head
   meta(charset='utf-8')
-  include ./menubar.pug
   meta(http-equiv='X-UA-Compatible' content='IE=edge')
   meta(name='viewport' content='width=device-width, initial-scale=1')
   title 404 Not found
   link(type='text/css' rel='stylesheet' href='/css/error.css')
 
++generateMenuBar(avatar_url)
 .notfound
   h1.oops oops!
   h2.error-msg Error 404 : Page Not Found

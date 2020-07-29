@@ -1,9 +1,9 @@
+include ./lib/lib.pug
+
 doctype html
 head
   meta(charset='UTF-8')
-  include ./menubar.pug
   link(rel='stylesheet' href='/css/editor.css')
-  link(rel='stylesheet' href='/css/menubar.css')
   link(rel='stylesheet' href='/css/readBlog.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
@@ -14,7 +14,7 @@ head
   script(src='/js/readBlog.js')
 
 body(onload=`render(${data})`)
-
++generateMenuBar(avatar_url)
 #post
   #title=title_text
   .user

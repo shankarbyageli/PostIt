@@ -1,11 +1,13 @@
+include ./lib/lib.pug
+
 head
   meta(charset='UTF-8')
   link(rel='stylesheet' href='/css/comments.css')
   script(src="/user/js/comment.js")
-  include ./menubar.pug
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Comments
 
++generateMenuBar(avatar_url)
 #title=title_text
 if avatar_url
   #newComment

@@ -1,0 +1,43 @@
+mixin generatePop(avatar_url)
+  .popup
+    img#user-profile(src=avatar_url onclick='showMenu()')
+    #drop-down.drop-down-container
+      a.menu(href='/user/editor') Write new post
+      a.menu(href='/user/posts/drafts') My posts
+      a.menu(href='/user/signOut') Sign out
+
+mixin generateMenuBar(avatar_url)
+  #menu-bar
+    #logoBox
+      a(href="/")
+        img#logo
+    #actions
+      if avatar_url
+        +generatePop(avatar_url)
+      else
+        #buttonsBox
+          a#link_text(href='/signIn')
+            span.sign_in Sign in
+
+head
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title PostIt
+  meta(charset='UTF-8')
+  link(rel="stylesheet" href="/user/css/menubar.css")
+
+  script. 
+    const hideMenu = function() {
+      const popup = document.getElementById("drop-down");
+      popup.classList.remove("show");
+    }
+
+    const showMenu = function() {
+      const popup = document.getElementById("drop-down");
+      popup.classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+     if (!event.target.matches('#user-profile')) {
+       hideMenu()
+     }
+    }

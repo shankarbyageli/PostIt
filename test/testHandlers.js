@@ -16,7 +16,7 @@ describe('GET', () => {
 
   it('should serve the static html and css files', (done) => {
     request(app)
-      .get('/css/signIn.css')
+      .get('/css/menubar.css')
       .set('Accept', '*/*')
       .expect('Content-type', /text\/css/)
       .expect(/body/, done);
@@ -100,10 +100,7 @@ describe('Ensure login', () => {
   });
 
   it('should give sign in if cookie are not there', (done) => {
-    request(app)
-      .get('/user/editor')
-      .expect('Location', '/')
-      .expect(302, done);
+    request(app).get('/user/editor').expect('Location', '/').expect(302, done);
   });
 });
 

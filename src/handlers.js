@@ -46,7 +46,7 @@ const serveDashboard = async function (req, res, next) {
   }
 };
 
-const serveEditor = async function (req, res) {
+const serveEditor = async function (req, res, next) {
   const { id } = req.params;
   if (id == undefined) {
     res.render('editor', {
@@ -64,6 +64,8 @@ const serveEditor = async function (req, res) {
         avatar_url: req.avatar_url,
         id: response.id,
       });
+    } else {
+      next();
     }
   }
 };
@@ -122,14 +124,18 @@ const serveProfile = async function (req, res, next) {
   const { user_id } = req.params;
   if (!+user_id) return next();
   const userDetails = await req.app.locals.db.getUserById(user_id);
-  const posts = await req.app.locals.db.getPostByUser(user_id);
-  res.render('userProfile', {
-    posts,
-    avatar_url: req.avatar_url,
-    author_avatar: userDetails.avatar_url,
-    username: userDetails.username,
-    takeMoment,
-  });
+  if (userDetails) {
+    const posts = await req.app.locals.db.getAllPosts(user_id, 1);
+    res.render('userProfile', {
+      posts,
+      avatar_url: req.avatar_url,
+      author_avatar: userDetails.avatar_url,
+      username: userDetails.username,
+      takeMoment,
+    });
+  } else {
+    next();
+  }
 };
 
 const serveComments = async function (req, res, next) {

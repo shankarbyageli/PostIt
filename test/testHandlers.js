@@ -76,7 +76,7 @@ describe('POST /publish', () => {
   it('Should publish the post', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
-      .post('/user/publish/1')
+      .post('/user/publish/2')
       .set('Cookie', 'sId=1234')
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
@@ -133,9 +133,10 @@ describe('GET /blog/id', () => {
   it('should return the blog content if the blog is published', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
-      .get('/blog/1')
+      .get('/blog/3')
       .set('Cookie', 'sId=1234')
-      .expect(/user-profile/, done);
+      .expect(/user-profile/)
+      .expect(/Read this blog/, done);
   });
 
   it('should return page not found for invalid blogId', (done) => {
@@ -174,10 +175,10 @@ describe('GET /comments/:blogId', () => {
     app.locals.sessions = {};
   });
 
-  it('user should be redirected to the signIn page after signOut', (done) => {
+  it('should give the comments on the given blog id', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
-      .get('/comments/1')
+      .get('/comments/4')
       .set('Cookie', 'sId=1234')
       .expect(/superb/)
       .expect(200, done);
@@ -213,7 +214,7 @@ describe('POST /autosave', () => {
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
       .expect(/id/)
-      .expect(/2/, done);
+      .expect(/5/, done);
   });
 
   it('should return back id of the already drafted post on autosave', (done) => {
@@ -256,6 +257,10 @@ describe('POST /autosave', () => {
 });
 
 describe('/user/publishComment', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
   it('should publish the given comment', (done) => {
     app.locals.sessions = { '1234': 1 };
     const data = { comment: 'hiii', blogId: 1 };
@@ -266,5 +271,105 @@ describe('/user/publishComment', () => {
       .send(JSON.stringify(data))
       .expect('Published Comment')
       .expect(200, done);
+  });
+});
+
+describe("GET /user/draft/:id", () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
+  it("should serve the editor with draft content", (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/user/draft/1')
+      .set('Cookie', 'sId=1234')
+      .expect(/Sample Post/, done);
+  });
+
+  it("should give error page if not signed in non-existing id", (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/user/draft/10')
+      .set('Cookie', 'sId=1234')
+      .expect(/dashboard/)
+      .expect(404, done);
+  });
+
+  it("should give redirect to sign in page if not signed in", (done) => {
+    request(app)
+      .get('/user/draft/10')
+      .expect(302, done);
+  });
+});
+
+describe("GET /user/posts/drafts", () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
+  it("should give all the drafts of requested user", (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/user/posts/drafts')
+      .set('Cookie', 'sId=1234')
+      .expect(/Sample Post/)
+      .expect(200, done);
+  });
+
+  it("should redirect to sign in page if not signed in", (done) => {
+    request(app)
+      .get('/user/posts/drafts')
+      .expect(302, done);
+  });
+});
+
+describe("GET /user/posts/published", () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
+  it("should give all the published of requested user", (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/user/posts/published')
+      .set('Cookie', 'sId=1234')
+      .expect(/Read this blog/)
+      .expect(200, done);
+  });
+
+  it("should redirect to sign in page if not signed in", (done) => {
+    request(app)
+      .get('/user/posts/published')
+      .expect(302, done);
+  });
+});
+
+describe("GET /profile/id", function () {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
+  it("should give the details of user given id", function (done) {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/profile/1')
+      .set('Cookie', 'sId=1234')
+      .expect(/User1/)
+      .expect(/Read this blog/, done);
+  });
+
+  it("should give the details of user given id if not signed in", function (done) {
+    request(app)
+      .get('/profile/1')
+      .expect(/User1/)
+      .expect(/Read this blog/, done);
+  });
+
+  it("should give error page if user doesn't exist", function (done) {
+    request(app)
+      .get('/profile/3')
+      .expect(/dashboard/)
+      .expect(404, done);
   });
 });

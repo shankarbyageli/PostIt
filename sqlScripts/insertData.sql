@@ -6,10 +6,12 @@ VALUES
 INSERT INTO stories
   (is_published, author_id, title, content, last_modified)
 VALUES
-  (0, 1, 'Sample Post', '{"type":"paragraph","blocks":[{"data":{"text":"First post"}}]}', 1552744582955);
-
+  (0, 1, 'Sample Post', '{"type":"paragraph","blocks":[{"data":{"text":"First post"}}]}', 1552744582955),
+  (0, 1, 'publish this', '{"type":"paragraph","blocks":[{"data":{"text":"First post"}}]}', 1552744582960),
+  (1, 1, 'Read this blog', '{"type":"paragraph","blocks":[{"data":{"text":"First post"}}]}', 1552744583960),
+  (1, 1, 'Comment on this', '{"type":"paragraph","blocks":[{"data":{"text":"First post"}}]}', 1552744583960);
 
 INSERT INTO comments
   (comment_on,comment_by,commented_at,comment)
 VALUES
-  (1, 1, 1552744582955, 'superb!');
+  (4, 1, 1552744582955, 'superb!');

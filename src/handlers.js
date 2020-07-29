@@ -60,6 +60,11 @@ const autoSave = async function (req, res) {
   res.send(JSON.stringify({ id }));
 };
 
+const serveDraftedPosts = async function (req, res) {
+  const drafts = await req.app.locals.db.getDrafts(req.user);
+  res.render('posts', { posts: drafts, avatar_url: req.avatar_url });
+};
+
 const publish = async function (req, res) {
   await req.app.locals.db.publishPost(req.params.id);
   res.send('Published');
@@ -155,4 +160,5 @@ module.exports = {
   serveComments,
   publishComment,
   autoSave,
+  serveDraftedPosts
 };

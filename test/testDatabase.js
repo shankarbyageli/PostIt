@@ -205,7 +205,7 @@ describe('getComments', () => {
     }, null);
   });
 
-  it('should give error for database failure ', () => {
+  it('should give error for database failure ', (done) => {
     const db = { all: (query, callback) => callback('error') };
     const database = new Database(db);
     database.getComments('ab').then(null, (actual) => {

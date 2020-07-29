@@ -29,6 +29,9 @@ link(rel="stylesheet", href="/css/allPosts.css")
       .container-post
         .data-post
           .title-post(title=value.title)
-            a.post-title(href=`/user/draft/${value.id}`)=value.title
+            if type == 0
+              a.post-title(href=`/user/draft/${value.id}`)=(value.title || 'Untitled post')
+            else 
+              a.post-title(href=`/blog/${value.id}`)=value.title
           .info-post
             span.date=takeMoment(value.last_modified)

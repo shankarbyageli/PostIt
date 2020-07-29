@@ -1,13 +1,7 @@
-body {
-  font-family: medium-content-sans-serif-font, 'Lucida Grande',
-    'Lucida Sans Unicode', 'Lucida Sans', Geneva, Arial, sans-serif;
-  margin: 0px;
-}
-
 .user-profile {
   display: flex;
   flex-direction: row;
-  width: 50%;
+  width: 58%;
   margin: 50px auto auto;
   justify-content: space-around;
   padding-bottom: 45px;
@@ -44,8 +38,6 @@ body {
 }
 
 .post {
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
   margin-bottom: 0.5rem;
   border-radius: 5px;
@@ -53,7 +45,7 @@ body {
   box-shadow: 0 1px 4px rgba(230, 230, 230, 1);
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 58%;
   min-height: 150px;
   margin: 20px auto;
   padding-right: 22px;

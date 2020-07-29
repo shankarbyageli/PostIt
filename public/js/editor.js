@@ -30,15 +30,15 @@ const getEditorOptions = function (data) {
       },
       Lists: { class: List, inlineToolbar: true },
     },
-    data
+    data,
   };
 };
 
 const modifyPublishBtn = function (id) {
   const publishBtn = document.querySelector('.action-button');
-  console.log("id", id);
+  console.log('id', id);
   if (id == -1) {
-    publishBtn.style.background = "#c5cac9";
+    publishBtn.style.background = '#c5cac9';
     publishBtn.disabled = true;
   } else {
     publishBtn.disabled = false;
@@ -52,6 +52,24 @@ const callback = function (res) {
   }
   document.querySelector('.action-button').disabled = false;
   document.getElementById('status').innerText = 'Saved';
+};
+
+const addPublishEvent = function (editor) {
+  const publishBtn = document.getElementById('publish');
+  publishBtn.addEventListener('click', async () => {
+    const data = await getPostContent(editor);
+    const postId = document.getElementsByClassName('post')[0].id;
+    if (data.content.blocks.length) {
+      sendReq(
+        'POST',
+        `/user/publish/${postId}`,
+        () => (window.location.href = '/'),
+        JSON.stringify(data)
+      );
+    } else {
+      window.alert('Please add some content !');
+    }
+  });
 };
 
 const addListeners = function (id, data) {
@@ -76,18 +94,7 @@ const addListeners = function (id, data) {
       }, 1000);
     });
   });
-
-  const publishBtn = document.getElementById('publish');
-  publishBtn.addEventListener('click', async () => {
-    const data = await getPostContent(editor);
-    const postId = document.getElementsByClassName('post')[0].id;
-    sendReq(
-      'POST',
-      `/user/publish/${postId}`,
-      () => (window.location.href = '/'),
-      JSON.stringify(data)
-    );
-  });
+  addPublishEvent(editor);
 };
 
 const sendReq = function (method, url, callback, content) {

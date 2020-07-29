@@ -169,7 +169,7 @@ describe('GET /user/signOut', () => {
   });
 });
 
-describe('GET /seeAllComments/:blogId', () => {
+describe('GET /comments/:blogId', () => {
   afterEach(() => {
     app.locals.sessions = {};
   });
@@ -177,7 +177,7 @@ describe('GET /seeAllComments/:blogId', () => {
   it('user should be redirected to the signIn page after signOut', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
-      .get('/seeAllComments/1')
+      .get('/comments/1')
       .set('Cookie', 'sId=1234')
       .expect(/superb/)
       .expect(200, done);

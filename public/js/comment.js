@@ -12,7 +12,7 @@ const publishComment = async function (blogId) {
       }),
     }).then((data) => {
       if (data.status == 200) {
-        window.location.href = `/seeAllComments/${blogId}`;
+        window.location.href = `/comments/${blogId}`;
       }
     });
   }

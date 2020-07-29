@@ -48,10 +48,10 @@ class Database {
         }
       });
     });
-  };
+  }
 
   getAllPosts(user_id, post_type) {
-    const query = `SELECT * from stories where author_id = ${user_id} AND is_published = ${post_type}`;
+    const query = `SELECT * from stories where author_id = ${user_id} AND is_published = ${post_type} order by last_modified desc`;
     return new Promise((resolve, reject) => {
       this.db.all(query, (err, rows) => {
         if (err) {
@@ -59,9 +59,9 @@ class Database {
         } else {
           resolve(rows);
         }
-      })
-    })
-  };
+      });
+    });
+  }
 
   getPost(id, post_type) {
     const query = `

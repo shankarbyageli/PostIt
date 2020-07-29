@@ -11,14 +11,14 @@
   outline: none;
   border-style: none;
   font-size: 40px;
-  max-width: 650px;
-  margin: 30px 387px;
+  max-width: 800px;
+  margin: 30px 315px;
   color: black;
 }
 
 #status {
   margin: 0.5rem 1.6rem;
-  color: rgba(0,0,0,.54);
+  color: rgba(0, 0, 0, 0.54);
 }
 
 #title[placeholder]:empty:before {
@@ -31,3 +31,25 @@
   color: #555252;
 }
 
+.ce-block__content {
+  position: relative;
+  max-width: 80%;
+  margin: 0 auto;
+  -webkit-transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease;
+}
+
+.ce-toolbar__actions {
+  position: absolute;
+  right: -95px;
+  top: 5px;
+  opacity: 1;
+}
+
+.ce-toolbar__plus {
+  left: -110px;
+}
+
+.ce-block {
+  margin-bottom: 10px;
+}

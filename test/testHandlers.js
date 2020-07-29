@@ -274,12 +274,12 @@ describe('/user/publishComment', () => {
   });
 });
 
-describe("GET /user/draft/:id", () => {
+describe('GET /user/draft/:id', () => {
   afterEach(() => {
     app.locals.sessions = {};
   });
 
-  it("should serve the editor with draft content", (done) => {
+  it('should serve the editor with draft content', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/user/draft/1')
@@ -287,7 +287,7 @@ describe("GET /user/draft/:id", () => {
       .expect(/Sample Post/, done);
   });
 
-  it("should give error page if not signed in non-existing id", (done) => {
+  it('should give error page if not signed in non-existing id', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/user/draft/10')
@@ -296,19 +296,17 @@ describe("GET /user/draft/:id", () => {
       .expect(404, done);
   });
 
-  it("should give redirect to sign in page if not signed in", (done) => {
-    request(app)
-      .get('/user/draft/10')
-      .expect(302, done);
+  it('should give redirect to sign in page if not signed in', (done) => {
+    request(app).get('/user/draft/10').expect(302, done);
   });
 });
 
-describe("GET /user/posts/drafts", () => {
+describe('GET /user/posts/drafts', () => {
   afterEach(() => {
     app.locals.sessions = {};
   });
 
-  it("should give all the drafts of requested user", (done) => {
+  it('should give all the drafts of requested user', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/user/posts/drafts')
@@ -317,19 +315,17 @@ describe("GET /user/posts/drafts", () => {
       .expect(200, done);
   });
 
-  it("should redirect to sign in page if not signed in", (done) => {
-    request(app)
-      .get('/user/posts/drafts')
-      .expect(302, done);
+  it('should redirect to sign in page if not signed in', (done) => {
+    request(app).get('/user/posts/drafts').expect(302, done);
   });
 });
 
-describe("GET /user/posts/published", () => {
+describe('GET /user/posts/published', () => {
   afterEach(() => {
     app.locals.sessions = {};
   });
 
-  it("should give all the published of requested user", (done) => {
+  it('should give all the published of requested user', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/user/posts/published')
@@ -338,19 +334,17 @@ describe("GET /user/posts/published", () => {
       .expect(200, done);
   });
 
-  it("should redirect to sign in page if not signed in", (done) => {
-    request(app)
-      .get('/user/posts/published')
-      .expect(302, done);
+  it('should redirect to sign in page if not signed in', (done) => {
+    request(app).get('/user/posts/published').expect(302, done);
   });
 });
 
-describe("GET /profile/id", function () {
+describe('GET /profile/id', function () {
   afterEach(() => {
     app.locals.sessions = {};
   });
 
-  it("should give the details of user given id", function (done) {
+  it('should give the details of user given id', function (done) {
     app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/profile/1')
@@ -359,7 +353,7 @@ describe("GET /profile/id", function () {
       .expect(/Read this blog/, done);
   });
 
-  it("should give the details of user given id if not signed in", function (done) {
+  it('should give the details of user given id if not signed in', function (done) {
     request(app)
       .get('/profile/1')
       .expect(/User1/)

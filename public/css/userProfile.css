@@ -30,3 +30,78 @@
   font-size: 14px;
   color: gray;
 }
+
+.all-posts {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.post {
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid rgba(230, 230, 230, 1);
+  box-shadow: 0 1px 4px rgba(230, 230, 230, 1);
+  display: flex;
+  flex-direction: column;
+  width: 58%;
+  min-height: 150px;
+  margin: 20px auto;
+  padding-right: 22px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: row;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  padding: 22px 0px;
+}
+
+.author-name {
+  font-size: 16px;
+}
+
+.date {
+  margin-top: 3px;
+  font-size: 13px;
+  color: #58585b;
+}
+
+.title-text {
+  font-size: 23px;
+  font-weight: lighter;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-left: 26px;
+}
+
+.title {
+  text-decoration: none;
+  color: black;
+  text-align: left;
+  width: 100%;
+}
+
+.data {
+  font-size: 16px;
+  color: #58585b;
+  width: 95%;
+  margin-top: 5px;
+  font-weight: lighter;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 10px 14px 22px 23px;
+}
+
+.author-profile {
+  width: 35px;
+  border-radius: 50%;
+  margin: 21px;
+}

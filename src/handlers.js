@@ -138,10 +138,11 @@ const serveComments = async function (req, res, next) {
   const renderOptions = {
     comments: await req.app.locals.db.getComments(blogId),
     title_text: blog.title,
+    user_id: req.user,
     takeMoment,
+    blogId,
   };
   if (req.user) {
-    renderOptions.blogId = blogId;
     renderOptions.currentUser = req.username;
     renderOptions.avatar_url = req.avatar_url;
   }

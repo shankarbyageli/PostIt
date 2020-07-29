@@ -8,12 +8,15 @@ head
   title Comments
 
 +generateMenuBar(avatar_url)
-#title=title_text
+
+#title
+  a.title(href=`/blog/${blogId}`)=title_text
 if avatar_url
   #newComment
     .user-details
       img.user-profile(src=avatar_url )
-      span.username=currentUser
+      span.username
+          a.author_url(href=`/profile/${user_id}`)=currentUser
     p#new-comment.commentText(contenteditable='true' placeholder='Write your thoughts here ...' onkeyup='isAbleToPublish()')
     button#publish(onclick=`publishComment(${blogId})`) Publish
 
@@ -22,7 +25,8 @@ each value in comments
     .user-details
       img.user-profile(src=value.avatar_url)
       div.details
-        span.username=value.username
+        span.username
+          a.author_url(href=`/profile/${value.comment_by}`)=value.username
         br
         span.date=takeMoment(value.commented_at)
     p.commentText

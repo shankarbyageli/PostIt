@@ -72,6 +72,13 @@
   color: black;
 }
 
+.title {
+  text-decoration: none;
+  color: black;
+  text-align: left;
+  width: 100%;
+}
+
 .date {
   margin-top: 7px;
   font-size: 12px;
@@ -80,4 +87,13 @@
 
 .details {
   margin: 19px 0px;
+}
+
+.author_url {
+  text-decoration: none;
+  color: black;
+}
+
+.author_url:hover {
+  text-decoration: underline;
 }

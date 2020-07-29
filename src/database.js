@@ -159,6 +159,18 @@ class Database {
       });
     });
   };
+
+  getPostByUser(user_id) {
+    const query = `select * from stories where author_id = ${user_id} AND is_published = 1`;
+    return new Promise((resolve, reject) => {
+      this.db.all(query, async (err, rows) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(rows);
+      });
+    });
+  }
 }
 
 module.exports = Database;

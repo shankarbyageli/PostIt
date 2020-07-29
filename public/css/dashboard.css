@@ -27,6 +27,7 @@
   border: 1px solid gray;
   padding: 0.3rem;
 }
+
 .info {
   display: flex;
   flex-direction: column;
@@ -36,11 +37,13 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 .headers {
   display: flex;
   flex-direction: column;
   width: 80%;
 }
+
 .cover-image {
   width: 20%;
   height: auto;
@@ -51,11 +54,13 @@
   font-weight: 600;
   width: 80%;
 }
+
 .details {
   margin-top: 9px;
   font-size: 17px;
   color: #58585b;
 }
+
 .author-name {
   font-size: 13px;
   color: #555252;
@@ -63,4 +68,13 @@
 
 button:hover {
   cursor: pointer;
+}
+
+.author_url {
+  text-decoration: none;
+  color: black;
+}
+
+.author_url:hover {
+  text-decoration: underline;
 }

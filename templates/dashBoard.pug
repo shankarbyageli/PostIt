@@ -16,6 +16,7 @@ head
         .data=JSON.parse(value.content).blocks[0].data.text
         br
         .info-post
-          span.author-details-post=value.username
+          span.author-details-post
+            a.author_url(href=`/profile/${value.author_id}`)=value.username
           span.date=takeMoment(value.last_modified)
       //- img.cover-image-post(src='/images/cricket.jpeg' alt='No image')

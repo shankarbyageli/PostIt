@@ -50,10 +50,10 @@ const serveEditor = async function (req, res) {
   const { id } = req.params;
   if (id == undefined) {
     res.render('editor', {
-      data: "{}",
-      title_text: "",
+      data: '{}',
+      title_text: '',
       avatar_url: req.avatar_url,
-      id: -1
+      id: -1,
     });
   } else {
     const response = await req.app.locals.db.getPost(id, 0);
@@ -80,12 +80,22 @@ const autoSave = async function (req, res) {
 
 const serveDraftedPosts = async function (req, res) {
   const drafts = await req.app.locals.db.getAllPosts(req.user, 0);
-  res.render('posts', { posts: drafts, avatar_url: req.avatar_url, type: 0, takeMoment });
+  res.render('posts', {
+    posts: drafts,
+    avatar_url: req.avatar_url,
+    type: 0,
+    takeMoment,
+  });
 };
 
 const servePublishedPosts = async function (req, res) {
   const published = await req.app.locals.db.getAllPosts(req.user, 1);
-  res.render('posts', { posts: published, avatar_url: req.avatar_url, type: 1, takeMoment });
+  res.render('posts', {
+    posts: published,
+    avatar_url: req.avatar_url,
+    type: 1,
+    takeMoment,
+  });
 };
 
 const publish = async function (req, res) {
@@ -111,6 +121,20 @@ const getBlog = async function (req, res, next) {
   } else {
     next();
   }
+};
+
+const serveProfile = async function (req, res, next) {
+  const { user_id } = req.params;
+  if (!+user_id) return next();
+  const userDetails = await req.app.locals.db.getUserById(user_id);
+  const posts = await req.app.locals.db.getPostByUser(user_id);
+  res.render('userProfile', {
+    posts,
+    avatar_url: req.avatar_url,
+    author_avatar: userDetails.avatar_url,
+    username: userDetails.username,
+    takeMoment,
+  });
 };
 
 const serveComments = async function (req, res, next) {
@@ -184,5 +208,6 @@ module.exports = {
   publishComment,
   autoSave,
   serveDraftedPosts,
-  servePublishedPosts
+  servePublishedPosts,
+  serveProfile,
 };

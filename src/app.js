@@ -13,6 +13,7 @@ const {
   getBlog,
   getLoggedInDetails,
   serveComments,
+  serveProfile,
 } = require('./handlers');
 
 const db = new sqlite.Database(`database/${process.env.db}`);
@@ -35,6 +36,7 @@ app.use(express.static(`${__dirname}/../public`));
 app.get('/signIn', signIn);
 app.get('/callback', githubCallback);
 app.get('/seeAllComments/:blogId', serveComments);
+app.get('/profile/:user_id', serveProfile);
 app.use(serveErrorPage);
 
 module.exports = app;

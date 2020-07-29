@@ -1,6 +1,15 @@
 head
   meta(charset='UTF-8')
   script. 
+    const showMenu = function() {
+      const popup = document.getElementById("drop-down");
+      popup.classList.add("show");
+    }
+
+    const hideMenu = function() {
+      const popup = document.getElementById("drop-down");
+      popup.classList.remove("show");
+    }
     window.onclick = function(event) {
      if (event.target.id =='user-profile' ) {
        showMenu();
@@ -22,7 +31,7 @@ head
       .popup
         img#user-profile(src=avatar_url onclick='showMenu()')
         #drop-down.drop-down-container
-          a.menu(href='/user/editor') Write new story
+          a.menu(href='/user/editor') Write new post
           a.menu(href='/user/signOut') Sign out
     else
       #buttonsBox

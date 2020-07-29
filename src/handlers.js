@@ -135,6 +135,7 @@ const serveProfile = async function (req, res, next) {
 const serveComments = async function (req, res, next) {
   const { blogId } = req.params;
   const blog = await req.app.locals.db.getPost(blogId, 1);
+  if (!blog) return next();
   const renderOptions = {
     comments: await req.app.locals.db.getComments(blogId),
     title_text: blog.title,

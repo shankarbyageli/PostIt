@@ -1,16 +1,6 @@
-doctype html
 head
   meta(charset='UTF-8')
   script. 
-    const showMenu = function() {
-      const popup = document.getElementById("drop-down");
-      popup.classList.add("show");
-    }
-
-    const hideMenu = function() {
-      const popup = document.getElementById("drop-down");
-      popup.classList.remove("show");
-    }
     window.onclick = function(event) {
      if (event.target.id =='user-profile' ) {
        showMenu();

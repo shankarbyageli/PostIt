@@ -1,4 +1,3 @@
-doctype html
 head
   meta(charset='UTF-8')
   link(rel='stylesheet' href='/css/comments.css')
@@ -24,4 +23,7 @@ each value in comments
         span.username=value.username
         br
         span.date=takeMoment(value.commented_at)
-    p.commentText=value.comment
+    p.commentText
+      each para in value.comment.split('\n')
+        span=para 
+        br

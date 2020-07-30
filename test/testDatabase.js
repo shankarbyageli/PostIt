@@ -199,7 +199,7 @@ describe('getUser', () => {
     }, null);
   });
 
-  it("should return false if user id doesn't exist", (done) => {
+  it('should return false if user id doesn\'t exist', (done) => {
     const db = { get: (query, params, callback) => callback(null, null) };
     const database = new Database(db);
     database.getUser('mama').then((actual) => {

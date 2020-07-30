@@ -1,9 +1,9 @@
 const disableEdit = () => {
-  let editable_elements = document.querySelectorAll('[contenteditable=true]');
+  const editable_elements = document.querySelectorAll('[contenteditable=true]');
   editable_elements.forEach((el) => el.removeAttribute('contenteditable'));
-  let icon_settings = document.querySelectorAll('.ce-toolbar__settings-btn');
+  const icon_settings = document.querySelectorAll('.ce-toolbar__settings-btn');
   icon_settings.forEach((el) => el.remove());
-  let blockElements = document.getElementById('editorjs'); // id of editor element
+  const blockElements = document.getElementById('editorjs'); // id of editor element
   blockElements.style.pointerEvents = 'none';
 };
 

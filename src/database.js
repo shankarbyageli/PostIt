@@ -100,7 +100,7 @@ class Database {
     });
   }
 
-  getUser = function (username) {
+  getUser(username) {
     return new Promise((resolve, reject) => {
       this.db.get(
         'select * from users where username=?',
@@ -117,7 +117,7 @@ class Database {
         }
       );
     });
-  };
+  }
 
   getComments(blogId) {
     const query = `select * from comments 

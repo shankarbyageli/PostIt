@@ -20,7 +20,7 @@ const ensureLogin = async function (req, res, next) {
   }
 };
 
-const signOut = function (req, res, next) {
+const signOut = function (req, res) {
   const sessions = req.app.locals.sessions;
   delete sessions[req.cookies.sId];
   res.clearCookie('sId');
@@ -43,7 +43,7 @@ const serveDashboard = async function (req, res, next) {
 
 const serveEditor = async function (req, res, next) {
   const { id } = req.params;
-  if (id == undefined) {
+  if (id === undefined) {
     res.render('editor', {
       data: '{}',
       title_text: '',
@@ -67,7 +67,7 @@ const serveEditor = async function (req, res, next) {
 
 const autoSave = async function (req, res) {
   let id = req.params.id;
-  if (id == -1) {
+  if (id === -1) {
     const postId = await req.app.locals.db.addPost(req.body, req.user);
     id = postId;
   }
@@ -102,7 +102,9 @@ const publish = async function (req, res) {
 
 const getBlog = async function (req, res, next) {
   const { id } = req.params;
-  if (!+id) return next();
+  if (!+id) {
+    return next();
+  }
   const avatar_url = req.user ? req.avatar_url : false;
   const response = await req.app.locals.db.getPost(id, 1);
   if (response) {
@@ -117,9 +119,13 @@ const getBlog = async function (req, res, next) {
 
 const serveProfile = async function (req, res, next) {
   const { user_id } = req.params;
-  if (!+user_id) return next();
+  if (!+user_id) {
+    return next();
+  }
   const userDetails = await req.app.locals.db.getUserById(user_id);
-  if (!userDetails) return next();
+  if (!userDetails) {
+    return next();
+  }
   const posts = await req.app.locals.db.getAllPosts(user_id, 1);
   res.render('userProfile', {
     posts,
@@ -139,7 +145,9 @@ const serveSearchResults = async function (req, res) {
 const serveComments = async function (req, res, next) {
   const { blogId } = req.params;
   const blog = await req.app.locals.db.getPost(blogId, 1);
-  if (!blog) return next();
+  if (!blog) {
+    return next();
+  }
   const renderOptions = {
     comments: await req.app.locals.db.getComments(blogId),
     title_text: blog.title,
@@ -154,7 +162,7 @@ const serveComments = async function (req, res, next) {
   res.render('comments', renderOptions);
 };
 
-const publishComment = function (req, res, next) {
+const publishComment = function (req, res) {
   const { comment, blogId } = req.body;
   const date = new Date().valueOf();
   req.app.locals.db.addComment(comment, blogId, req.user, date);

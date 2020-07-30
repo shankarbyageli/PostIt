@@ -108,7 +108,7 @@ const publishPost = async function (editor) {
   if (data.content.blocks.length) {
     const xhr = new XMLHttpRequest();
     xhr.onload = function () {
-      window.location.href = "/";
+      window.location.href = '/';
     };
     xhr.open('POST', `/user/publish/${postId}`);
     xhr.send(form);
@@ -127,7 +127,7 @@ const addPreview = function () {
 };
 
 const addListeners = function (id, data) {
-  let editor = new EditorJS(getEditorOptions(data));
+  const editor = new EditorJS(getEditorOptions(data));
   modifyPublishBtn(id);
 
   let editorTimeout = null;

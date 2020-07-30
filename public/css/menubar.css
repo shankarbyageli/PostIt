@@ -136,3 +136,32 @@ body {
     opacity: 1;
   }
 }
+
+.search-container {
+  float: right;
+  display: flex;
+  flex-direction: row;
+}
+
+.search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.search-container button:hover {
+  background: #ccc;
+}
+
+.search-container input[type='text'] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+}

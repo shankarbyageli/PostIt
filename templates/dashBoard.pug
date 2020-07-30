@@ -7,7 +7,22 @@ head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
 
-+generateMenuBar(avatar_url)
+//- +generateMenuBar(avatar_url)
+#menu-bar
+  #logoBox
+    a(href="/")
+      img#logo
+  #actions
+    .search-container
+      .filter
+        label Gender
+        select(name='gender')
+          option(value='male') Male
+          option(value='female') Female
+          option(value='other') Other
+      input(type='text' placeholder='Search..' name='search')
+      button.search-button(type='submit') Search
+    +generatePop(avatar_url)
 .all-posts
   each post in posts
     .post

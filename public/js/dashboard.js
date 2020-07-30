@@ -45,10 +45,10 @@ const getSearchText = function (event) {
     .value;
   const filter = document.querySelector('.filter select').value;
   sendReq(
-    'POST',
-    '/user/search',
+    'GET',
+    `/user/search?filter=${filter}&searchText=${searchText}`,
     renderSearchResults,
-    JSON.stringify({ filter, searchText })
+    null
   );
 };
 

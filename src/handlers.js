@@ -131,7 +131,7 @@ const serveProfile = async function (req, res, next) {
 };
 
 const serveSearchResults = async function (req, res) {
-  const { filter, searchText } = req.body;
+  const { filter, searchText } = req.query;
   const posts = await req.app.locals.db.getSearchedPosts(filter, searchText);
   res.send({ posts });
 };

@@ -185,7 +185,7 @@ describe('GET /comments/:blogId', () => {
       .expect(200, done);
   });
 
-  it('should give 404 error page if blog id doesn\'t exist', (done) => {
+  it("should give 404 error page if blog id doesn't exist", (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/comments/10')
@@ -223,7 +223,7 @@ describe('POST /autosave', () => {
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
       .expect(/id/)
-      .expect(/5/, done);
+      .expect(/7/, done);
   });
 
   it('should return back id of the already drafted post on autosave', (done) => {
@@ -384,15 +384,52 @@ describe('GET /profile/id', function () {
   });
 });
 
-describe("GET /callback", () => {
-  it("should redirect to dashboard after authentication", (done) => {
-    const stubbed = sinon.stub()
-      .onCall(0).resolves('token=12345')
-      .onCall(1).resolves(JSON.stringify({ login: 'user', avatar_url: 'https://img.com' }));
+describe('GET /callback', () => {
+  it('should redirect to dashboard after authentication', (done) => {
+    const stubbed = sinon
+      .stub()
+      .onCall(0)
+      .resolves('token=12345')
+      .onCall(1)
+      .resolves(
+        JSON.stringify({ login: 'user', avatar_url: 'https://img.com' })
+      );
     sinon.replace(lib, 'makeRequest', stubbed);
+    request(app).get('/callback').expect('Location', '/').expect(302, done);
+  });
+});
+
+describe('GET /user/search', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
+  it('should give all the published posts of requested author', (done) => {
+    app.locals.sessions = { '1234': 1 };
     request(app)
-      .get('/callback')
-      .expect('Location', '/')
-      .expect(302, done);
+      .get('/user/search?filter=author&searchText=User2')
+      .set('Cookie', 'sId=1234')
+      .expect(/testing search/)
+      .expect(/testing the search/)
+      .expect(200, done);
+  });
+
+  it('should give all the published posts to related title', (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/user/search?filter=title&searchText=testing')
+      .set('Cookie', 'sId=1234')
+      .expect(/testing search/)
+      .expect(/testing the search/)
+      .expect(200, done);
+  });
+
+  it('should give all the published posts to related tags', (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/user/search?filter=tag&searchText=testing')
+      .set('Cookie', 'sId=1234')
+      .expect(/testing search/)
+      .expect(200, done);
   });
 });

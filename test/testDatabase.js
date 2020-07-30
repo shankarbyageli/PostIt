@@ -263,3 +263,25 @@ describe('addComment', () => {
       });
   });
 });
+
+describe('getSearchedPosts', () => {
+  it('should give error if database failure', (done) => {
+    const db = { all: (query, callback) => callback('error') };
+    const database = new Database(db);
+    database.getSearchedPosts('error', 'venky').then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it('should get the user posts', (done) => {
+    const db = {
+      all: (query, callback) => callback(null, [{ username: 'ramu', id: 7 }]),
+    };
+    const database = new Database(db);
+    database.getSearchedPosts('author', 'ramu').then((actual) => {
+      assert.deepStrictEqual(actual, [{ username: 'ramu', id: 7 }]);
+      done();
+    }, null);
+  });
+});

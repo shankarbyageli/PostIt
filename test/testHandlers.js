@@ -1,6 +1,7 @@
+const sinon = require('sinon');
 const request = require('supertest');
 const app = require('../src/app');
-let { makeRequest } = require('../src/lib');
+const lib = require('../src/lib');
 
 describe('GET', () => {
   afterEach(() => {
@@ -182,6 +183,14 @@ describe('GET /comments/:blogId', () => {
       .set('Cookie', 'sId=1234')
       .expect(/superb/)
       .expect(200, done);
+  });
+
+  it('should give 404 error page if blog id doesn\'t exist', (done) => {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/comments/10')
+      .set('Cookie', 'sId=1234')
+      .expect(404, done);
   });
 });
 
@@ -365,5 +374,25 @@ describe('GET /profile/id', function () {
       .get('/profile/3')
       .expect(/dashboard/)
       .expect(404, done);
+  });
+
+  it("should give error page if user doesn't exist", function (done) {
+    request(app)
+      .get('/profile/0')
+      .expect(/dashboard/)
+      .expect(404, done);
+  });
+});
+
+describe("GET /callback", () => {
+  it("should redirect to dashboard after authentication", (done) => {
+    const stubbed = sinon.stub()
+      .onCall(0).resolves('token=12345')
+      .onCall(1).resolves(JSON.stringify({ login: 'user', avatar_url: 'https://img.com' }));
+    sinon.replace(lib, 'makeRequest', stubbed);
+    request(app)
+      .get('/callback')
+      .expect('Location', '/')
+      .expect(302, done);
   });
 });

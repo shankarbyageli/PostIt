@@ -2,9 +2,25 @@ const Database = require('../src/database');
 const assert = require('assert');
 
 describe('addPost', () => {
-  it('should give error if database failure', (done) => {
+  it('should give error if database failure in run', (done) => {
     const db = {
+      get: (query, callback) => callback(null, null),
       run: (query, callback) => callback('error'),
+      serialize: (callback) => callback(run),
+    };
+    const database = new Database(db);
+    database
+      .addPost({ id: 1, title: 'title', content: { time: '1' } }, 2)
+      .then(null, (actual) => {
+        assert.equal(actual, 'error');
+        done();
+      });
+  });
+
+  it('should give error if database failure in get', (done) => {
+    const db = {
+      get: (query, callback) => callback('error'),
+      run: (query, callback) => callback(null),
       serialize: (callback) => callback(run),
     };
     const database = new Database(db);

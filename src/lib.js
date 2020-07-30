@@ -6,19 +6,6 @@ const takeMoment = function (date) {
   return moment(date).fromNow();
 };
 
-const getUserDetail = (tokenDetails) => {
-  const token = tokenDetails.split('&')[0].split('=')[1];
-  const options = {
-    hostname: 'api.github.com',
-    path: '/user',
-    headers: {
-      'user-agent': 'node.js',
-      Authorization: `token ${token}`,
-    },
-  };
-  return makeRequest(options, {});
-};
-
 const addUserDetails = async function (req, details) {
   const user = JSON.parse(details);
   let userDetails = await req.app.locals.db.getUser(user.login);
@@ -42,4 +29,4 @@ const makeRequest = function (options, params) {
   });
 };
 
-module.exports = { getUserDetail, makeRequest, addUserDetails, takeMoment };
+module.exports = { makeRequest, addUserDetails, takeMoment };

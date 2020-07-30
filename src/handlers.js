@@ -1,10 +1,5 @@
 const { clientId, clientSecret } = require('../config');
-const {
-  getUserDetail,
-  makeRequest,
-  addUserDetails,
-  takeMoment,
-} = require('./lib');
+const lib = require('./lib');
 
 const getLoggedInDetails = async function (req, res, next) {
   const sessions = req.app.locals.sessions;
@@ -38,7 +33,7 @@ const serveDashboard = async function (req, res, next) {
       posts: await req.app.locals.db.getLatestPosts(10),
       avatar_url: req.avatar_url,
       username: req.username,
-      takeMoment,
+      takeMoment: lib.takeMoment,
     });
   } else {
     req.url = '/signIn.html';
@@ -86,7 +81,7 @@ const serveDraftedPosts = async function (req, res) {
     posts: drafts,
     avatar_url: req.avatar_url,
     type: 0,
-    takeMoment,
+    takeMoment: lib.takeMoment,
   });
 };
 
@@ -96,7 +91,7 @@ const servePublishedPosts = async function (req, res) {
     posts: published,
     avatar_url: req.avatar_url,
     type: 1,
-    takeMoment,
+    takeMoment: lib.takeMoment,
   });
 };
 
@@ -131,7 +126,7 @@ const serveProfile = async function (req, res, next) {
     avatar_url: req.avatar_url,
     author_avatar: userDetails.avatar_url,
     username: userDetails.username,
-    takeMoment,
+    takeMoment: lib.takeMoment,
   });
 };
 
@@ -143,8 +138,8 @@ const serveComments = async function (req, res, next) {
     comments: await req.app.locals.db.getComments(blogId),
     title_text: blog.title,
     user_id: req.user,
-    takeMoment,
-    blogId,
+    takeMoment: lib.takeMoment,
+    blogId
   };
   if (req.user) {
     renderOptions.currentUser = req.username;
@@ -170,6 +165,19 @@ const signIn = function (req, res) {
   res.redirect(`https://github.com/login/oauth/authorize?${params}`);
 };
 
+const getUserDetail = (tokenDetails) => {
+  const token = tokenDetails.split('&')[0].split('=')[1];
+  const options = {
+    hostname: 'api.github.com',
+    path: '/user',
+    headers: {
+      'user-agent': 'node.js',
+      Authorization: `token ${token}`,
+    },
+  };
+  return lib.makeRequest(options, {});
+};
+
 const githubCallback = function (req, res) {
   const code = req.url.split('=')[1];
   const params = {
@@ -182,9 +190,9 @@ const githubCallback = function (req, res) {
     path: '/login/oauth/access_token',
     method: 'POST',
   };
-  makeRequest(url, params)
+  lib.makeRequest(url, params)
     .then(getUserDetail)
-    .then((details) => addUserDetails(req, details))
+    .then((details) => lib.addUserDetails(req, details))
     .then((userDetails) => {
       const sId = Date.now();
       req.app.locals.sessions[sId] = userDetails.user_id;

@@ -3,6 +3,7 @@ include ./lib/lib.pug
 doctype html
 head
   meta(charset='UTF-8')
+  link(rel='stylesheet' href='/user/css/preview.css')
   link(rel='stylesheet' href='/user/css/editor.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
@@ -14,15 +15,30 @@ head
 
 body(onload=`addListeners(${id}, ${data})`)
 
-#menu-bar
-  #logoBox
-    a(href="/")
-      img#logo
-    p#status=""
-  #actions
-    #buttonsBox
-      button.action-button#publish Publish
-    +generatePop(avatar_url)
-.post(id=id)
-  .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')=title_text
-  .content#editorjs
+#container
+  #menu-bar
+    #logoBox
+      a(href="/")
+        img#logo
+      p#status=""
+    #actions
+      #buttonsBox
+        button.action-button#publish(onclick='addPreview()') Publish
+      +generatePop(avatar_url)
+  .post(id=id)
+    .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')=title_text
+    .content#editorjs
+
+form#preview-form
+  #preview.hide-preview
+    img#exit-icon(src='./images/cross-icon.svg' alt='close' onclick='hidePreview()')
+    input#file(type='file' name='file' onchange='renderImage(event)')
+    .preview-content
+      span#preview-title
+      label#cover-image(for='file')
+        | add cover image here
+    .actions
+      #added-tags
+      span Add or change tags (up to 4)
+      input#tag(type='text' onkeydown='addTag(event)')
+      button#preview-publish(type='submit') Publish

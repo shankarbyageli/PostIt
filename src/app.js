@@ -4,6 +4,7 @@ const sqlite = require('sqlite3').verbose();
 const Database = require('./database');
 const app = express();
 const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
 const { userRouter } = require('./userRouter');
 const {
   serveDashboard,
@@ -23,10 +24,11 @@ app.locals.db = new Database(db);
 
 app.set('view engine', 'pug');
 app.set('views', `${__dirname}/../templates`);
+app.use(fileUpload());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use(getLoggedInDetails);
 app.use('/user', userRouter);

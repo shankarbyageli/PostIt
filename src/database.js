@@ -159,6 +159,36 @@ class Database {
       });
     });
   };
+
+  getPostsByTitle(title) {
+    const query = `select * from stories join users on stories.author_id = users.user_id where is_published = 1 AND title like '%${title}%' order by stories.id desc`;
+    return new Promise((resolve, reject) => {
+      this.db.all(query, async (err, rows) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(rows);
+      });
+    });
+  }
+
+  getPostsByUsername = function (username) {
+    return new Promise((resolve, reject) => {
+      this.db.all(
+        `select * from stories join users on stories.author_id = users.user_id where is_published = 1 AND username like '%${username}%' order by last_modified desc`,
+        (err, row) => {
+          if (err) {
+            reject(err);
+          }
+          if (row) {
+            resolve(row);
+          } else {
+            resolve(false);
+          }
+        }
+      );
+    });
+  };
 }
 
 module.exports = Database;

@@ -130,10 +130,27 @@ const serveProfile = async function (req, res, next) {
   });
 };
 
+const getPostsByAuthor = async function (req, author) {
+  return await req.app.locals.db.getPostsByUsername(author, 1);
+};
+
+const getPostsByTags = async function (req, tag) {
+  return await req.app.locals.db.getPostsByTags(tag);
+};
+
+const getPostsByTitle = async function (req, title) {
+  return await req.app.locals.db.getPostsByTitle(title);
+};
+
 const serveSearchResults = async function (req, res) {
   const { filter, searchText } = req.body;
-  const userDetails = await req.app.locals.db.getUser(searchText);
-  const posts = await req.app.locals.db.getAllPosts(userDetails.user_id, 1);
+  const searchHandlers = {
+    title: getPostsByTitle,
+    author: getPostsByAuthor,
+    tag: getPostsByTags,
+  };
+
+  const posts = await searchHandlers[filter](req, searchText);
   res.send({ posts });
 };
 

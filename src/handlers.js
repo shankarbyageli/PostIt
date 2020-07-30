@@ -130,6 +130,13 @@ const serveProfile = async function (req, res, next) {
   });
 };
 
+const serveSearchResults = async function (req, res) {
+  const { filter, searchText } = req.body;
+  const userDetails = await req.app.locals.db.getUser(searchText);
+  const posts = await req.app.locals.db.getAllPosts(userDetails.user_id, 1);
+  res.send({ posts });
+};
+
 const serveComments = async function (req, res, next) {
   const { blogId } = req.params;
   const blog = await req.app.locals.db.getPost(blogId, 1);
@@ -139,7 +146,7 @@ const serveComments = async function (req, res, next) {
     title_text: blog.title,
     user_id: req.user,
     takeMoment: lib.takeMoment,
-    blogId
+    blogId,
   };
   if (req.user) {
     renderOptions.currentUser = req.username;
@@ -190,7 +197,8 @@ const githubCallback = function (req, res) {
     path: '/login/oauth/access_token',
     method: 'POST',
   };
-  lib.makeRequest(url, params)
+  lib
+    .makeRequest(url, params)
     .then(getUserDetail)
     .then((details) => lib.addUserDetails(req, details))
     .then((userDetails) => {
@@ -218,4 +226,5 @@ module.exports = {
   serveDraftedPosts,
   servePublishedPosts,
   serveProfile,
+  serveSearchResults,
 };

@@ -10,7 +10,8 @@ const {
   autoSave,
   serveErrorPage,
   serveDraftedPosts,
-  servePublishedPosts
+  servePublishedPosts,
+  serveSearchResults,
 } = require('./handlers');
 
 userRouter.use(ensureLogin);
@@ -23,6 +24,7 @@ userRouter.post('/publishComment', publishComment);
 userRouter.post('/autosave/:id', autoSave);
 userRouter.post('/publish/:id', publish);
 userRouter.get('/draft/:id', serveEditor);
+userRouter.post('/search', serveSearchResults);
 userRouter.use(serveErrorPage);
 
 module.exports = { userRouter };

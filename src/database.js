@@ -51,7 +51,7 @@ class Database {
   }
 
   getAllPosts(user_id, post_type) {
-    const query = `SELECT * from stories where author_id = ${user_id} AND is_published = ${post_type} order by last_modified desc`;
+    const query = `SELECT * from stories join users on stories.author_id = users.user_id where author_id = ${user_id} AND is_published = ${post_type} order by last_modified desc`;
     return new Promise((resolve, reject) => {
       this.db.all(query, (err, rows) => {
         if (err) {
@@ -131,7 +131,7 @@ class Database {
         resolve(rows);
       });
     });
-  };
+  }
 
   addComment(comment, blogId, userId, date) {
     const query = `INSERT INTO comments 

@@ -67,7 +67,7 @@ const serveEditor = async function (req, res, next) {
 
 const autoSave = async function (req, res) {
   let id = req.params.id;
-  if (id === -1) {
+  if (+id === -1) {
     const postId = await req.app.locals.db.addPost(req.body, req.user);
     id = postId;
   }

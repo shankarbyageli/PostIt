@@ -1,0 +1,102 @@
+.preview {
+  width: 50%;
+  height: 500px;
+  border: 1px solid rgba(230, 230, 230, 1);
+  box-shadow: 0 1px 4px rgba(230, 230, 230, 1);
+  margin: 7% auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  display: flex;
+  width: 60%;
+  justify-content: center;
+  flex-direction: column;
+  padding: 23px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 29%;
+}
+
+#title {
+  font-size: 21px;
+}
+
+#cover-image {
+  width: 90%;
+  height: 125px;
+  margin: 30px 0px;
+  border: solid 0.3px gray;
+  cursor: pointer;
+}
+
+#post-content {
+  font-size: 16px;
+}
+
+#publish {
+  background: #03a87c;
+  text-align: center;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 17px;
+  height: 40px;
+  cursor: pointer;
+}
+
+#added-tags {
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+#tag {
+  height: 30px;
+  margin: 20px 0px;
+}
+
+.added-tag {
+  height: 30px;
+  width: 78px;
+  display: flex;
+  flex-direction: row;
+  background-color: grey;
+  color: white;
+  padding: 10px 9px 0px 9px;
+  text-align: left;
+  margin: 3px;
+}
+
+#exit-icon {
+  width: 23px;
+  height: 23px;
+  margin: 0.7% 47%;
+  position: absolute;
+}
+
+#file {
+  display: none;
+}
+
+.close {
+  position: relative;
+  width: 7px;
+  left: 74px;
+  cursor: pointer;
+  bottom: 16px;
+}
+
+.tag-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

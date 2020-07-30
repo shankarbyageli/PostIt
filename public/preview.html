@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./css/preview.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="preview">
+      <img id="exit-icon" src="./images/cross-icon.svg" alt="" />
+      <input type="file" name="file" id="file" />
+
+      <div class="content">
+        <span id="title">4 Lessons I learnt from virat Kohli</span>
+        <label for="file" id="cover-image">
+          add cover image here
+        </label>
+        <span id="post-content">
+          Hey there I am your content
+        </span>
+      </div>
+      <div class="actions">
+        <div id="added-tags"></div>
+        <span>Add or change tags (up to 4)</span>
+
+        <input type="text" id="tag" onkeyup="addTag(event)" />
+        <button id="publish">publish</button>
+      </div>
+    </div>
+  </body>
+</html>

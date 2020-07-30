@@ -160,10 +160,14 @@ class Database {
     });
   };
 
-  getPostsByTitle(title) {
-    const query = `select * from stories join users on stories.author_id = users.user_id where is_published = 1 AND title like '%${title}%' order by stories.id desc`;
+  getSearchedPosts(filteringOption, searchedText) {
+    const query = {
+      tag: `select * from tags join stories on tags.story_id = stories.id join users on stories.author_id = users.user_id where is_published = 1 AND tag like '%${searchedText}%' order by last_modified desc`,
+      title: `select * from stories join users on stories.author_id = users.user_id where is_published = 1 AND title like '%${searchedText}%' order by stories.id desc`,
+      author: `select * from stories join users on stories.author_id = users.user_id where is_published = 1 AND username like '%${searchedText}%' order by last_modified desc`,
+    };
     return new Promise((resolve, reject) => {
-      this.db.all(query, async (err, rows) => {
+      this.db.all(query[filteringOption], async (err, rows) => {
         if (err) {
           reject(err);
         }
@@ -171,24 +175,6 @@ class Database {
       });
     });
   }
-
-  getPostsByUsername = function (username) {
-    return new Promise((resolve, reject) => {
-      this.db.all(
-        `select * from stories join users on stories.author_id = users.user_id where is_published = 1 AND username like '%${username}%' order by last_modified desc`,
-        (err, row) => {
-          if (err) {
-            reject(err);
-          }
-          if (row) {
-            resolve(row);
-          } else {
-            resolve(false);
-          }
-        }
-      );
-    });
-  };
 }
 
 module.exports = Database;

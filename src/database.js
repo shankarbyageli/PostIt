@@ -1,5 +1,3 @@
-const { response } = require('express');
-
 class Database {
   constructor(db) {
     this.db = db;

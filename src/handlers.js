@@ -111,7 +111,7 @@ const publish = async function (req, res) {
     await req.app.locals.db.addTags(tags, req.params.id);
   }
   await req.app.locals.db.publishPost(req.params.id, imageDetails.imageId);
-  res.send('Published');
+  res.send(JSON.stringify({ message: 'Published' }));
 };
 
 const getBlog = async function (req, res, next) {

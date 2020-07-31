@@ -214,18 +214,21 @@ class Database {
       select * from tags
        join stories on tags.storyId = stories.id 
        join users on stories.authorId = users.userId 
+       join images on stories.coverImageId = images.imageId
        where isPublished = 1 AND tag like '%${searchedText}%' 
        order by lastModified desc
       `,
       title: `
       select * from stories
        join users on stories.authorId = users.userId 
+       join images on stories.coverImageId = images.imageId
        where isPublished = 1 AND title like '%${searchedText}%' 
        order by stories.id desc
       `,
       author: `
       select * from stories
        join users on stories.authorId = users.userId 
+       join images on stories.coverImageId = images.imageId
        where isPublished = 1 AND username like '%${searchedText}%' 
        order by lastModified desc
       `,

@@ -23,6 +23,9 @@ const generatePost = function (post) {
       </div>
     </div>
   </div>
+  <img class="cover-image-post" src=/coverImage/${
+  post.imagePath
+} alt="Cover image"/>
   </div>`;
   return convertHtmlToNode(postInnerHtml);
 };

@@ -86,3 +86,14 @@
   text-decoration: underline;
   color: red;
 }
+
+.edit-link {
+  text-decoration: none;
+  color: black;
+  margin-right: 15px;
+}
+
+.edit-link:hover {
+  text-decoration: underline;
+  color: #03a87c;
+}

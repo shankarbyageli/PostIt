@@ -36,4 +36,6 @@ link(rel="stylesheet", href="/css/allPosts.css")
           .info-post
             span.date=takeMoment(value.lastModified)
             span
-              a(class="delete-link" href=`/user/delete/${value.id}`)='delete the post'
+              if type == 0
+                a(class="edit-link" href=`/user/draft/${value.id}`)='Edit'
+              a(class="delete-link" href=`/user/delete/${value.id}`)='Delete'

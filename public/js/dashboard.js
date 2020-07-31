@@ -5,7 +5,8 @@ const convertHtmlToNode = function (html) {
 };
 
 const generatePost = function (post) {
-  const postInnerHtml = `<div class="post">
+  const postInnerHtml = `<div class="container">
+  <div class="post">
     <div class="title-text">
       <a class="title" href="/blog/${post.id}">${post.title}</a>
     </div>
@@ -21,6 +22,7 @@ const generatePost = function (post) {
         <span class="date">${new Date(post.lastModified).toDateString()}</span>
       </div>
     </div>
+  </div>
   </div>`;
   return convertHtmlToNode(postInnerHtml);
 };

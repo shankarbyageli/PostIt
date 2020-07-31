@@ -83,7 +83,7 @@ describe('POST /publish', () => {
       .set('Cookie', 'sId=1234')
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
-      .expect('Published')
+      .expect(/Published/)
       .expect(200, done);
   });
 });

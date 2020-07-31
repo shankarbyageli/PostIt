@@ -188,7 +188,7 @@ const publishComment = function (req, res) {
   const { comment, blogId } = req.body;
   const date = new Date().valueOf();
   req.app.locals.db.addComment(comment, blogId, req.user, date);
-  res.send('Published Comment');
+  res.send(JSON.stringify({ message: 'Published Comment' }));
 };
 
 const serveErrorPage = function (req, res) {

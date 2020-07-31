@@ -14,10 +14,14 @@ const addTag = function (event) {
   const tagElement = document.getElementById('tag');
   const tag = tagElement.value.trim();
   const allTags = document.getElementById('added-tags');
-  if (tag && event.keyCode == 13 && allTags.childElementCount < 4) {
+  if (tag && event.keyCode === 13 && allTags.childElementCount < 4) {
     event.preventDefault();
     const newTag = ` <span class="added-tag">
-              <img src="./images/close.svg" alt="" class="close" onclick="removeTag(event)" />
+              <img 
+                src="./images/close.svg" 
+                alt="" class="close" 
+                onclick="removeTag(event)" 
+              />
            <span class="tag-text"> ${tag} </span>
           </span>`;
     allTags.innerHTML += newTag;
@@ -75,7 +79,7 @@ const getEditorOptions = function (data) {
 
 const modifyPublishBtn = function (id) {
   const publishBtn = document.querySelector('.action-button');
-  if (id == -1) {
+  if (id === -1) {
     publishBtn.style.background = '#c5cac9';
     publishBtn.disabled = true;
   } else {
@@ -85,7 +89,7 @@ const modifyPublishBtn = function (id) {
 
 const callback = function (res) {
   const postId = document.getElementsByClassName('post')[0].id;
-  if (postId == -1) {
+  if (+postId === -1) {
     document.getElementsByClassName('post')[0].id = res.id;
   }
   document.querySelector('.action-button').disabled = false;
@@ -94,7 +98,7 @@ const callback = function (res) {
 
 const getTags = function () {
   const tags = document.getElementsByClassName('added-tag');
-  return Array.from(tags).map(tag => tag.innerText);
+  return Array.from(tags).map((tag) => tag.innerText);
 };
 
 const publishPost = async function (editor) {
@@ -123,7 +127,9 @@ const addPreview = function () {
   preview.classList.add('display-preview');
   const container = document.getElementById('container');
   container.style.filter = 'blur(5px)';
-  document.getElementById('preview-title').innerText = document.getElementById('title').innerText;
+  document.getElementById('preview-title').innerText = document.getElementById(
+    'title'
+  ).innerText;
 };
 
 const addListeners = function (id, data) {
@@ -149,7 +155,10 @@ const addListeners = function (id, data) {
     });
   });
 
-  document.getElementById('preview-publish').onclick = publishPost.bind(null, editor);
+  document.getElementById('preview-publish').onclick = publishPost.bind(
+    null,
+    editor
+  );
 };
 
 const sendReq = function (method, url, callback, content) {

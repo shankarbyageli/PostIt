@@ -115,10 +115,11 @@
     },
     {
       "files": [
-        "public/scripts/map.js"
+        "public/js/*.js"
       ],
       "rules": {
-        "max-len": "off"
+        "no-undef": "off",
+        "no-unused-vars": "off"
       }
     }
   ]

@@ -11,7 +11,7 @@ const publishComment = async function (blogId) {
         blogId,
       }),
     }).then((data) => {
-      if (data.status == 200) {
+      if (data.status === 200) {
         window.location.href = `/comments/${blogId}`;
       }
     });

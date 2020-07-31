@@ -4,19 +4,27 @@ class Database {
   }
 
   addPost(data, user_id) {
-    const query = `INSERT INTO stories (is_published,author_id,title,content,last_modified) values (
+    const query = `
+    INSERT INTO stories (is_published,author_id,title,content,last_modified) 
+    values (
       ${0},
       '${user_id}',
       '${data.title}','${JSON.stringify(data.content)}',
-      '${data.content.time}');`;
+      '${data.content.time}'
+    );`;
     return new Promise((resolve, reject) => {
       this.db.serialize(() => {
         this.db.run(query, (err) => {
-          if (err) reject(err);
+          if (err) {
+            reject(err);
+          }
         });
         this.db.get('select id from stories order by id desc', (err, row) => {
-          if (err) reject(err);
-          else resolve(row.id);
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row.id);
+          }
         });
       });
     });
@@ -51,7 +59,12 @@ class Database {
   }
 
   getAllPosts(user_id, post_type) {
-    const query = `SELECT * from stories join users on stories.author_id = users.user_id where author_id = ${user_id} AND is_published = ${post_type} order by last_modified desc`;
+    const query = `
+    SELECT * from stories
+     join users on stories.author_id = users.user_id 
+     where author_id = ${user_id} AND is_published = ${post_type}
+     order by last_modified desc
+    `;
     return new Promise((resolve, reject) => {
       this.db.all(query, (err, rows) => {
         if (err) {
@@ -65,7 +78,9 @@ class Database {
 
   getPost(id, post_type) {
     const query = `
-      select * from stories join users on stories.author_id = users.user_id where id = ${id} AND is_published = ${post_type}
+      select * from stories
+       join users on stories.author_id = users.user_id
+       where id = ${id} AND is_published = ${post_type}
       `;
     return new Promise((resolve, reject) => {
       this.db.get(query, (err, row) => {
@@ -148,8 +163,13 @@ class Database {
     });
   }
 
-  getLatestPosts = function (count) {
-    const query = `select * from stories join users on stories.author_id = users.user_id where is_published = 1 order by stories.id desc limit ${count}`;
+  getLatestPosts(count) {
+    const query = `
+    select * from stories
+     join users on stories.author_id = users.user_id 
+     where is_published = 1 
+     order by stories.id desc limit ${count}
+    `;
     return new Promise((resolve, reject) => {
       this.db.all(query, async (err, rows) => {
         if (err) {
@@ -158,14 +178,31 @@ class Database {
         resolve(rows);
       });
     });
-  };
+  }
 
   getSearchedPosts(filteringOption, searchedText) {
     const query = {
-      tag: `select * from tags join stories on tags.story_id = stories.id join users on stories.author_id = users.user_id where is_published = 1 AND tag like '%${searchedText}%' order by last_modified desc`,
-      title: `select * from stories join users on stories.author_id = users.user_id where is_published = 1 AND title like '%${searchedText}%' order by stories.id desc`,
-      author: `select * from stories join users on stories.author_id = users.user_id where is_published = 1 AND username like '%${searchedText}%' order by last_modified desc`,
+      tag: `
+      select * from tags
+       join stories on tags.story_id = stories.id 
+       join users on stories.author_id = users.user_id 
+       where is_published = 1 AND tag like '%${searchedText}%' 
+       order by last_modified desc
+      `,
+      title: `
+      select * from stories
+       join users on stories.author_id = users.user_id 
+       where is_published = 1 AND title like '%${searchedText}%' 
+       order by stories.id desc
+      `,
+      author: `
+      select * from stories
+       join users on stories.author_id = users.user_id 
+       where is_published = 1 AND username like '%${searchedText}%' 
+       order by last_modified desc
+      `,
     };
+
     return new Promise((resolve, reject) => {
       this.db.all(query[filteringOption], async (err, rows) => {
         if (err) {

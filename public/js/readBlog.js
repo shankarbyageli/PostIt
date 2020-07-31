@@ -3,7 +3,7 @@ const disableEdit = () => {
   editable_elements.forEach((el) => el.removeAttribute('contenteditable'));
   const icon_settings = document.querySelectorAll('.ce-toolbar__settings-btn');
   icon_settings.forEach((el) => el.remove());
-  const blockElements = document.getElementById('editorjs'); // id of editor element
+  const blockElements = document.getElementById('editorjs');
   blockElements.style.pointerEvents = 'none';
 };
 

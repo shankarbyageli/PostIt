@@ -20,7 +20,9 @@ const makeRequest = function (options, params) {
   return new Promise((resolve) => {
     const request = https.request(options, (res) => {
       let data = '';
-      res.on('data', (chunk) => data += chunk);
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
       res.on('end', () => {
         resolve(data.toString());
       });

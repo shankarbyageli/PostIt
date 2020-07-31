@@ -35,6 +35,7 @@ app.use('/user', userRouter);
 app.get('/blog/:id', getBlog);
 app.get('/', serveDashboard);
 app.use(express.static(`${__dirname}/../public`));
+app.use('/coverImage', express.static(`${__dirname}/../database/images`));
 app.get('/signIn', signIn);
 app.get('/callback', githubCallback);
 app.get('/comments/:blogId', serveComments);

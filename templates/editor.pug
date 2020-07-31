@@ -32,7 +32,7 @@ body(onload=`addListeners(${id}, ${data})`)
 form#preview-form
   #preview.hide-preview
     img#exit-icon(src='./images/cross-icon.svg' alt='close' onclick='hidePreview()')
-    input#file(type='file' name='file' onchange='renderImage(event)')
+    input#file(type='file' name='file' onchange='renderImage(event)' required)
     .preview-content
       span#preview-title
       label#cover-image(for='file')

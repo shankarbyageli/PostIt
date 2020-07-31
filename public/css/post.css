@@ -3,16 +3,28 @@
   flex-direction: column;
   justify-content: space-around;
 }
-.post {
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-  border-bottom: slategrey solid 0.3px;
+
+.container {
   display: flex;
-  flex-direction: column;
   width: 58%;
+  flex-direction: row;
   min-height: 150px;
   margin: 15px auto;
   padding-right: 11px;
+  margin-bottom: 0.5rem;
+  border-bottom: slategrey solid 0.3px;
+}
+.post {
+  justify-content: space-between;
+
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+}
+
+.cover-image-post {
+  width: 20%;
+  height: 140px;
 }
 
 .user-details {

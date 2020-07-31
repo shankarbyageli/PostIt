@@ -125,7 +125,7 @@ const publishPost = async function (editor) {
       'POST',
       `/user/publish/${postId}`,
       function () {
-        window.location.href = '/';
+        window.location.href = `/blog/${postId}`;
       },
       form
     );

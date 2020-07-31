@@ -25,14 +25,15 @@ head
     +generatePop(avatarUrl)
 .all-posts
   each post in posts
-    .post
-      .title-text
-        a.title(href=`/blog/${post.id}`)=post.title
-      .data=JSON.parse(post.content).blocks[0].data.text
-      .user-details
-        img.author-profile(src=post.avatarUrl)
-        .details
-          span.author-name
-            a.author_url( href=`/profile/${post.userId}`)=post.username
-          span.date=takeMoment(post.lastModified)
-      //- img.cover-image-post(src='/images/cricket.jpeg' alt='No image')
+    .container 
+      .post
+        .title-text
+          a.title(href=`/blog/${post.id}`)=post.title
+        .data=JSON.parse(post.content).blocks[0].data.text
+        .user-details
+          img.author-profile(src=post.avatarUrl)
+          .details
+            span.author-name
+              a.author_url( href=`/profile/${post.userId}`)=post.username
+            span.date=takeMoment(post.lastModified)
+      img.cover-image-post(src=`/coverImage/${post.imagePath}` alt='No image')

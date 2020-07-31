@@ -168,6 +168,7 @@ class Database {
     const query = `
     select * from stories
      join users on stories.authorId = users.userId 
+     join images on stories.coverImageId = images.imageId
      where isPublished = 1 
      order by stories.id desc limit ${count}
     `;

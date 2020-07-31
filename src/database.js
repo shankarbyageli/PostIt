@@ -45,8 +45,9 @@ class Database {
     });
   }
 
-  publishPost(postId) {
-    const query = `UPDATE stories SET isPublished = 1 where id = ${postId}`;
+  publishPost(postId, imageId) {
+    const query = `UPDATE stories SET isPublished = 1,
+     coverImageId = ${imageId} where id = ${postId}`;
     return new Promise((resolve, reject) => {
       this.db.run(query, (err) => {
         if (err) {
@@ -209,6 +210,43 @@ class Database {
           reject(err);
         }
         resolve(rows);
+      });
+    });
+  }
+
+  addImage(fileName) {
+    const query = `INSERT INTO images (imagePath) VALUES ('${fileName}')`;
+    return new Promise((resolve, reject) => {
+      this.db.serialize(() => {
+        this.db.run(query, (err) => {
+          if (err) {
+            reject(err);
+          }
+        });
+        this.db.get(
+          'select * from images order by imageId desc',
+          (err, row) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(row);
+            }
+          }
+        );
+      });
+    });
+  }
+
+  addTags(tags, postId) {
+    const values = tags.map((tag) => `(${postId}, '${tag}')`);
+    const query = `INSERT INTO tags VALUES ${values.join(',')}`;
+    return new Promise((resolve, reject) => {
+      this.db.run(query, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(true);
+        }
       });
     });
   }

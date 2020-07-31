@@ -72,6 +72,8 @@ describe('POST /publish', () => {
       ],
       version: '2.11.10',
     },
+
+    tags: JSON.stringify([]),
   };
 
   it('Should publish the post', (done) => {
@@ -185,7 +187,7 @@ describe('GET /comments/:blogId', () => {
       .expect(200, done);
   });
 
-  it('should give 404 error page if blog id doesn\'t exist', (done) => {
+  it('should give 404 error page if blog id doesnot exist', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/comments/10')
@@ -369,14 +371,14 @@ describe('GET /profile/id', function () {
       .expect(/Read this blog/, done);
   });
 
-  it('should give error page if user doesn\'t exist', function (done) {
+  it('should give error page if user does not exist', function (done) {
     request(app)
       .get('/profile/3')
       .expect(/dashboard/)
       .expect(404, done);
   });
 
-  it('should give error page if user doesn\'t exist', function (done) {
+  it('should give error page if user does not exist', function (done) {
     request(app)
       .get('/profile/0')
       .expect(/dashboard/)

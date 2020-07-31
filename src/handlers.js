@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { clientId, clientSecret } = require('../config');
 const lib = require('./lib');
 
@@ -96,7 +97,20 @@ const servePublishedPosts = async function (req, res) {
 };
 
 const publish = async function (req, res) {
-  await req.app.locals.db.publishPost(req.params.id);
+  const coverImage = req.files && req.files.file;
+  let imageDetails = { imageId: null };
+  if (coverImage) {
+    fs.writeFileSync(
+      `${__dirname}/../database/images/${coverImage.md5}`,
+      coverImage.data
+    );
+    imageDetails = await req.app.locals.db.addImage(coverImage.md5);
+  }
+  const tags = JSON.parse(req.body.tags);
+  if (tags.length) {
+    await req.app.locals.db.addTags(tags, req.params.id);
+  }
+  await req.app.locals.db.publishPost(req.params.id, imageDetails.imageId);
   res.send('Published');
 };
 
@@ -191,6 +205,7 @@ const getUserDetail = (tokenDetails) => {
   };
   return lib.makeRequest(options, {});
 };
+
 const githubCallback = function (req, res) {
   const code = req.url.split('=')[1];
   const params = {

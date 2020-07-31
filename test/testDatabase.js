@@ -199,7 +199,7 @@ describe('getUser', () => {
     }, null);
   });
 
-  it('should return false if user id doesn\'t exist', (done) => {
+  it('should return false if user id does not exist', (done) => {
     const db = { get: (query, params, callback) => callback(null, null) };
     const database = new Database(db);
     database.getUser('mama').then((actual) => {
@@ -284,4 +284,69 @@ describe('getSearchedPosts', () => {
       done();
     }, null);
   });
+});
+
+describe('addImage', () => {
+  it('should give error if database failure', (done) => {
+    const db = {
+      get: (query, callback) => callback('error'),
+      run: (query, callback) => callback(null, true),
+      serialize: (callback) => callback(),
+    };
+    const database = new Database(db);
+    database.addImage('myFile').then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it('should give error if database failure', (done) => {
+    const db = {
+      get: (query, callback) => callback(null),
+      run: (query, callback) => callback('error', true),
+      serialize: (callback) => callback(),
+    };
+    const database = new Database(db);
+    database.addImage('myFile').then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it('should add image to the database', (done) => {
+    const db = {
+      get: (query, callback) => callback(null, 1),
+      run: (query, callback) => callback(null),
+      serialize: (callback) => callback(),
+    };
+    const database = new Database(db);
+    database.addImage('myFile').then((actual) => {
+      assert.equal(actual, 1);
+      done();
+    }, null);
+  });
+});
+
+describe('addTags', () => {
+  it('should give error if database failure', (done) => {
+    const db = { run: (query, callback) => callback('error') };
+    const database = new Database(db);
+    database.addTags(['tag1']).then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it(
+    'should add the tag',
+    (done) => {
+      const db = { run: (query, callback) => callback(null) };
+      const database = new Database(db);
+      database.addTags(['tag1'], 1).then((actual) => {
+        assert.equal(actual, true);
+        done();
+      });
+    },
+    null
+  );
 });

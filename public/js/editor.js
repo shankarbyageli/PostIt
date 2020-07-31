@@ -18,7 +18,7 @@ const addTag = function (event) {
     event.preventDefault();
     const newTag = ` <span class="added-tag">
               <img 
-                src="./images/close.svg" 
+                src="/user/images/close.svg" 
                 alt="" class="close" 
                 onclick="removeTag(event)" 
               />

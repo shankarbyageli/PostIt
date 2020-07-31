@@ -293,6 +293,42 @@ class Database {
       });
     });
   }
+
+  isClapped(postId, userId) {
+    const query = `SELECT * from claps 
+    WHERE storyId=${postId} AND clappedBy=${userId}`;
+    return new Promise((resolve, reject) => {
+      this.db.get(query, (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+  }
+
+  clapOnPost(postId, userId) {
+    let query = `INSERT INTO claps 
+    VALUES (${postId},${userId})`;
+    let status = true;
+    return new Promise((resolve, reject) => {
+      this.isClapped(postId, userId).then((row) => {
+        if (row) {
+          query = `DELETE from claps 
+            WHERE storyId=${postId} AND clappedBy=${userId}`;
+          status = false;
+        }
+        this.db.run(query, (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(status);
+          }
+        });
+      });
+    });
+  }
 }
 
 module.exports = Database;

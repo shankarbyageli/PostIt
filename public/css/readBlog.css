@@ -80,3 +80,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+#clap {
+  width: 36px;
+}

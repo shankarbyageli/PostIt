@@ -28,5 +28,9 @@ body(onload=`render(${post.content})`)
     each tag in tags
       span.added-tag=tag
   .user-actions
-      a(href=`/comments/${post.id}`) 
-        button.user-action Comments
+    if(isClapped)
+      img#clap(src="/images/clapBlack.svg" alt="Clap" onclick=`clapOnPost(${post.id})`)
+    else
+      img#clap(src="/images/clapWhite.svg" alt="Clap" onclick=`clapOnPost(${post.id})`)
+    a(href=`/comments/${post.id}`) 
+      button.user-action Comments

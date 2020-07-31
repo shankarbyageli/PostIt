@@ -1,5 +1,6 @@
 const Database = require('../src/database');
 const assert = require('assert');
+const sinon = require('sinon');
 
 describe('addPost', () => {
   it('should give error if database failure in run', (done) => {
@@ -343,6 +344,70 @@ describe('addTags', () => {
       const db = { run: (query, callback) => callback(null) };
       const database = new Database(db);
       database.addTags(['tag1'], 1).then((actual) => {
+        assert.equal(actual, true);
+        done();
+      });
+    },
+    null
+  );
+});
+
+describe('isClapped', () => {
+  it('should give error if database failure', (done) => {
+    const db = { get: (query, callback) => callback('error') };
+    const database = new Database(db);
+    database.isClapped(1, 2).then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it(
+    'should give false if the user is already clapped',
+    (done) => {
+      const db = { get: (query, callback) => callback(null, false) };
+      const database = new Database(db);
+      database.isClapped(3, 1).then((actual) => {
+        assert.equal(actual, false);
+        done();
+      });
+    },
+    null
+  );
+});
+
+describe('clapOnPost', () => {
+  it('should give error if database failure', (done) => {
+    const db = { run: (query, callback) => callback('error') };
+    const database = new Database(db);
+    database.isClapped = sinon.fake.resolves(true);
+    database.clapOnPost(1, 2).then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it(
+    'should be able to unclap on post if the user is already clapped',
+    (done) => {
+      const db = { run: (query, callback) => callback(null) };
+      const database = new Database(db);
+      database.isClapped = sinon.fake.resolves(true);
+      database.clapOnPost(3, 1).then((actual) => {
+        assert.equal(actual, false);
+        done();
+      });
+    },
+    null
+  );
+
+  it(
+    'should be able to clap on post if the user is not already clapped',
+    (done) => {
+      const db = { run: (query, callback) => callback(null) };
+      const database = new Database(db);
+      database.isClapped = sinon.fake.resolves(false);
+      database.clapOnPost(3, 1).then((actual) => {
         assert.equal(actual, true);
         done();
       });

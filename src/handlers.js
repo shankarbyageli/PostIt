@@ -132,6 +132,7 @@ const getBlog = async function (req, res, next) {
       avatarUrl,
       coverImage: postDetails.imagePath,
       tags: postDetails.tags,
+      isClapped: await req.app.locals.db.isClapped(id, req.user),
     });
   } else {
     next();
@@ -246,6 +247,15 @@ const deletePost = async function (req, res, next) {
   res.redirect(req.headers.referer);
 };
 
+const clapOnPost = async function (req, res, next) {
+  const { id } = req.params;
+  if (!+id) {
+    return next();
+  }
+  const status = await req.app.locals.db.clapOnPost(id, req.user);
+  res.send({ clapped: status });
+};
+
 module.exports = {
   serveDashboard,
   signIn,
@@ -265,4 +275,5 @@ module.exports = {
   serveProfile,
   serveSearchResults,
   deletePost,
+  clapOnPost,
 };

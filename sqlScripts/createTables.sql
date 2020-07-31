@@ -22,9 +22,9 @@ CREATE TABLE IF NOT EXISTS images (
 );
 
 CREATE TABLE IF NOT EXISTS claps (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  storyId INTEGER,
-  clappedBy INTEGER ,
+  storyId INTEGER NOT NULL,
+  clappedBy INTEGER NOT NULL,
+  PRIMARY KEY(storyId, clappedBy),
   FOREIGN KEY(storyId) REFERENCES stories(id),
   FOREIGN KEY(clappedBy) REFERENCES users(userId)
 );

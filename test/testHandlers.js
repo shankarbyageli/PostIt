@@ -128,12 +128,6 @@ describe('GET /blog/id', () => {
   });
 
   it('should return the blog content if the blog is published', (done) => {
-    request(app)
-      .get('/blog/3')
-      .expect(/signIn/, done);
-  });
-
-  it('should return the blog content if the blog is published', (done) => {
     app.locals.sessions = { '1234': 1 };
     request(app)
       .get('/blog/3')
@@ -447,5 +441,29 @@ describe('GET /delete/:id', () => {
       .get('/user/delete/1')
       .set('Cookie', 'sId=1234')
       .expect(302, done);
+  });
+});
+
+describe('GET /clap/:id', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
+  it('should give true when the user is not already clapped', function (done) {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .post('/user/clap/3')
+      .set('Cookie', 'sId=1234')
+      .expect(/true/)
+      .expect(200, done);
+  });
+
+  it('should give false when the user is already clapped', function (done) {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .post('/user/clap/4')
+      .set('Cookie', 'sId=1234')
+      .expect(/false/)
+      .expect(200, done);
   });
 });

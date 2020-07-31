@@ -18,3 +18,31 @@ const render = function (data) {
     onReady: disableEdit,
   });
 };
+
+const clapOnPost = function (postId) {
+  sendReq(
+    'POST',
+    `/user/clap/${postId}`,
+    (res) => {
+      if (res.clapped) {
+        document.getElementById('clap').src = '/images/clapBlack.svg';
+        return;
+      }
+      document.getElementById('clap').src = '/images/clapWhite.svg';
+    },
+    null
+  );
+};
+
+const sendReq = function (method, url, callback, content) {
+  const xhr = new XMLHttpRequest();
+  xhr.onload = function () {
+    if (this.status === 200 || this.status === 302) {
+      callback && callback(this.response);
+    }
+  };
+  xhr.responseType = 'json';
+  xhr.open(method, url);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(content);
+};

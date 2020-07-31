@@ -1,6 +1,41 @@
+const { query } = require('express');
+
 class Database {
   constructor(db) {
     this.db = db;
+  }
+
+  run(query) {
+    return new Promise((resolve, reject) => {
+      this.db.run(query, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  }
+
+  all(query) {
+    return new Promise((resolve, reject) => {
+      this.db.all(query, (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  }
+
+  get(query) {
+    return new Promise((resolve, reject) => {
+      this.db.get(query, (err, row) => {
+        err && reject(err);
+        resolve(row);
+      });
+    });
   }
 
   addPost(data, userId) {
@@ -34,29 +69,13 @@ class Database {
     const query = `UPDATE stories SET title = '${data.title}', 
       content = '${JSON.stringify(data.content)}',
       lastModified = '${data.content.time}' where id = ${id};`;
-    return new Promise((resolve, reject) => {
-      this.db.run(query, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(true);
-        }
-      });
-    });
+    return this.run(query);
   }
 
   publishPost(postId, imageId) {
     const query = `UPDATE stories SET isPublished = 1,
      coverImageId = ${imageId} where id = ${postId}`;
-    return new Promise((resolve, reject) => {
-      this.db.run(query, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(true);
-        }
-      });
-    });
+    return this.run(query);
   }
 
   getAllPosts(userId, postType) {
@@ -66,15 +85,7 @@ class Database {
      where authorId = ${userId} AND isPublished = ${postType}
      order by lastModified desc
     `;
-    return new Promise((resolve, reject) => {
-      this.db.all(query, (err, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(rows);
-        }
-      });
-    });
+    return this.all(query);
   }
 
   getPost(id, postType) {
@@ -83,12 +94,7 @@ class Database {
        join users on stories.authorId = users.userId
        where id = ${id} AND isPublished = ${postType}
       `;
-    return new Promise((resolve, reject) => {
-      this.db.get(query, (err, row) => {
-        err && reject(err);
-        resolve(row);
-      });
-    });
+    return this.get(query);
   }
 
   getPostDetails(blogId, imageId) {
@@ -119,45 +125,29 @@ class Database {
 
   getUserById(userId) {
     const query = `select * from users where userId = ${userId}`;
-    return new Promise((resolve, reject) => {
-      this.db.get(query, (err, row) => {
-        err && reject(err);
-        resolve(row);
-      });
-    });
+    return this.get(query);
   }
 
   addUser(userDetails) {
     const query = `INSERT INTO users (username, avatarUrl) values (
       '${userDetails.login}', '${userDetails.avatar_url}')
     ;`;
-    return new Promise((resolve, reject) => {
-      this.db.run(query, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(true);
-        }
-      });
-    });
+    return this.run(query);
   }
 
   getUser(username) {
+    const query = 'select * from users where username=?';
     return new Promise((resolve, reject) => {
-      this.db.get(
-        'select * from users where username=?',
-        [username],
-        (err, row) => {
-          if (err) {
-            reject(err);
-          }
-          if (row) {
-            resolve(row);
-          } else {
-            resolve(false);
-          }
+      this.db.get(query, [username], (err, row) => {
+        if (err) {
+          reject(err);
         }
-      );
+        if (row) {
+          resolve(row);
+        } else {
+          resolve(false);
+        }
+      });
     });
   }
 
@@ -165,29 +155,14 @@ class Database {
     const query = `select * from comments 
       join users on comments.commentBy = users.userId
       where commentOn = ${blogId} order by comments.id desc`;
-    return new Promise((resolve, reject) => {
-      this.db.all(query, async (err, rows) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(rows);
-      });
-    });
+    return this.all(query);
   }
 
   addComment(comment, blogId, userId, date) {
     const query = `INSERT INTO comments 
       (commentOn,commentBy,commentedAt,comment) VALUES
       (${blogId},${userId},${date},'${comment}')`;
-    return new Promise((resolve, reject) => {
-      this.db.run(query, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(true);
-        }
-      });
-    });
+    return this.run(query);
   }
 
   getLatestPosts(count) {
@@ -198,14 +173,7 @@ class Database {
      where isPublished = 1 
      order by stories.id desc limit ${count}
     `;
-    return new Promise((resolve, reject) => {
-      this.db.all(query, async (err, rows) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(rows);
-      });
-    });
+    return this.all(query);
   }
 
   getSearchedPosts(filteringOption, searchedText) {
@@ -234,14 +202,7 @@ class Database {
       `,
     };
 
-    return new Promise((resolve, reject) => {
-      this.db.all(query[filteringOption], async (err, rows) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(rows);
-      });
-    });
+    return this.all(query[filteringOption]);
   }
 
   addImage(fileName) {
@@ -270,28 +231,12 @@ class Database {
   addTags(tags, postId) {
     const values = tags.map((tag) => `(${postId}, '${tag}')`);
     const query = `INSERT INTO tags VALUES ${values.join(',')}`;
-    return new Promise((resolve, reject) => {
-      this.db.run(query, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(true);
-        }
-      });
-    });
+    return this.run(query);
   }
 
   deletePost(id) {
     const query = `delete from stories where id = ${id}`;
-    return new Promise((resolve, reject) => {
-      this.db.run(query, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(true);
-        }
-      });
-    });
+    return this.run(query);
   }
 
   isClapped(postId, userId) {

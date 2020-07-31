@@ -237,6 +237,15 @@ const githubCallback = function (req, res) {
     });
 };
 
+const deletePost = async function (req, res, next) {
+  const { id } = req.params;
+  if (!+id) {
+    return next();
+  }
+  await req.app.locals.db.deletePost(id);
+  res.redirect(req.headers.referer);
+};
+
 module.exports = {
   serveDashboard,
   signIn,
@@ -255,4 +264,5 @@ module.exports = {
   servePublishedPosts,
   serveProfile,
   serveSearchResults,
+  deletePost,
 };

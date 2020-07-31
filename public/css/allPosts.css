@@ -67,12 +67,22 @@
 
 .info-post {
   display: flex;
-  justify-content: space-around;
-  flex-direction: column;
+  justify-content: space-between;
+  flex-direction: row;
 }
 
 .date {
   margin-top: 7px;
   font-size: 12px;
   color: #58585b;
+}
+
+.delete-link {
+  text-decoration: none;
+  color: black;
+}
+
+.delete-link:hover {
+  text-decoration: underline;
+  color: red;
 }

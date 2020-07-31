@@ -277,6 +277,19 @@ class Database {
       });
     });
   }
+
+  deletePost(id) {
+    const query = `delete from stories where id = ${id}`;
+    return new Promise((resolve, reject) => {
+      this.db.run(query, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  }
 }
 
 module.exports = Database;

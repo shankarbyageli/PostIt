@@ -435,3 +435,17 @@ describe('GET /user/search', () => {
       .expect(200, done);
   });
 });
+
+describe('GET /delete/:id', () => {
+  afterEach(() => {
+    app.locals.sessions = {};
+  });
+
+  it('should give the details of user given id', function (done) {
+    app.locals.sessions = { '1234': 1 };
+    request(app)
+      .get('/user/delete/1')
+      .set('Cookie', 'sId=1234')
+      .expect(302, done);
+  });
+});

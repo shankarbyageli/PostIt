@@ -35,3 +35,5 @@ link(rel="stylesheet", href="/css/allPosts.css")
               a.post-title(href=`/blog/${value.id}`)=value.title
           .info-post
             span.date=takeMoment(value.lastModified)
+            span
+              a(class="delete-link" href=`/user/delete/${value.id}`)='delete the post'

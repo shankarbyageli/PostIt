@@ -37,10 +37,7 @@ const renderSearchResults = function ({ posts }) {
   });
 };
 
-const getSearchText = function (event) {
-  if (event.keyCode !== 13) {
-    return;
-  }
+const getSearchResults = function () {
   const searchText = document.querySelector('.search-box input[type=text]')
     .value;
   const filter = document.querySelector('.filter select').value;
@@ -50,6 +47,13 @@ const getSearchText = function (event) {
     renderSearchResults,
     null
   );
+};
+
+const getSearchText = function (event) {
+  if (event.keyCode !== 13) {
+    return;
+  }
+  return getSearchResults();
 };
 
 const sendReq = function (method, url, callback, content) {

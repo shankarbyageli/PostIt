@@ -15,12 +15,13 @@ head
   #actions
     .search-container
       .filter
-        select(name='filter')
+        select.filter-select(name='filter')
           option(value='title') Title
           option(value='author') Author
           option(value='tag') Tag
       .search-box
         input(type='text' placeholder='Search..' name='search' onkeyup='getSearchText(event)')
+      img.search-icon(src="/images/search.png" alt="" onclick="getSearchResults()")
     +generatePop(avatarUrl)
 .all-posts
   each post in posts

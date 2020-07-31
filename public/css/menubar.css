@@ -140,6 +140,8 @@ body {
 .search-container {
   display: flex;
   margin-right: 20px;
+  border: 0.2px solid lightgray;
+  height: 22px;
 }
 
 .search-box button {
@@ -156,7 +158,32 @@ body {
 }
 
 .search-box input[type='text'] {
-  font-size: 17px;
+  font-size: 15px;
   border: none;
   outline: none;
+  width: 150px;
+}
+
+.filter-select {
+  width: 5rem;
+  height: 22px;
+  border: none;
+  outline: none;
+  background-color: #2ed3a7;
+  color: white;
+  font-family: medium-content-sans-serif-font, 'Lucida Grande',
+    'Lucida Sans Unicode', 'Lucida Sans', Geneva, Arial, sans-serif;
+}
+
+.search-icon {
+  height: 20px;
+  width: auto;
+}
+
+.filter-select:hover {
+  cursor: pointer;
+}
+
+.search-icon:hover {
+  cursor: pointer;
 }

@@ -29,7 +29,6 @@
   justify-content: space-around;
   width: 58%;
   margin: 0 auto;
-  margin-top: -12rem;
 }
 
 .user-action {
@@ -53,4 +52,31 @@
 
 .author_url:hover {
   text-decoration: underline;
+}
+
+.cover-image {
+  width: 56%;
+  height: 400px;
+  margin: 12px 22%;
+}
+
+.tags {
+  display: flex;
+  flex-direction: row;
+  margin: 0 22%;
+  justify-content: flex-start;
+  margin-top: -17rem;
+}
+
+.added-tag {
+  height: 30px;
+  width: 78px;
+  background-color: rgba(242, 242, 242, 1);
+  color: rgb(116, 110, 110);
+  padding-top: 10px;
+  text-align: center;
+  margin: 0px 25px 27px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

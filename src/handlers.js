@@ -121,10 +121,17 @@ const getBlog = async function (req, res, next) {
   }
   const avatarUrl = req.user ? req.avatarUrl : false;
   const response = await req.app.locals.db.getPost(id, 1);
+
   if (response) {
+    const postDetails = await req.app.locals.db.getPostDetails(
+      id,
+      response.coverImageId
+    );
     res.render('readBlog', {
       post: response,
       avatarUrl,
+      coverImage: postDetails.imagePath,
+      tags: postDetails.tags,
     });
   } else {
     next();

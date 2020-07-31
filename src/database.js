@@ -1,3 +1,5 @@
+const { response } = require('express');
+
 class Database {
   constructor(db) {
     this.db = db;
@@ -87,6 +89,32 @@ class Database {
       this.db.get(query, (err, row) => {
         err && reject(err);
         resolve(row);
+      });
+    });
+  }
+
+  getPostDetails(blogId, imageId) {
+    const imageQuery = `SELECT * FROM images where imageId = ${imageId}`;
+    const tagsQuery = `SELECT * FROM tags where storyId = ${blogId}`;
+    const details = { tags: [] };
+    return new Promise((resolve, reject) => {
+      this.db.serialize(() => {
+        this.db.get(imageQuery, (err, row) => {
+          if (err) {
+            reject(err);
+          }
+          details.imagePath = row.imagePath;
+        });
+
+        this.db.all(tagsQuery, (err, rows) => {
+          if (err) {
+            reject(err);
+          }
+          rows.forEach((row) => {
+            details.tags.push(row.tag);
+          });
+          resolve(details);
+        });
       });
     });
   }

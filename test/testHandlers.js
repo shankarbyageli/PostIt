@@ -129,7 +129,7 @@ describe('GET /blog/id', () => {
 
   it('should return the blog content if the blog is published', (done) => {
     request(app)
-      .get('/blog/1')
+      .get('/blog/3')
       .expect(/signIn/, done);
   });
 

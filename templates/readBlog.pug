@@ -22,7 +22,11 @@ body(onload=`render(${post.content})`)
     div.userInfo
       a.author_url(href=`/profile/${post.userId}`)#name=post.username
       #date=new Date(post.lastModified).toDateString()
+  img.cover-image(src=`/coverImage/${coverImage}`)
   #editorjs
+  .tags 
+    each tag in tags
+      span.added-tag=tag
   .user-actions
       a(href=`/comments/${post.id}`) 
         button.user-action Comments

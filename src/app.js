@@ -38,7 +38,7 @@ app.use(express.static(`${__dirname}/../public`));
 app.get('/signIn', signIn);
 app.get('/callback', githubCallback);
 app.get('/comments/:blogId', serveComments);
-app.get('/profile/:user_id', serveProfile);
+app.get('/profile/:userId', serveProfile);
 app.use(serveErrorPage);
 
 module.exports = app;

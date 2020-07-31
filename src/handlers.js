@@ -6,7 +6,7 @@ const getLoggedInDetails = async function (req, res, next) {
   if (sessions[req.cookies.sId] !== undefined) {
     req.user = sessions[req.cookies.sId];
     const userDetails = await req.app.locals.db.getUserById(req.user);
-    req.avatar_url = userDetails.avatar_url;
+    req.avatarUrl = userDetails.avatarUrl;
     req.username = userDetails.username;
   }
   next();
@@ -31,7 +31,7 @@ const serveDashboard = async function (req, res, next) {
   if (req.user !== undefined) {
     res.render('dashBoard', {
       posts: await req.app.locals.db.getLatestPosts(10),
-      avatar_url: req.avatar_url,
+      avatarUrl: req.avatarUrl,
       username: req.username,
       takeMoment: lib.takeMoment,
     });
@@ -46,8 +46,8 @@ const serveEditor = async function (req, res, next) {
   if (id === undefined) {
     res.render('editor', {
       data: '{}',
-      title_text: '',
-      avatar_url: req.avatar_url,
+      titleText: '',
+      avatarUrl: req.avatarUrl,
       id: -1,
     });
   } else {
@@ -55,8 +55,8 @@ const serveEditor = async function (req, res, next) {
     if (response) {
       res.render('editor', {
         data: response.content,
-        title_text: response.title,
-        avatar_url: req.avatar_url,
+        titleText: response.title,
+        avatarUrl: req.avatarUrl,
         id: response.id,
       });
     } else {
@@ -79,7 +79,7 @@ const serveDraftedPosts = async function (req, res) {
   const drafts = await req.app.locals.db.getAllPosts(req.user, 0);
   res.render('posts', {
     posts: drafts,
-    avatar_url: req.avatar_url,
+    avatarUrl: req.avatarUrl,
     type: 0,
     takeMoment: lib.takeMoment,
   });
@@ -89,7 +89,7 @@ const servePublishedPosts = async function (req, res) {
   const published = await req.app.locals.db.getAllPosts(req.user, 1);
   res.render('posts', {
     posts: published,
-    avatar_url: req.avatar_url,
+    avatarUrl: req.avatarUrl,
     type: 1,
     takeMoment: lib.takeMoment,
   });
@@ -105,12 +105,12 @@ const getBlog = async function (req, res, next) {
   if (!+id) {
     return next();
   }
-  const avatar_url = req.user ? req.avatar_url : false;
+  const avatarUrl = req.user ? req.avatarUrl : false;
   const response = await req.app.locals.db.getPost(id, 1);
   if (response) {
     res.render('readBlog', {
       post: response,
-      avatar_url,
+      avatarUrl,
     });
   } else {
     next();
@@ -118,19 +118,19 @@ const getBlog = async function (req, res, next) {
 };
 
 const serveProfile = async function (req, res, next) {
-  const { user_id } = req.params;
-  if (!+user_id) {
+  const { userId } = req.params;
+  if (!+userId) {
     return next();
   }
-  const userDetails = await req.app.locals.db.getUserById(user_id);
+  const userDetails = await req.app.locals.db.getUserById(userId);
   if (!userDetails) {
     return next();
   }
-  const posts = await req.app.locals.db.getAllPosts(user_id, 1);
+  const posts = await req.app.locals.db.getAllPosts(userId, 1);
   res.render('userProfile', {
     posts,
-    avatar_url: req.avatar_url,
-    author_avatar: userDetails.avatar_url,
+    avatarUrl: req.avatarUrl,
+    authorAvatar: userDetails.avatarUrl,
     username: userDetails.username,
     takeMoment: lib.takeMoment,
   });
@@ -150,14 +150,14 @@ const serveComments = async function (req, res, next) {
   }
   const renderOptions = {
     comments: await req.app.locals.db.getComments(blogId),
-    title_text: blog.title,
-    user_id: req.user,
+    titleText: blog.title,
+    userId: req.user,
     takeMoment: lib.takeMoment,
     blogId,
   };
   if (req.user) {
     renderOptions.currentUser = req.username;
-    renderOptions.avatar_url = req.avatar_url;
+    renderOptions.avatarUrl = req.avatarUrl;
   }
   res.render('comments', renderOptions);
 };
@@ -171,7 +171,7 @@ const publishComment = function (req, res) {
 
 const serveErrorPage = function (req, res) {
   res.status(404);
-  res.render('error', { avatar_url: req.avatar_url });
+  res.render('error', { avatarUrl: req.avatarUrl });
 };
 
 const signIn = function (req, res) {
@@ -191,12 +191,11 @@ const getUserDetail = (tokenDetails) => {
   };
   return lib.makeRequest(options, {});
 };
-
 const githubCallback = function (req, res) {
   const code = req.url.split('=')[1];
   const params = {
-    client_id: clientId,
-    client_secret: clientSecret,
+    client_id: clientId, // eslint-disable-line
+    client_secret: clientSecret, // eslint-disable-line
     code,
   };
   const url = {
@@ -210,7 +209,7 @@ const githubCallback = function (req, res) {
     .then((details) => lib.addUserDetails(req, details))
     .then((userDetails) => {
       const sId = Date.now();
-      req.app.locals.sessions[sId] = userDetails.user_id;
+      req.app.locals.sessions[sId] = userDetails.userId;
       res.cookie('sId', sId);
       res.redirect('/');
     });

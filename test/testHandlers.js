@@ -392,7 +392,7 @@ describe('GET /callback', () => {
       .resolves('token=12345')
       .onCall(1)
       .resolves(
-        JSON.stringify({ login: 'user', avatar_url: 'https://img.com' })
+        JSON.stringify({ login: 'user', avatarUrl: 'https://img.com' })
       );
     sinon.replace(lib, 'makeRequest', stubbed);
     request(app).get('/callback').expect('Location', '/').expect(302, done);

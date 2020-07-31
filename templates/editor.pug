@@ -24,9 +24,9 @@ body(onload=`addListeners(${id}, ${data})`)
     #actions
       #buttonsBox
         button.action-button#publish(onclick='addPreview()') Publish
-      +generatePop(avatar_url)
+      +generatePop(avatarUrl)
   .post(id=id)
-    .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')=title_text
+    .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')=titleText
     .content#editorjs
 
 form#preview-form

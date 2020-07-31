@@ -101,6 +101,17 @@ const getTags = function () {
   return Array.from(tags).map((tag) => tag.innerText);
 };
 
+const sendPost = function (method, url, callback, content) {
+  const xhr = new XMLHttpRequest();
+  xhr.onload = function () {
+    if (this.status === 200 || this.status === 302) {
+      callback && callback(this.response);
+    }
+  };
+  xhr.open(method, url);
+  xhr.send(content);
+};
+
 const publishPost = async function (editor) {
   event.preventDefault();
   const data = await getPostContent(editor);
@@ -110,12 +121,14 @@ const publishPost = async function (editor) {
   form.append('data', JSON.stringify(data));
   const postId = document.getElementsByClassName('post')[0].id;
   if (data.content.blocks.length) {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      window.location.href = '/';
-    };
-    xhr.open('POST', `/user/publish/${postId}`);
-    xhr.send(form);
+    sendPost(
+      'POST',
+      `/user/publish/${postId}`,
+      function () {
+        window.location.href = '/';
+      },
+      form
+    );
   } else {
     window.alert('Please add some content !');
   }

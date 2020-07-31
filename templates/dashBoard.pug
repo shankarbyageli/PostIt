@@ -21,7 +21,7 @@ head
           option(value='tag') Tag
       .search-box
         input(type='text' placeholder='Search..' name='search' onkeyup='getSearchText(event)')
-    +generatePop(avatar_url)
+    +generatePop(avatarUrl)
 .all-posts
   each post in posts
     .post
@@ -29,9 +29,9 @@ head
         a.title(href=`/blog/${post.id}`)=post.title
       .data=JSON.parse(post.content).blocks[0].data.text
       .user-details
-        img.author-profile(src=post.avatar_url)
+        img.author-profile(src=post.avatarUrl)
         .details
           span.author-name
-            a.author_url( href=`/profile/${post.user_id}`)=post.username
-          span.date=takeMoment(post.last_modified)
+            a.author_url( href=`/profile/${post.userId}`)=post.username
+          span.date=takeMoment(post.lastModified)
       //- img.cover-image-post(src='/images/cricket.jpeg' alt='No image')

@@ -4,22 +4,22 @@ head
   link(rel='stylesheet' href='/css/userProfile.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Profile
-+generateMenuBar(avatar_url)
++generateMenuBar(avatarUrl)
 .user-profile
   .user-info
     span.username=username
     div
       span.follow-details 45 followers 
       span.follow-details 34 following 
-  img.profile-picture(src=author_avatar)
+  img.profile-picture(src=authorAvatar)
 .all-posts
   each post in posts
     .post
       .user-details
-        img.author-profile(src=author_avatar)
+        img.author-profile(src=authorAvatar)
         .details
           span.author-name=username
-          span.date=takeMoment(post.last_modified)
+          span.date=takeMoment(post.lastModified)
       .title-text
         a.title(href=`/blog/${post.id}`)=post.title
       .data=JSON.parse(post.content).blocks[0].data.text

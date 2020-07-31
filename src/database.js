@@ -3,12 +3,12 @@ class Database {
     this.db = db;
   }
 
-  addPost(data, user_id) {
+  addPost(data, userId) {
     const query = `
-    INSERT INTO stories (is_published,author_id,title,content,last_modified) 
+    INSERT INTO stories (isPublished,authorId,title,content,lastModified) 
     values (
       ${0},
-      '${user_id}',
+      '${userId}',
       '${data.title}','${JSON.stringify(data.content)}',
       '${data.content.time}'
     );`;
@@ -33,7 +33,7 @@ class Database {
   updatePost(id, data) {
     const query = `UPDATE stories SET title = '${data.title}', 
       content = '${JSON.stringify(data.content)}',
-      last_modified = '${data.content.time}' where id = ${id};`;
+      lastModified = '${data.content.time}' where id = ${id};`;
     return new Promise((resolve, reject) => {
       this.db.run(query, (err) => {
         if (err) {
@@ -46,7 +46,7 @@ class Database {
   }
 
   publishPost(postId) {
-    const query = `UPDATE stories SET is_published = 1 where id = ${postId}`;
+    const query = `UPDATE stories SET isPublished = 1 where id = ${postId}`;
     return new Promise((resolve, reject) => {
       this.db.run(query, (err) => {
         if (err) {
@@ -58,12 +58,12 @@ class Database {
     });
   }
 
-  getAllPosts(user_id, post_type) {
+  getAllPosts(userId, postType) {
     const query = `
     SELECT * from stories
-     join users on stories.author_id = users.user_id 
-     where author_id = ${user_id} AND is_published = ${post_type}
-     order by last_modified desc
+     join users on stories.authorId = users.userId 
+     where authorId = ${userId} AND isPublished = ${postType}
+     order by lastModified desc
     `;
     return new Promise((resolve, reject) => {
       this.db.all(query, (err, rows) => {
@@ -76,11 +76,11 @@ class Database {
     });
   }
 
-  getPost(id, post_type) {
+  getPost(id, postType) {
     const query = `
       select * from stories
-       join users on stories.author_id = users.user_id
-       where id = ${id} AND is_published = ${post_type}
+       join users on stories.authorId = users.userId
+       where id = ${id} AND isPublished = ${postType}
       `;
     return new Promise((resolve, reject) => {
       this.db.get(query, (err, row) => {
@@ -90,8 +90,8 @@ class Database {
     });
   }
 
-  getUserById(user_id) {
-    const query = `select * from users where user_id = ${user_id}`;
+  getUserById(userId) {
+    const query = `select * from users where userId = ${userId}`;
     return new Promise((resolve, reject) => {
       this.db.get(query, (err, row) => {
         err && reject(err);
@@ -100,9 +100,9 @@ class Database {
     });
   }
 
-  addUser(user_details) {
-    const query = `INSERT INTO users (username, avatar_url) values (
-      '${user_details.login}', '${user_details.avatar_url}')
+  addUser(userDetails) {
+    const query = `INSERT INTO users (username, avatarUrl) values (
+      '${userDetails.login}', '${userDetails.avatar_url}')
     ;`;
     return new Promise((resolve, reject) => {
       this.db.run(query, (err) => {
@@ -136,8 +136,8 @@ class Database {
 
   getComments(blogId) {
     const query = `select * from comments 
-      join users on comments.comment_by = users.user_id
-      where comment_on = ${blogId} order by comments.id desc`;
+      join users on comments.commentBy = users.userId
+      where commentOn = ${blogId} order by comments.id desc`;
     return new Promise((resolve, reject) => {
       this.db.all(query, async (err, rows) => {
         if (err) {
@@ -150,7 +150,7 @@ class Database {
 
   addComment(comment, blogId, userId, date) {
     const query = `INSERT INTO comments 
-      (comment_on,comment_by,commented_at,comment) VALUES
+      (commentOn,commentBy,commentedAt,comment) VALUES
       (${blogId},${userId},${date},'${comment}')`;
     return new Promise((resolve, reject) => {
       this.db.run(query, (err) => {
@@ -166,8 +166,8 @@ class Database {
   getLatestPosts(count) {
     const query = `
     select * from stories
-     join users on stories.author_id = users.user_id 
-     where is_published = 1 
+     join users on stories.authorId = users.userId 
+     where isPublished = 1 
      order by stories.id desc limit ${count}
     `;
     return new Promise((resolve, reject) => {
@@ -184,22 +184,22 @@ class Database {
     const query = {
       tag: `
       select * from tags
-       join stories on tags.story_id = stories.id 
-       join users on stories.author_id = users.user_id 
-       where is_published = 1 AND tag like '%${searchedText}%' 
-       order by last_modified desc
+       join stories on tags.storyId = stories.id 
+       join users on stories.authorId = users.userId 
+       where isPublished = 1 AND tag like '%${searchedText}%' 
+       order by lastModified desc
       `,
       title: `
       select * from stories
-       join users on stories.author_id = users.user_id 
-       where is_published = 1 AND title like '%${searchedText}%' 
+       join users on stories.authorId = users.userId 
+       where isPublished = 1 AND title like '%${searchedText}%' 
        order by stories.id desc
       `,
       author: `
       select * from stories
-       join users on stories.author_id = users.user_id 
-       where is_published = 1 AND username like '%${searchedText}%' 
-       order by last_modified desc
+       join users on stories.authorId = users.userId 
+       where isPublished = 1 AND username like '%${searchedText}%' 
+       order by lastModified desc
       `,
     };
 

@@ -7,28 +7,28 @@ head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Comments
 
-+generateMenuBar(avatar_url)
++generateMenuBar(avatarUrl)
 
 #title
-  a.title(href=`/blog/${blogId}`)=title_text
-if avatar_url
+  a.title(href=`/blog/${blogId}`)=titleText
+if avatarUrl
   #newComment
     .user-details
-      img.user-profile(src=avatar_url )
+      img.user-profile(src=avatarUrl )
       span.username
-          a.author_url(href=`/profile/${user_id}`)=currentUser
+          a.author_url(href=`/profile/${userId}`)=currentUser
     p#new-comment.commentText(contenteditable='true' placeholder='Write your thoughts here ...' onkeyup='isAbleToPublish()')
     button#publish(onclick=`publishComment(${blogId})`) Publish
 
 each value in comments
   .comment-box
     .user-details
-      img.user-profile(src=value.avatar_url)
+      img.user-profile(src=value.avatarUrl)
       div.details
         span.username
-          a.author_url(href=`/profile/${value.comment_by}`)=value.username
+          a.author_url(href=`/profile/${value.commentBy}`)=value.username
         br
-        span.date=takeMoment(value.commented_at)
+        span.date=takeMoment(value.commentedAt)
     p.commentText
       each para in value.comment.split('\n')
         span=para 

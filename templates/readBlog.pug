@@ -14,14 +14,14 @@ head
   script(src='/js/readBlog.js')
 
 body(onload=`render(${post.content})`)
-+generateMenuBar(avatar_url)
++generateMenuBar(avatarUrl)
 #post
   #title=post.title
   .user
-    img#user-profile(src=post.avatar_url)
+    img#user-profile(src=post.avatarUrl)
     div.userInfo
-      a.author_url(href=`/profile/${post.user_id}`)#name=post.username
-      #date=new Date(post.last_modified).toDateString()
+      a.author_url(href=`/profile/${post.userId}`)#name=post.username
+      #date=new Date(post.lastModified).toDateString()
   #editorjs
   .user-actions
       a(href=`/comments/${post.id}`) 

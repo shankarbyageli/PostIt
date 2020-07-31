@@ -11,14 +11,14 @@ const generatePost = function (post) {
     </div>
     <div class="data">${JSON.parse(post.content).blocks[0].data.text}</div>
     <div class="user-details">
-      <img class="author-profile" src=${post.avatar_url}>
+      <img class="author-profile" src=${post.avatarUrl}>
       <div class="details">
         <span class="author-name">
-          <a class="author_url" href="/profile/${post.user_id}">
+          <a class="author_url" href="/profile/${post.userId}">
           ${post.username}
           </a>
         </span>
-        <span class="date">${new Date(post.last_modified).toDateString()}</span>
+        <span class="date">${new Date(post.lastModified).toDateString()}</span>
       </div>
     </div>
   </div>`;

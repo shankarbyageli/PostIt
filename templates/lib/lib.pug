@@ -1,19 +1,19 @@
-mixin generatePop(avatar_url)
+mixin generatePop(avatarUrl)
   .popup
-    img#user-profile(src=avatar_url onclick='showMenu()')
+    img#user-profile(src=avatarUrl onclick='showMenu()')
     #drop-down.drop-down-container
       a.menu(href='/user/editor') Write new post
       a.menu(href='/user/posts/drafts') My posts
       a.menu(href='/user/signOut') Sign out
 
-mixin generateMenuBar(avatar_url)
+mixin generateMenuBar(avatarUrl)
   #menu-bar
     #logoBox
       a(href="/")
         img#logo
     #actions
-      if avatar_url
-        +generatePop(avatar_url)
+      if avatarUrl
+        +generatePop(avatarUrl)
       else
         #buttonsBox
           a#link_text(href='/signIn')

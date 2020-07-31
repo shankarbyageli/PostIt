@@ -159,7 +159,7 @@ describe('addUser', () => {
     const db = { run: (query, callback) => callback('error') };
     const database = new Database(db);
     database
-      .addUser({ login: 'kaka', avatar_url: 'https://img.com' })
+      .addUser({ login: 'kaka', avatarUrl: 'https://img.com' })
       .then(null, (actual) => {
         assert.equal(actual, 'error');
         done();
@@ -170,7 +170,7 @@ describe('addUser', () => {
     const db = { run: (query, callback) => callback(null, true) };
     const database = new Database(db);
     database
-      .addUser({ login: 'kaka', avatar_url: 'https://img.com' })
+      .addUser({ login: 'kaka', avatarUrl: 'https://img.com' })
       .then((actual) => {
         assert.ok(actual);
         done();
@@ -190,11 +190,11 @@ describe('getUser', () => {
 
   it('should get user details of given id', (done) => {
     const db = {
-      get: (query, params, callback) => callback(null, { user_id: 7 }),
+      get: (query, params, callback) => callback(null, { userId: 7 }),
     };
     const database = new Database(db);
     database.getUser('mama').then((actual) => {
-      assert.deepStrictEqual(actual, { user_id: 7 });
+      assert.deepStrictEqual(actual, { userId: 7 });
       done();
     }, null);
   });

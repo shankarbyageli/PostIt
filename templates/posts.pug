@@ -2,7 +2,7 @@ include ./lib/lib.pug
 
 link(rel="stylesheet", href="/css/allPosts.css")
 
-+generateMenuBar(avatar_url)
++generateMenuBar(avatarUrl)
 #main
   #container
     p.your_posts  Your Posts 
@@ -34,4 +34,4 @@ link(rel="stylesheet", href="/css/allPosts.css")
             else 
               a.post-title(href=`/blog/${value.id}`)=value.title
           .info-post
-            span.date=takeMoment(value.last_modified)
+            span.date=takeMoment(value.lastModified)

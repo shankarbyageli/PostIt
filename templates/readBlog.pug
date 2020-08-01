@@ -27,6 +27,7 @@ body(onload=`render(${post.content})`)
   .tags 
     each tag in tags
       span.added-tag=tag
+  hr#horizontal-line
   .user-actions
     .clap-action
       if(clap.isClapped)

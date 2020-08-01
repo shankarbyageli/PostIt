@@ -49,11 +49,16 @@
 }
 
 .title-text {
+  width: 97%;
   font-size: 23px;
   font-weight: lighter;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.title-text:hover {
+  text-decoration: underline;
 }
 
 .author-profile {

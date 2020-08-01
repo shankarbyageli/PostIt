@@ -13,6 +13,10 @@
   flex-direction: column;
 }
 
+#horizontal-line {
+  width: 57%;
+}
+
 #date {
   font-size: 0.7rem;
   margin-top: 3px;
@@ -28,7 +32,7 @@
   flex-direction: row;
   justify-content: space-around;
   width: 58%;
-  margin: 0 auto;
+  margin: 50px auto;
 }
 
 .user-action {

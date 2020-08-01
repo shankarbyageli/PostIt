@@ -58,6 +58,7 @@
 }
 
 .title-post {
+  width: 86%;
   font-size: 1.7rem;
   font-weight: lighter;
   overflow: hidden;

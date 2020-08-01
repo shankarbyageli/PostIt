@@ -251,6 +251,22 @@ class Database {
     });
   }
 
+  getClapsCount(postId) {
+    const query = `
+    SELECT count(*) as count from claps 
+      WHERE storyId=${postId}
+    `;
+    return new Promise((resolve, reject) => {
+      this.db.get(query, (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+  }
+
   clapOnPost(postId, userId) {
     let query = `INSERT INTO claps 
     VALUES (${postId},${userId})`;

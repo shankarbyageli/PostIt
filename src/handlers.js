@@ -119,20 +119,23 @@ const getBlog = async function (req, res, next) {
   if (!+id) {
     return next();
   }
-  const avatarUrl = req.user ? req.avatarUrl : false;
+
   const response = await req.app.locals.db.getPost(id, 1);
+  const isClapped = await req.app.locals.db.isClapped(id, req.user);
+  const clapsCount = (await req.app.locals.db.getClapsCount(id)).count;
 
   if (response) {
     const postDetails = await req.app.locals.db.getPostDetails(
       id,
       response.coverImageId
     );
+
     res.render('readBlog', {
       post: response,
-      avatarUrl,
+      avatarUrl: req.user ? req.avatarUrl : false,
       coverImage: postDetails.imagePath,
       tags: postDetails.tags,
-      isClapped: await req.app.locals.db.isClapped(id, req.user),
+      clap: { isClapped, clapsCount },
     });
   } else {
     next();
@@ -253,7 +256,8 @@ const clapOnPost = async function (req, res, next) {
     return next();
   }
   const status = await req.app.locals.db.clapOnPost(id, req.user);
-  res.send({ clapped: status });
+  const clapsCount = (await req.app.locals.db.getClapsCount(id)).count;
+  res.send({ clapped: status, clapsCount });
 };
 
 module.exports = {

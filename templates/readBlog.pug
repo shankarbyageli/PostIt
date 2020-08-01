@@ -36,6 +36,7 @@ body(onload=`render(${post.content})`)
         img#clap(src="/images/clapWhite.svg" alt="Clap" onclick=`clapOnPost(${post.id})`)
       if(clap.isClapped == null)
         img#clap.unavailable(src="/images/clapWhite.svg" alt="Clap" )
-      span#clapCount=clap.clapsCount
-    a(href=`/comments/${post.id}`) 
-      button.user-action Comments
+      span#clapCount=`${clap.clapsCount} Claps`
+    a.comment-link.clap-action(href=`/comments/${post.id}`) 
+      img(class="comment-icon" src="/images/comment.svg", alt="", srcset="")
+      span.comment-text Comments

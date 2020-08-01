@@ -30,9 +30,10 @@
 .user-actions {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-start;
   width: 58%;
   margin: 50px auto;
+  padding-left: 12%;
 }
 
 .user-action {
@@ -93,6 +94,7 @@
 .clap-action {
   display: flex;
   align-items: center;
+  margin-right: 29px;
 }
 
 #clapCount {
@@ -103,4 +105,21 @@
 .unavailable {
   filter: opacity(0.4);
   pointer-events: none;
+}
+
+.comment-icon {
+  width: 36px;
+}
+
+.comment-link {
+  text-decoration: none;
+  color: black;
+}
+
+.comment-text :hover {
+  text-decoration: underline !important;
+}
+
+.comment-text {
+  margin-left: 11px;
 }

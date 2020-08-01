@@ -17,6 +17,7 @@
 }
 
 #status {
+  width: 10%;
   margin: 0.5rem 1.6rem;
   color: rgba(0, 0, 0, 0.54);
 }
@@ -52,4 +53,9 @@
 
 .ce-block {
   margin-bottom: 10px;
+}
+
+#error {
+  width: 213px;
+  color: red;
 }

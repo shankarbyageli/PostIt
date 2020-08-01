@@ -143,7 +143,7 @@ const publishPost = async function (editor) {
       form
     );
   } else {
-    window.alert('Please add some content !');
+    document.getElementById('error').innerText = 'Please add some content !';
   }
 };
 
@@ -165,6 +165,7 @@ const addListeners = function (id, data) {
   let editorTimeout = null;
   Array.from(document.getElementsByClassName('content')).forEach((element) => {
     element.addEventListener('keydown', () => {
+      document.getElementById('error').innerText = '';
       document.getElementById('status').innerText = '';
       clearTimeout(editorTimeout);
       editorTimeout = setTimeout(async () => {

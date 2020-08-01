@@ -113,11 +113,11 @@ describe('getPost', () => {
   });
 });
 
-describe('getAllPosts', () => {
+describe('getUsersPosts', () => {
   it('should give error if database failure', (done) => {
     const db = { all: (query, callback) => callback('error') };
     const database = new Database(db);
-    database.getAllPosts(1, 1).then(null, (actual) => {
+    database.getUsersPosts(1, 1).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
     });
@@ -126,7 +126,7 @@ describe('getAllPosts', () => {
   it('should get all the posts of given type from database', (done) => {
     const db = { all: (query, callback) => callback(null, [{}, {}]) };
     const database = new Database(db);
-    database.getAllPosts(1, 1).then((actual) => {
+    database.getUsersPosts(1, 1).then((actual) => {
       assert.deepStrictEqual(actual, [{}, {}]);
       done();
     }, null);

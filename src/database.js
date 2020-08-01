@@ -1,3 +1,4 @@
+const queries = require('./queries');
 class Database {
   constructor(db) {
     this.db = db;
@@ -37,22 +38,14 @@ class Database {
   }
 
   addPost(data, userId) {
-    const query = `
-    INSERT INTO stories (isPublished,authorId,title,content,lastModified) 
-    values (
-      ${0},
-      '${userId}',
-      '${data.title}','${JSON.stringify(data.content)}',
-      '${data.content.time}'
-    );`;
     return new Promise((resolve, reject) => {
       this.db.serialize(() => {
-        this.db.run(query, (err) => {
+        this.db.run(queries.addPost(userId, data), (err) => {
           if (err) {
             reject(err);
           }
         });
-        this.db.get('select id from stories order by id desc', (err, row) => {
+        this.db.get(queries.getAllStories(), (err, row) => {
           if (err) {
             reject(err);
           } else {
@@ -64,51 +57,33 @@ class Database {
   }
 
   updatePost(id, data) {
-    const query = `UPDATE stories SET title = '${data.title}', 
-      content = '${JSON.stringify(data.content)}',
-      lastModified = '${data.content.time}' where id = ${id};`;
-    return this.run(query);
+    return this.run(queries.updateStory(id, data));
   }
 
   publishPost(postId, imageId) {
-    const query = `UPDATE stories SET isPublished = 1,
-     coverImageId = ${imageId} where id = ${postId}`;
-    return this.run(query);
+    return this.run(queries.publishPost(imageId, postId));
   }
 
-  getAllPosts(userId, postType) {
-    const query = `
-    SELECT * from stories
-     join users on stories.authorId = users.userId 
-     where authorId = ${userId} AND isPublished = ${postType}
-     order by lastModified desc
-    `;
-    return this.all(query);
+  getUsersPosts(userId, postType) {
+    return this.all(queries.getUsersPosts(userId, postType));
   }
 
   getPost(id, postType) {
-    const query = `
-      select * from stories
-       join users on stories.authorId = users.userId
-       where id = ${id} AND isPublished = ${postType}
-      `;
-    return this.get(query);
+    return this.get(queries.getPost(id, postType));
   }
 
   getPostDetails(blogId, imageId) {
-    const imageQuery = `SELECT * FROM images where imageId = ${imageId}`;
-    const tagsQuery = `SELECT * FROM tags where storyId = ${blogId}`;
     const details = { tags: [] };
     return new Promise((resolve, reject) => {
       this.db.serialize(() => {
-        this.db.get(imageQuery, (err, row) => {
+        this.db.get(queries.imageQuery(imageId), (err, row) => {
           if (err) {
             reject(err);
           }
           details.imagePath = row.imagePath;
         });
 
-        this.db.all(tagsQuery, (err, rows) => {
+        this.db.all(queries.tagsQuery(blogId), (err, rows) => {
           if (err) {
             reject(err);
           }
@@ -122,15 +97,11 @@ class Database {
   }
 
   getUserById(userId) {
-    const query = `select * from users where userId = ${userId}`;
-    return this.get(query);
+    return this.get(queries.selectUser(userId));
   }
 
   addUser(userDetails) {
-    const query = `INSERT INTO users (username, avatarUrl) values (
-      '${userDetails.login}', '${userDetails.avatar_url}')
-    ;`;
-    return this.run(query);
+    return this.run(queries.addUser(userDetails));
   }
 
   getUser(username) {
@@ -150,86 +121,48 @@ class Database {
   }
 
   getComments(blogId) {
-    const query = `select * from comments 
-      join users on comments.commentBy = users.userId
-      where commentOn = ${blogId} order by comments.id desc`;
-    return this.all(query);
+    return this.all(queries.getComments(blogId));
   }
 
   addComment(comment, blogId, userId, date) {
-    const query = `INSERT INTO comments 
-      (commentOn,commentBy,commentedAt,comment) VALUES
-      (${blogId},${userId},${date},'${comment}')`;
-    return this.run(query);
+    return this.run(queries.addComment(blogId, userId, date, comment));
   }
 
   getLatestPosts(count) {
-    const query = `
-    select * from stories
-     join users on stories.authorId = users.userId 
-     join images on stories.coverImageId = images.imageId
-     where isPublished = 1 
-     order by stories.id desc limit ${count}
-    `;
-    return this.all(query);
+    return this.all(queries.getLatestPosts(count));
   }
 
   getSearchedPosts(filteringOption, searchedText) {
-    const query = {
-      tag: `
-      select * from tags
-       join stories on tags.storyId = stories.id 
-       join users on stories.authorId = users.userId 
-       join images on stories.coverImageId = images.imageId
-       where isPublished = 1 AND tag like '%${searchedText}%' 
-       order by lastModified desc
-      `,
-      title: `
-      select * from stories
-       join users on stories.authorId = users.userId 
-       join images on stories.coverImageId = images.imageId
-       where isPublished = 1 AND title like '%${searchedText}%' 
-       order by stories.id desc
-      `,
-      author: `
-      select * from stories
-       join users on stories.authorId = users.userId 
-       join images on stories.coverImageId = images.imageId
-       where isPublished = 1 AND username like '%${searchedText}%' 
-       order by lastModified desc
-      `,
+    const queryString = {
+      tag: queries.getPostsByTag(searchedText),
+      title: queries.getPostsByTitle(searchedText),
+      author: queries.getPostsByAuthor(searchedText),
     };
 
-    return this.all(query[filteringOption]);
+    return this.all(queryString[filteringOption]);
   }
 
   addImage(fileName) {
-    const query = `INSERT INTO images (imagePath) VALUES ('${fileName}')`;
     return new Promise((resolve, reject) => {
       this.db.serialize(() => {
-        this.db.run(query, (err) => {
+        this.db.run(queries.insertImage(fileName), (err) => {
           if (err) {
             reject(err);
           }
         });
-        this.db.get(
-          'select * from images order by imageId desc',
-          (err, row) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(row);
-            }
+        this.db.get(queries.selectImages(), (err, row) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(row);
           }
-        );
+        });
       });
     });
   }
 
   addTags(tags, postId) {
-    const values = tags.map((tag) => `(${postId}, '${tag}')`);
-    const query = `INSERT INTO tags VALUES ${values.join(',')}`;
-    return this.run(query);
+    return this.run(queries.addTags(tags, postId));
   }
 
   deletePost(id) {
@@ -238,10 +171,8 @@ class Database {
   }
 
   isClapped(postId, userId) {
-    const query = `SELECT * from claps 
-    WHERE storyId=${postId} AND clappedBy=${userId}`;
     return new Promise((resolve, reject) => {
-      this.db.get(query, (err, row) => {
+      this.db.get(queries.selectClaps(postId, userId), (err, row) => {
         if (err) {
           reject(err);
         } else {
@@ -268,17 +199,15 @@ class Database {
   }
 
   clapOnPost(postId, userId) {
-    let query = `INSERT INTO claps 
-    VALUES (${postId},${userId})`;
+    let queryString = queries.insertClap(postId, userId);
     let status = true;
     return new Promise((resolve, reject) => {
       this.isClapped(postId, userId).then((row) => {
         if (row) {
-          query = `DELETE from claps 
-            WHERE storyId=${postId} AND clappedBy=${userId}`;
+          queryString = queries.deleteClap(postId, userId);
           status = false;
         }
-        this.db.run(query, (err) => {
+        this.db.run(queryString, (err) => {
           if (err) {
             reject(err);
           } else {

@@ -77,7 +77,7 @@ const autoSave = async function (req, res) {
 };
 
 const serveDraftedPosts = async function (req, res) {
-  const drafts = await req.app.locals.db.getAllPosts(req.user, 0);
+  const drafts = await req.app.locals.db.getUsersPosts(req.user, 0);
   res.render('posts', {
     posts: drafts,
     avatarUrl: req.avatarUrl,
@@ -87,7 +87,7 @@ const serveDraftedPosts = async function (req, res) {
 };
 
 const servePublishedPosts = async function (req, res) {
-  const published = await req.app.locals.db.getAllPosts(req.user, 1);
+  const published = await req.app.locals.db.getUsersPosts(req.user, 1);
   res.render('posts', {
     posts: published,
     avatarUrl: req.avatarUrl,
@@ -151,7 +151,7 @@ const serveProfile = async function (req, res, next) {
   if (!userDetails) {
     return next();
   }
-  const posts = await req.app.locals.db.getAllPosts(userId, 1);
+  const posts = await req.app.locals.db.getUsersPosts(userId, 1);
   res.render('userProfile', {
     posts,
     avatarUrl: req.avatarUrl,

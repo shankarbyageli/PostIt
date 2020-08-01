@@ -140,7 +140,7 @@ body {
 .search-container {
   display: flex;
   margin-right: 20px;
-  border: 0.2px solid lightgray;
+  border-bottom: 0.2px solid rgb(156, 154, 154);
   height: 32px;
 }
 

@@ -24,7 +24,7 @@ body(onload=`addListeners(${id}, ${data})`)
       span#error=""
     #actions
       #buttonsBox
-        button.action-button#publish(onclick='addPreview()') Publish
+        button.action-button#publish Publish
       +generatePop(avatarUrl)
   .post(id=id)
     .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')=titleText

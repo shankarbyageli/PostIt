@@ -133,29 +133,30 @@ const publishPost = async function (editor) {
   const tags = getTags();
   const form = getFormData(data, tags);
   const postId = document.getElementsByClassName('post')[0].id;
+  sendPost(
+    'POST',
+    `/user/publish/${postId}`,
+    () => {
+      window.location.href = `/blog/${postId}`;
+    },
+    form
+  );
+};
+
+const addPreview = async function (editor) {
+  const data = await getPostContent(editor);
   if (data.content.blocks.length) {
-    sendPost(
-      'POST',
-      `/user/publish/${postId}`,
-      () => {
-        window.location.href = `/blog/${postId}`;
-      },
-      form
-    );
+    const preview = document.getElementById('preview');
+    preview.classList.remove('hide-preview');
+    preview.classList.add('display-preview');
+    const container = document.getElementById('container');
+    container.style.filter = 'blur(5px)';
+    document.getElementById(
+      'preview-title'
+    ).innerText = document.getElementById('title').innerText;
   } else {
     document.getElementById('error').innerText = 'Please add some content !';
   }
-};
-
-const addPreview = function () {
-  const preview = document.getElementById('preview');
-  preview.classList.remove('hide-preview');
-  preview.classList.add('display-preview');
-  const container = document.getElementById('container');
-  container.style.filter = 'blur(5px)';
-  document.getElementById('preview-title').innerText = document.getElementById(
-    'title'
-  ).innerText;
 };
 
 const addListeners = function (id, data) {
@@ -186,6 +187,8 @@ const addListeners = function (id, data) {
     null,
     editor
   );
+
+  document.getElementById('publish').onclick = addPreview.bind(null, editor);
 };
 
 const sendReq = function (method, url, callback, content) {

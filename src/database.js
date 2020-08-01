@@ -45,13 +45,9 @@ class Database {
             reject(err);
           }
         });
-        this.db.get(queries.getAllStories(), (err, row) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(row.id);
-          }
-        });
+        this.get(queries.getAllStories())
+          .then((row) => resolve(row.id))
+          .catch((err) => reject(err));
       });
     });
   }

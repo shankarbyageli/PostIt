@@ -167,15 +167,7 @@ class Database {
   }
 
   isClapped(postId, userId) {
-    return new Promise((resolve, reject) => {
-      this.db.get(queries.selectClaps(postId, userId), (err, row) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(row);
-        }
-      });
-    });
+    return this.get(queries.selectClaps(postId, userId));
   }
 
   getClapsCount(postId) {
@@ -183,15 +175,7 @@ class Database {
     SELECT count(*) as count from claps 
       WHERE storyId=${postId}
     `;
-    return new Promise((resolve, reject) => {
-      this.db.get(query, (err, row) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(row);
-        }
-      });
-    });
+    return this.get(query);
   }
 
   clapOnPost(postId, userId) {

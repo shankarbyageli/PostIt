@@ -24,7 +24,7 @@ const clapOnPost = function (postId) {
     'POST',
     `/user/clap/${postId}`,
     ({ clapped, clapsCount }) => {
-      document.getElementById('clapCount').innerText = clapsCount;
+      document.getElementById('clapCount').innerText = `${clapsCount} Claps`;
       if (clapped) {
         document.getElementById('clap').src = '/images/clapBlack.svg';
         return;

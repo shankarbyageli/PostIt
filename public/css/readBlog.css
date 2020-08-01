@@ -94,7 +94,7 @@
 .clap-action {
   display: flex;
   align-items: center;
-  margin-right: 29px;
+  margin-right: 60px;
 }
 
 #clapCount {
@@ -116,10 +116,11 @@
   color: black;
 }
 
-.comment-text :hover {
-  text-decoration: underline !important;
+.comment-link .comment-text:hover {
+  text-decoration: underline;
 }
 
 .comment-text {
   margin-left: 11px;
+  text-decoration: none;
 }

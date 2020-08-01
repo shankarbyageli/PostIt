@@ -77,6 +77,8 @@
 #tag {
   height: 30px;
   margin: 20px 0px;
+  padding: 10px;
+  outline: none;
 }
 
 .added-tag {

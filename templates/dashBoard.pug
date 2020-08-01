@@ -21,7 +21,7 @@ head
           option(value='tag') Tag
       .search-box
         input(type='text' placeholder='Search..' name='search' onkeyup='getSearchText(event)')
-      img.search-icon(src="/images/search.png" alt="" onclick="getSearchResults()")
+      img.search-icon(src="/images/search.svg" alt="" onclick="getSearchResults()")
     +generatePop(avatarUrl)
 .all-posts
   each post in posts

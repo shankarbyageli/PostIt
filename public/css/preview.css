@@ -120,3 +120,9 @@
 #instruction {
   margin: 0px 129px;
 }
+
+#preview-error {
+  position: absolute;
+  color: red;
+  margin: 8% 38%;
+}

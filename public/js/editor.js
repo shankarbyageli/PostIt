@@ -112,19 +112,32 @@ const sendPost = function (method, url, callback, content) {
   xhr.send(content);
 };
 
-const publishPost = async function (editor) {
-  event.preventDefault();
-  const data = await getPostContent(editor);
-  const tags = getTags();
+const displayPreviewError = function () {
+  document.getElementById('preview-error').innerText =
+    'Please add cover image !';
+};
+
+const getFormData = function (data, tags) {
   const form = new FormData(document.getElementById('preview-form'));
   form.append('tags', JSON.stringify(tags));
   form.append('data', JSON.stringify(data));
+  return form;
+};
+
+const publishPost = async function (editor) {
+  event.preventDefault();
+  if (document.getElementById('file').files.length == 0) {
+    return displayPreviewError();
+  }
+  const data = await getPostContent(editor);
+  const tags = getTags();
+  const form = getFormData(data, tags);
   const postId = document.getElementsByClassName('post')[0].id;
   if (data.content.blocks.length) {
     sendPost(
       'POST',
       `/user/publish/${postId}`,
-      function () {
+      () => {
         window.location.href = `/blog/${postId}`;
       },
       form

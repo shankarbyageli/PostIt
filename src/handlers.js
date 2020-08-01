@@ -114,6 +114,17 @@ const publish = async function (req, res) {
   res.send(JSON.stringify({ message: 'Published' }));
 };
 
+const getClapsDetails = async function (req, id) {
+  const clapsCount = (await req.app.locals.db.getClapsCount(id)).count;
+
+  if (req.user) {
+    const clappedDetails = await req.app.locals.db.isClapped(id, req.user);
+    const isClapped = clappedDetails ? true : false;
+    return { clapsCount, isClapped };
+  }
+  return { clapsCount, isClapped: null };
+};
+
 const getBlog = async function (req, res, next) {
   const { id } = req.params;
   if (!+id) {
@@ -121,8 +132,7 @@ const getBlog = async function (req, res, next) {
   }
 
   const response = await req.app.locals.db.getPost(id, 1);
-  const isClapped = await req.app.locals.db.isClapped(id, req.user);
-  const clapsCount = (await req.app.locals.db.getClapsCount(id)).count;
+  const clap = await getClapsDetails(req, id);
 
   if (response) {
     const postDetails = await req.app.locals.db.getPostDetails(
@@ -135,7 +145,7 @@ const getBlog = async function (req, res, next) {
       avatarUrl: req.user ? req.avatarUrl : false,
       coverImage: postDetails.imagePath,
       tags: postDetails.tags,
-      clap: { isClapped, clapsCount },
+      clap,
     });
   } else {
     next();

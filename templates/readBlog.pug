@@ -31,8 +31,10 @@ body(onload=`render(${post.content})`)
     .clap-action
       if(clap.isClapped)
         img#clap(src="/images/clapBlack.svg" alt="Clap" onclick=`clapOnPost(${post.id})`)
-      else
+      if(clap.isClapped == false)
         img#clap(src="/images/clapWhite.svg" alt="Clap" onclick=`clapOnPost(${post.id})`)
+      if(clap.isClapped == null)
+        img#clap.unavailable(src="/images/clapWhite.svg" alt="Clap" )
       span#clapCount=clap.clapsCount
     a(href=`/comments/${post.id}`) 
       button.user-action Comments

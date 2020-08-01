@@ -83,15 +83,20 @@
 
 #clap {
   width: 36px;
+  cursor: pointer;
 }
 
 .clap-action {
   display: flex;
   align-items: center;
-  cursor: pointer;
 }
 
 #clapCount {
   margin-left: 10px;
   color: #292929;
+}
+
+.unavailable {
+  filter: opacity(0.4);
+  pointer-events: none;
 }

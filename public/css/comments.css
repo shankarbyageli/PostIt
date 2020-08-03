@@ -88,12 +88,3 @@
 .details {
   margin: 19px 0px;
 }
-
-.author_url {
-  text-decoration: none;
-  color: black;
-}
-
-.author_url:hover {
-  text-decoration: underline;
-}

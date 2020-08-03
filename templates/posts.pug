@@ -1,6 +1,7 @@
 include ./lib/lib.pug
 
 link(rel="stylesheet", href="/css/allPosts.css")
+link(rel="stylesheet", href="/css/post.css")
 
 +generateMenuBar(avatarUrl)
 #main
@@ -9,7 +10,7 @@ link(rel="stylesheet", href="/css/allPosts.css")
     .post-types
       p#drafted.type
         if(type == 0)
-          a.highlight(href='/user/posts/drafts')
+          a.link-text(href='/user/posts/drafts')
             | Drafted 
           span#draft-count=posts.length
         else
@@ -18,7 +19,7 @@ link(rel="stylesheet", href="/css/allPosts.css")
       p.type  |
       p#published.type
         if(type == 1)
-          a.highlight(href='/user/posts/published')
+          a.link-text(href='/user/posts/published')
             | Published 
           span#publish-count=posts.length
         else 
@@ -28,14 +29,14 @@ link(rel="stylesheet", href="/css/allPosts.css")
     each value in posts 
       .container-post
         .data-post
-          .title-post(title=value.title)
+          .title-post.title(title=value.title)
             if type == 0
-              a.post-title(href=`/user/draft/${value.id}`)=(value.title || 'Untitled post')
+              a.link-text(href=`/user/draft/${value.id}`)=(value.title || 'Untitled post')
             else 
-              a.post-title(href=`/blog/${value.id}`)=value.title
+              a.link-text(href=`/blog/${value.id}`)=value.title
           .info-post
             span.date=takeMoment(value.lastModified)
             span
               if type == 0
-                a(class="edit-link" href=`/user/draft/${value.id}`)='Edit'
-              a(class="delete-link" href=`/user/delete/${value.id}`)='Delete'
+                a(id="edit-link" class="link-text" href=`/user/draft/${value.id}`)='Edit'
+              a(id="delete-link" class="link-text" href=`/user/delete/${value.id}`)='Delete'

@@ -14,9 +14,9 @@
   margin-bottom: 0.5rem;
   border-bottom: slategrey solid 0.3px;
 }
+
 .post {
   justify-content: space-between;
-
   display: flex;
   width: 80%;
   flex-direction: column;
@@ -51,6 +51,9 @@
 .title-text {
   width: 97%;
   font-size: 23px;
+}
+
+.title {
   font-weight: lighter;
   overflow: hidden;
   white-space: nowrap;
@@ -80,17 +83,16 @@
   margin: 10px 14px 10px 1px;
 }
 
-.title {
-  text-decoration: none;
-  color: black;
+.title-link {
   text-align: left;
   width: 100%;
 }
 
-.author_url {
+.link-text {
   text-decoration: none;
   color: black;
 }
+
 .author_url:hover {
   text-decoration: underline;
 }

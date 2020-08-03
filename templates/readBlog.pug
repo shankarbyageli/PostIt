@@ -5,6 +5,7 @@ head
   meta(charset='UTF-8')
   link(rel='stylesheet' href='/css/editor.css')
   link(rel='stylesheet' href='/css/readBlog.css')
+  link(rel='stylesheet' href='/css/post.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Blog
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest')
@@ -20,7 +21,7 @@ body(onload=`render(${post.content})`)
   .user
     img#user-profile(src=post.avatarUrl)
     div.userInfo
-      a.author_url(href=`/profile/${post.userId}`)#name=post.username
+      a.link-text.author_url(href=`/profile/${post.userId}`)#name=post.username
       #date=new Date(post.lastModified).toDateString()
   img.cover-image(src=`/coverImage/${coverImage}`)
   #editorjs
@@ -37,6 +38,6 @@ body(onload=`render(${post.content})`)
       if(clap.isClapped == null)
         img#clap.unavailable(src="/images/clapWhite.svg" alt="Clap" )
       span#clapCount=`${clap.clapsCount} Claps`
-    a.comment-link.clap-action(href=`/comments/${post.id}`) 
+    a.link-text.clap-action(href=`/comments/${post.id}`) 
       img(class="comment-icon" src="/images/comment.svg", alt="", srcset="")
       span.comment-text Comments

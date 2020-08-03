@@ -55,14 +55,9 @@
 }
 
 #preview-publish {
-  background: #03a87c;
-  text-align: center;
-  color: white;
-  border: none;
   border-radius: 5px;
   font-size: 17px;
   height: 40px;
-  cursor: pointer;
 }
 
 #added-tags {

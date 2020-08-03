@@ -8,16 +8,6 @@
   color: gray;
 }
 
-.post-title {
-  text-decoration: none;
-  color: black;
-}
-
-.highlight {
-  text-decoration: none;
-  color: black;
-}
-
 #container {
   width: 60%;
 }
@@ -60,10 +50,6 @@
 .title-post {
   width: 86%;
   font-size: 1.7rem;
-  font-weight: lighter;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .info-post {
@@ -78,23 +64,16 @@
   color: #58585b;
 }
 
-.delete-link {
-  text-decoration: none;
-  color: black;
-}
-
-.delete-link:hover {
+#delete-link:hover {
   text-decoration: underline;
   color: red;
 }
 
-.edit-link {
-  text-decoration: none;
-  color: black;
+#edit-link {
   margin-right: 15px;
 }
 
-.edit-link:hover {
+#edit-link:hover {
   text-decoration: underline;
   color: #03a87c;
 }

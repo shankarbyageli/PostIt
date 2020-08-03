@@ -50,15 +50,6 @@
   cursor: pointer;
 }
 
-.author_url {
-  text-decoration: none;
-  color: black;
-}
-
-.author_url:hover {
-  text-decoration: underline;
-}
-
 .cover-image {
   width: 56%;
   height: 400px;
@@ -109,11 +100,6 @@
 
 .comment-icon {
   width: 36px;
-}
-
-.comment-link {
-  text-decoration: none;
-  color: black;
 }
 
 .comment-link .comment-text:hover {

@@ -4,7 +4,8 @@ head
   meta(charset='UTF-8')
   script.
   link(rel="stylesheet" href="/user/css/post.css")
-  script(src='/js/request.js')
+  script(src='/user/js/request.js')
+  link(rel="stylesheet" href="/user/css/dashboard.css")
   script(src="/user/js/dashboard.js")
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt
@@ -32,7 +33,7 @@ head
           a.title-link.link-text(href=`/blog/${post.id}`)=post.title
         .data=JSON.parse(post.content).blocks[0].data.text
         .user-details
-          img.author-profile(src=post.avatarUrl)
+          img.author-profile.profile(src=post.avatarUrl)
           .details
             span.author-name
               a.link-text.author_url( href=`/profile/${post.userId}`)=post.username

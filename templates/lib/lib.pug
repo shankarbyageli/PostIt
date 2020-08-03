@@ -1,6 +1,6 @@
 mixin generatePop(avatarUrl)
   .popup
-    img#user-profile(src=avatarUrl onclick='showMenu()')
+    img.author-profile(src=avatarUrl onclick='showMenu()')
     #drop-down.drop-down-container
       a.menu(href='/user/editor') Write new post
       a.menu(href='/user/posts/drafts') My posts
@@ -16,8 +16,8 @@ mixin generateMenuBar(avatarUrl)
         +generatePop(avatarUrl)
       else
         #buttonsBox
-          a#link_text(href='/signIn')
-            span.sign_in Sign in
+          a.link-text(href='/signIn')
+            span.sign_in.action-button Sign in
 
 head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')

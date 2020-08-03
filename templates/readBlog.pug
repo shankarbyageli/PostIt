@@ -20,10 +20,10 @@ body(onload=`render(${post.content})`)
 #post
   #title=post.title
   .user
-    img#user-profile(src=post.avatarUrl)
+    img.author-profile(src=post.avatarUrl)
     div.userInfo
       a.link-text.author_url(href=`/profile/${post.userId}`)#name=post.username
-      #date=new Date(post.lastModified).toDateString()
+      .date=new Date(post.lastModified).toDateString()
   img.cover-image(src=`/coverImage/${coverImage}`)
   #editorjs
   .tags 

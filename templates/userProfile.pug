@@ -2,6 +2,7 @@ head
   meta(charset='UTF-8')
   include ./lib/lib.pug
   link(rel='stylesheet' href='/css/userProfile.css')
+  link(rel='stylesheet' href='/css/post.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt | Profile
 +generateMenuBar(avatarUrl)
@@ -20,6 +21,6 @@ head
         .details
           span.author-name=username
           span.date=takeMoment(post.lastModified)
-      .title-text
-        a.title(href=`/blog/${post.id}`)=post.title
+      .title.title-text
+        a.link-text(href=`/blog/${post.id}`)=post.title
       .data=JSON.parse(post.content).blocks[0].data.text

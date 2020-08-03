@@ -24,13 +24,8 @@
 }
 
 .action-button {
-  font-size: 14px;
   text-decoration: none;
   text-transform: uppercase;
-  background: #03a87c;
   padding: 15px 15px;
-  border-radius: 5px;
-  color: #fff;
   font-weight: 700;
-  margin-top: 20px;
 }

@@ -1,41 +1,13 @@
-.all-posts {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+.title {
+  font-weight: lighter;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.container {
-  display: flex;
-  width: 58%;
-  flex-direction: row;
-  min-height: 150px;
-  margin: 15px auto;
-  padding-right: 11px;
-  margin-bottom: 0.5rem;
-  border-bottom: slategrey solid 0.3px;
-}
-
-.post {
-  justify-content: space-between;
-  display: flex;
-  width: 80%;
-  flex-direction: column;
-}
-
-.cover-image-post {
-  width: 20%;
-  height: 140px;
-}
-
-.user-details {
-  display: flex;
-  flex-direction: row;
-}
-
-.details {
-  display: flex;
-  flex-direction: column;
-  padding: 22px 0px;
+.link-text {
+  text-decoration: none;
+  color: black;
 }
 
 .author-name {
@@ -48,49 +20,10 @@
   color: #58585b;
 }
 
-.title-text {
-  width: 97%;
-  font-size: 23px;
-}
-
-.title {
-  font-weight: lighter;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.title-text:hover {
-  text-decoration: underline;
-}
-
 .author-profile {
-  width: 35px;
-  height: 35px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  margin: 23px 11px 0px 0px;
-}
-
-.data {
-  font-size: 16px;
-  color: #58585b;
-  width: 97%;
-  margin-top: 5px;
-  font-weight: lighter;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  margin: 10px 14px 10px 1px;
-}
-
-.title-link {
-  text-align: left;
-  width: 100%;
-}
-
-.link-text {
-  text-decoration: none;
-  color: black;
 }
 
 .author_url:hover {

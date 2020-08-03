@@ -17,16 +17,6 @@
   width: 57%;
 }
 
-#date {
-  font-size: 0.7rem;
-  margin-top: 3px;
-}
-
-#user-profile {
-  width: 42px;
-  border-radius: 50%;
-}
-
 .user-actions {
   display: flex;
   flex-direction: row;
@@ -34,20 +24,6 @@
   width: 58%;
   margin: 50px auto;
   padding-left: 12%;
-}
-
-.user-action {
-  border: solid #03a87c 0.5px;
-  height: 46px;
-  color: #03a87c;
-  font-size: 17px;
-  background: white;
-  width: 250px;
-  outline: none;
-  border-radius: 3px;
-  text-decoration: none;
-  align-items: center;
-  cursor: pointer;
 }
 
 .cover-image {
@@ -102,7 +78,7 @@
   width: 36px;
 }
 
-.comment-link .comment-text:hover {
+.comment-text:hover {
   text-decoration: underline;
 }
 

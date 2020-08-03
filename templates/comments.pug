@@ -12,20 +12,19 @@ head
 +generateMenuBar(avatarUrl)
 
 #title
-  a.title(href=`/blog/${blogId}`)=titleText
+  a.link-text(href=`/blog/${blogId}`)=titleText
 if avatarUrl
   #newComment
     .user-details
-      img.user-profile(src=avatarUrl )
-      span.username
-          a.link-text.author_url(href=`/profile/${userId}`)=currentUser
+      img.user-profile.author-profile(src=avatarUrl )
+      span.username=currentUser
     p#new-comment.commentText(contenteditable='true' placeholder='Write your thoughts here ...' onkeyup='isAbleToPublish()')
     button#publish(onclick=`publishComment(${blogId})`) Publish
 
 each value in comments
   .comment-box
     .user-details
-      img.user-profile(src=value.avatarUrl)
+      img.user-profile.author-profile(src=value.avatarUrl)
       div.details
         span.username
           a.link-text.author_url(href=`/profile/${value.commentBy}`)=value.username

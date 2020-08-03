@@ -7,12 +7,13 @@ head
   link(rel='stylesheet' href='/css/readBlog.css')
   link(rel='stylesheet' href='/css/post.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Blog
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/header@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/list@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest')
+  script(src='/js/request.js')
   script(src='/js/readBlog.js')
+  title PostIt | Blog
 
 body(onload=`render(${post.content})`)
 +generateMenuBar(avatarUrl)
@@ -39,5 +40,5 @@ body(onload=`render(${post.content})`)
         img#clap.unavailable(src="/images/clapWhite.svg" alt="Clap" )
       span#clapCount=`${clap.clapsCount} Claps`
     a.link-text.clap-action(href=`/comments/${post.id}`) 
-      img(class="comment-icon" src="/images/comment.svg", alt="", srcset="")
+      img(class="comment-icon" src="/images/comment.svg" alt="" srcset="")
       span.comment-text Comments

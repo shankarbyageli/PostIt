@@ -1,20 +1,18 @@
 const publishComment = async function (blogId) {
   const newComment = document.getElementById('new-comment').innerText;
   if (newComment.trim()) {
-    await fetch('/user/publishComment', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        comment: newComment,
-        blogId,
-      }),
-    }).then((data) => {
-      if (data.status === 200) {
-        window.location.href = `/comments/${blogId}`;
-      }
+    const commentDetails = JSON.stringify({
+      comment: newComment,
+      blogId,
     });
+    sendReq(
+      'POST',
+      '/user/publishComment',
+      () => {
+        window.location.href = `/comments/${blogId}`;
+      },
+      commentDetails
+    );
   }
 };
 

@@ -10,6 +10,17 @@ const hidePreview = function () {
   container.style.filter = 'none';
 };
 
+const showPreview = function () {
+  const preview = document.getElementById('preview');
+  preview.classList.remove('hide-preview');
+  preview.classList.add('display-preview');
+  const container = document.getElementById('container');
+  container.style.filter = 'blur(5px)';
+  document.getElementById('preview-title').innerText = document.getElementById(
+    'title'
+  ).innerText;
+};
+
 const addTag = function (event) {
   const tagElement = document.getElementById('tag');
   const tag = tagElement.value.trim();
@@ -41,22 +52,9 @@ const renderImage = function (event) {
   }
 };
 
-const isAbleToPublish = function () {
-  const title = document.getElementById('title').innerText;
-  const publishBtn = document.querySelector('#publish');
-  if (title.trim() === '') {
-    publishBtn.setAttribute(
-      'style',
-      'background-color: #c5cac9;cursor: default;'
-    );
-    return;
-  }
-  publishBtn.setAttribute('style', 'background-color: #03a87c;cursor: pointer');
-};
-
 const getPostContent = function (editor) {
   const title = document.getElementById('title').innerText;
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     editor.save().then((content) => {
       resolve({ content, title });
     });
@@ -77,22 +75,11 @@ const getEditorOptions = function (data) {
   };
 };
 
-const modifyPublishBtn = function (id) {
-  const publishBtn = document.querySelector('.action-button');
-  if (id === -1) {
-    publishBtn.style.background = '#c5cac9';
-    publishBtn.disabled = true;
-  } else {
-    publishBtn.disabled = false;
-  }
-};
-
-const callback = function (res) {
+const autoSaveCallback = function (res) {
   const postId = document.getElementsByClassName('post')[0].id;
   if (+postId === -1) {
     document.getElementsByClassName('post')[0].id = res.id;
   }
-  document.querySelector('.action-button').disabled = false;
   document.getElementById('status').innerText = 'Saved';
 };
 
@@ -126,7 +113,7 @@ const getFormData = function (data, tags) {
 
 const publishPost = async function (editor) {
   event.preventDefault();
-  if (document.getElementById('file').files.length == 0) {
+  if (document.getElementById('file').files.length === 0) {
     return displayPreviewError();
   }
   const data = await getPostContent(editor);
@@ -143,26 +130,21 @@ const publishPost = async function (editor) {
   );
 };
 
-const addPreview = async function (editor) {
+const previewPost = async function (editor) {
+  const title = document.getElementById('title').innerText;
+  if (title.trim() === '') {
+    document.getElementById('error').innerText = 'Please add some title !';
+    return;
+  }
   const data = await getPostContent(editor);
   if (data.content.blocks.length) {
-    const preview = document.getElementById('preview');
-    preview.classList.remove('hide-preview');
-    preview.classList.add('display-preview');
-    const container = document.getElementById('container');
-    container.style.filter = 'blur(5px)';
-    document.getElementById(
-      'preview-title'
-    ).innerText = document.getElementById('title').innerText;
+    showPreview();
   } else {
     document.getElementById('error').innerText = 'Please add some content !';
   }
 };
 
-const addListeners = function (id, data) {
-  const editor = new EditorJS(getEditorOptions(data));
-  modifyPublishBtn(id);
-
+const addAutoSaveListener = function (editor) {
   let editorTimeout = null;
   Array.from(document.getElementsByClassName('content')).forEach((element) => {
     element.addEventListener('keydown', () => {
@@ -176,30 +158,20 @@ const addListeners = function (id, data) {
         sendReq(
           'POST',
           `/user/autosave/${postId || -1}`,
-          callback,
+          autoSaveCallback,
           JSON.stringify(data)
         );
       }, 1000);
     });
   });
+};
 
+const addListeners = function (id, data) {
+  const editor = new EditorJS(getEditorOptions(data));
+  addAutoSaveListener(editor);
   document.getElementById('preview-publish').onclick = publishPost.bind(
     null,
     editor
   );
-
-  document.getElementById('publish').onclick = addPreview.bind(null, editor);
-};
-
-const sendReq = function (method, url, callback, content) {
-  const xhr = new XMLHttpRequest();
-  xhr.onload = function () {
-    if (this.status === 200 || this.status === 302) {
-      callback && callback(this.response);
-    }
-  };
-  xhr.responseType = 'json';
-  xhr.open(method, url);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(content);
+  document.getElementById('publish').onclick = previewPost.bind(null, editor);
 };

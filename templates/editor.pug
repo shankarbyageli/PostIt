@@ -6,12 +6,13 @@ head
   link(rel='stylesheet' href='/user/css/preview.css')
   link(rel='stylesheet' href='/user/css/editor.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title PostIt
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/header@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/list@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest')
+  script(src='/js/request.js')
   script( src='/user/js/editor.js')
+  title PostIt | Editor
 
 body(onload=`addListeners(${id}, ${data})`)
 
@@ -27,7 +28,7 @@ body(onload=`addListeners(${id}, ${data})`)
         button.action-button#publish Publish
       +generatePop(avatarUrl)
   .post(id=id)
-    .content#title(contenteditable='true' onkeyup='isAbleToPublish()'  placeholder='Title..')=titleText
+    .content#title(contenteditable='true' placeholder='Title..')=titleText
     .content#editorjs
 
 form#preview-form

@@ -7,7 +7,7 @@ const hidePreview = function () {
   preview.classList.remove('display-preview');
   preview.classList.add('hide-preview');
   const container = document.getElementById('container');
-  container.style.filter = 'none';
+  container.style.display = '';
 };
 
 const showPreview = function () {
@@ -15,31 +15,34 @@ const showPreview = function () {
   preview.classList.remove('hide-preview');
   preview.classList.add('display-preview');
   const container = document.getElementById('container');
-  container.style.filter = 'blur(5px)';
+  container.style.display = 'none';
   document.getElementById('preview-title').innerText = document.getElementById(
     'title'
   ).innerText;
 };
 
-const addTag = function (event) {
-  const tagElement = document.getElementById('tag');
-  const tag = tagElement.value.trim();
-  const allTags = document.getElementById('added-tags');
-  if (tag && event.keyCode === 13 && allTags.childElementCount < 4) {
-    event.preventDefault();
-    const newTag = ` <span class="added-tag">
-              <img 
-                src="/user/images/close.svg" 
-                alt="" class="close" 
-                onclick="removeTag(event)" 
-              />
-           <span class="tag-text"> ${tag} </span>
-          </span>`;
-    allTags.innerHTML += newTag;
-    tagElement.value = '';
+const addNewTag = function (tag) {
+  const tagDiv = document.createElement('div');
+  tagDiv.innerHTML = `<span class="tag-text"> ${tag} </span>
+    <span class="cross-button" onclick="removeTag(event)"> x </span>`;
+  tagDiv.classList.add('added-tag');
+  const lastTag = document.querySelector('#tag div:last-of-type');
+  if (lastTag) {
+    lastTag.after(tagDiv);
+  } else {
+    document.querySelector('#tag').prepend(tagDiv);
   }
 };
 
+const addTag = function (event) {
+  const tagElement = document.getElementById('tag-input');
+  const tag = tagElement.value.trim();
+  if (tag && event.keyCode === 13) {
+    event.preventDefault();
+    addNewTag(tag);
+    tagElement.value = '';
+  }
+};
 const renderImage = function (event) {
   const file = event.target.files[0];
   const reader = new FileReader();
@@ -84,8 +87,10 @@ const autoSaveCallback = function (res) {
 };
 
 const getTags = function () {
-  const tags = document.getElementsByClassName('added-tag');
-  return Array.from(tags).map((tag) => tag.innerText);
+  const tags = document.getElementById('tag').childNodes;
+  return Array.from(tags)
+    .slice(0, -1)
+    .map((tag) => tag.firstChild.innerText);
 };
 
 const sendPost = function (method, url, callback, content) {

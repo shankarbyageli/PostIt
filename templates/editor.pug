@@ -33,15 +33,15 @@ body(onload=`addListeners(${id}, ${data})`)
 
 form#preview-form
   #preview.hide-preview
-    span#preview-error
+    #preview-error Preview Post
     img#exit-icon(src='/images/cross-icon.svg' alt='close' onclick='hidePreview()')
-    input#file(type='file' name='file' onchange='renderImage(event)' required)
     .preview-content
       span#preview-title
+      input#file(type='file' name='file' onchange='renderImage(event)' required)
       label#cover-image(for='file')
         span#instruction='Add cover image here'
-    .actions
-      #added-tags
       span Add or change tags (up to 4)
-      input#tag(type='text' onkeydown='addTag(event)')
+    .actions
+      #tag
+        input#tag-input(type='text' onkeydown='addTag(event)')
       button.action-button#preview-publish(type='submit') Publish

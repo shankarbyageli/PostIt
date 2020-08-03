@@ -2,14 +2,14 @@
   position: absolute;
   background: white;
   top: 0;
-  left: 22%;
-  width: 56%;
+  left: 28%;
+  width: 45%;
   height: 500px;
   border: 1px solid rgba(230, 230, 230, 1);
   box-shadow: 0 1px 4px rgba(230, 230, 230, 1);
   margin: 7% auto;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .display-preview {
@@ -22,7 +22,7 @@
 
 .preview-content {
   display: flex;
-  width: 60%;
+  width: 100%;
   justify-content: center;
   flex-direction: column;
   padding: 23px;
@@ -31,23 +31,27 @@
 .actions {
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  width: 29%;
+  flex-direction: row;
+  width: 96%;
+  margin: 0 23px;
 }
 
 #preview-title {
   font-size: 21px;
+  margin-right: 45px;
 }
 
 #cover-image {
-  width: 90%;
-  height: 150px;
+  width: 93%;
+  height: 180px;
   margin: 30px 0px;
   border: solid 0.3px gray;
   cursor: pointer;
   display: flex;
   justify-content: center;
   flex-direction: column;
+  overflow: hidden;
+  object-fit: cover;
 }
 
 #post-content {
@@ -57,35 +61,36 @@
 #preview-publish {
   border-radius: 5px;
   font-size: 17px;
-  height: 40px;
-}
-
-#added-tags {
-  height: 100px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-bottom: 20px;
+  margin: 0 15px;
+  height: 39px;
+  width: 15%;
 }
 
 #tag {
-  height: 30px;
-  margin: 20px 0px;
-  padding: 10px;
   outline: none;
+  width: 85%;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+#tag input {
+  height: 39px;
+  max-width: 100%;
+  flex-grow: 1;
 }
 
 .added-tag {
   height: 30px;
-  width: 78px;
+  width: fit-content;
   display: flex;
   flex-direction: row;
   background-color: grey;
   color: white;
   padding: 10px 9px 0px 9px;
   text-align: left;
-  margin: 3px;
+  margin: 0 5px;
+  border-radius: 5px;
 }
 
 #exit-icon {
@@ -115,11 +120,16 @@
 }
 
 #instruction {
-  margin: 0px 129px;
+  margin: 0px 216px;
 }
 
 #preview-error {
-  position: absolute;
+  text-align: center;
   color: red;
-  margin: 8% 38%;
+  margin-top: 13px;
+}
+
+.cross-button {
+  margin-left: 15px;
+  cursor: pointer;
 }

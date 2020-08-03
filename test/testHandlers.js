@@ -1,11 +1,12 @@
 const sinon = require('sinon');
 const request = require('supertest');
 const app = require('../src/app');
+const Sessions = require('../src/session');
 const lib = require('../src/lib');
 
 describe('GET', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should serve the static html and css files', (done) => {
@@ -26,7 +27,7 @@ describe('GET', () => {
 
 describe('GET /', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
   it('should serve sign in page if not signed in', (done) => {
     request(app)
@@ -36,7 +37,7 @@ describe('GET /', () => {
   });
 
   it('should serve dashboard if signed in', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/')
       .set('Cookie', 'sId=1234')
@@ -46,7 +47,7 @@ describe('GET /', () => {
 
 describe('GET /signIn', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
   it('should redirect to github authentication', (done) => {
     request(app).get('/signIn').expect(302, done);
@@ -55,7 +56,7 @@ describe('GET /signIn', () => {
 
 describe('POST /publish', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
   const data = {
     title: 'my title',
@@ -77,24 +78,23 @@ describe('POST /publish', () => {
   };
 
   it('Should publish the post', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .post('/user/publish/2')
       .set('Cookie', 'sId=1234')
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
-      .expect(/Published/)
       .expect(200, done);
   });
 });
 
 describe('Ensure login', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should get css file if session is there', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/css/editor.css')
       .set('Cookie', 'sId=1234')
@@ -109,11 +109,11 @@ describe('Ensure login', () => {
 
 describe('GET /user/editor', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should get editor', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/editor')
       .set('Cookie', 'sId=1234')
@@ -124,11 +124,11 @@ describe('GET /user/editor', () => {
 
 describe('GET /blog/id', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should return the blog content if the blog is published', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/blog/3')
       .set('Cookie', 'sId=1234')
@@ -137,7 +137,7 @@ describe('GET /blog/id', () => {
   });
 
   it('should return page not found for invalid blogId', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/blog/104540')
       .set('Cookie', 'sId=1234')
@@ -145,7 +145,7 @@ describe('GET /blog/id', () => {
   });
 
   it('should return not found for string as blog Id ', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/blog/1string')
       .set('Cookie', 'sId=1234')
@@ -155,11 +155,11 @@ describe('GET /blog/id', () => {
 
 describe('GET /user/signOut', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('user should be redirected to the signIn page after signOut', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/signOut')
       .set('Cookie', 'sId=1234')
@@ -169,11 +169,11 @@ describe('GET /user/signOut', () => {
 
 describe('GET /comments/:blogId', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should give the comments on the given blog id', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/comments/4')
       .set('Cookie', 'sId=1234')
@@ -182,7 +182,7 @@ describe('GET /comments/:blogId', () => {
   });
 
   it('should give 404 error page if blog id doesnot exist', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/comments/10')
       .set('Cookie', 'sId=1234')
@@ -192,11 +192,11 @@ describe('GET /comments/:blogId', () => {
 
 describe('POST /autosave', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should return back id of the new drafted post if request id is -1', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     const data = {
       title: 'my title',
       content: {
@@ -223,7 +223,7 @@ describe('POST /autosave', () => {
   });
 
   it('should return back id of the already drafted post on autosave', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     const data = {
       title: 'my title',
       content: {
@@ -263,29 +263,28 @@ describe('POST /autosave', () => {
 
 describe('/user/publishComment', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should publish the given comment', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     const data = { comment: 'hiii', blogId: 1 };
     request(app)
       .post('/user/publishComment/')
       .set('Cookie', 'sId=1234')
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
-      .expect(/Published Comment/)
       .expect(200, done);
   });
 });
 
 describe('GET /user/draft/:id', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should serve the editor with draft content', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/draft/1')
       .set('Cookie', 'sId=1234')
@@ -293,11 +292,10 @@ describe('GET /user/draft/:id', () => {
   });
 
   it('should give error page if not signed in non-existing id', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/draft/10')
       .set('Cookie', 'sId=1234')
-      .expect(/dashboard/)
       .expect(404, done);
   });
 
@@ -308,11 +306,11 @@ describe('GET /user/draft/:id', () => {
 
 describe('GET /user/posts/drafts', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should give all the drafts of requested user', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/posts/drafts')
       .set('Cookie', 'sId=1234')
@@ -327,11 +325,11 @@ describe('GET /user/posts/drafts', () => {
 
 describe('GET /user/posts/published', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should give all the published of requested user', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/posts/published')
       .set('Cookie', 'sId=1234')
@@ -346,11 +344,11 @@ describe('GET /user/posts/published', () => {
 
 describe('GET /profile/id', function () {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should give the details of user given id', function (done) {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/profile/1')
       .set('Cookie', 'sId=1234')
@@ -397,11 +395,11 @@ describe('GET /callback', () => {
 
 describe('GET /user/search', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should give all the published posts of requested author', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/search?filter=author&searchText=User2')
       .set('Cookie', 'sId=1234')
@@ -411,7 +409,7 @@ describe('GET /user/search', () => {
   });
 
   it('should give all the published posts to related title', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/search?filter=title&searchText=testing')
       .set('Cookie', 'sId=1234')
@@ -421,7 +419,7 @@ describe('GET /user/search', () => {
   });
 
   it('should give all the published posts to related tags', (done) => {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/search?filter=tag&searchText=testing')
       .set('Cookie', 'sId=1234')
@@ -432,11 +430,11 @@ describe('GET /user/search', () => {
 
 describe('GET /delete/:id', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should give the details of user given id', function (done) {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/delete/1')
       .set('Cookie', 'sId=1234')
@@ -446,11 +444,11 @@ describe('GET /delete/:id', () => {
 
 describe('GET /clap/:id', () => {
   afterEach(() => {
-    app.locals.sessions = {};
+    app.locals.sessions = new Sessions({});
   });
 
   it('should give true when the user is not already clapped', function (done) {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .post('/user/clap/3')
       .set('Cookie', 'sId=1234')
@@ -459,7 +457,7 @@ describe('GET /clap/:id', () => {
   });
 
   it('should give false when the user is already clapped', function (done) {
-    app.locals.sessions = { '1234': 1 };
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .post('/user/clap/4')
       .set('Cookie', 'sId=1234')

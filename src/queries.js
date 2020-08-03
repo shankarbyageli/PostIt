@@ -5,9 +5,10 @@ const addPost = (userId, data) =>
 
 const getAllStories = () => 'select id from stories order by id desc';
 
-const updateStory = (id, data) => `UPDATE stories SET title = '${data.title}', 
+const updatePost = (postId, data) => `
+      UPDATE stories SET title = '${data.title}', 
       content = '${JSON.stringify(data.content)}',
-      lastModified = '${data.content.time}' where id = ${id};`;
+      lastModified = '${data.content.time}' where id = ${postId};`;
 
 const publishPost = (imageId, postId) => `UPDATE stories SET isPublished = 1,
      coverImageId = ${imageId} where id = ${postId}`;
@@ -100,7 +101,7 @@ const selectImages = () => 'select * from images order by imageId desc';
 module.exports = {
   addPost,
   getAllStories,
-  updateStory,
+  updatePost,
   publishPost,
   getUsersPosts,
   getPost,

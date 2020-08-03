@@ -1,4 +1,5 @@
 const queries = require('./queries');
+
 class Database {
   constructor(db) {
     this.db = db;
@@ -9,9 +10,8 @@ class Database {
       this.db.run(query, (err) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(true);
         }
+        resolve(true);
       });
     });
   }
@@ -21,9 +21,8 @@ class Database {
       this.db.all(query, (err, rows) => {
         if (err) {
           reject(err);
-        } else {
-          resolve(rows);
         }
+        resolve(rows);
       });
     });
   }
@@ -31,7 +30,9 @@ class Database {
   get(query) {
     return new Promise((resolve, reject) => {
       this.db.get(query, (err, row) => {
-        err && reject(err);
+        if (err) {
+          reject(err);
+        }
         resolve(row);
       });
     });
@@ -52,8 +53,8 @@ class Database {
     });
   }
 
-  updatePost(id, data) {
-    return this.run(queries.updateStory(id, data));
+  updatePost(postId, data) {
+    return this.run(queries.updatePost(postId, data));
   }
 
   publishPost(postId, imageId) {
@@ -167,15 +168,17 @@ class Database {
   }
 
   isClapped(postId, userId) {
-    return this.get(queries.selectClaps(postId, userId));
-  }
-
-  getClapsCount(postId) {
-    const query = `
-    SELECT count(*) as count from claps 
-      WHERE storyId=${postId}
-    `;
-    return this.get(query);
+    return new Promise((resolve, reject) => {
+      this.db.get(queries.selectClaps(postId, userId), (err, row) => {
+        if (err) {
+          reject(err);
+        }
+        if (row) {
+          resolve(true);
+        }
+        resolve(false);
+      });
+    });
   }
 
   clapOnPost(postId, userId) {
@@ -196,6 +199,14 @@ class Database {
         });
       });
     });
+  }
+
+  getClapsCount(postId) {
+    const query = `
+    SELECT count(*) as count from claps 
+      WHERE storyId=${postId}
+    `;
+    return this.get(query);
   }
 }
 

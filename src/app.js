@@ -1,25 +1,26 @@
 const express = require('express');
 const morgan = require('morgan');
+const fileUpload = require('express-fileupload');
+const cookieParser = require('cookie-parser');
 const sqlite = require('sqlite3').verbose();
 const Database = require('./database');
-const app = express();
-const cookieParser = require('cookie-parser');
-const fileUpload = require('express-fileupload');
+const Sessions = require('./session');
 const { userRouter } = require('./userRouter');
 const {
-  serveDashboard,
+  serveHomepage,
   signIn,
   githubCallback,
   serveErrorPage,
   getBlog,
-  getLoggedInDetails,
+  getSessionDetails,
   serveComments,
   serveProfile,
 } = require('./handlers');
 
+const app = express();
 const db = new sqlite.Database(`database/${process.env.db}`);
 
-app.locals.sessions = {};
+app.locals.sessions = new Sessions({});
 app.locals.db = new Database(db);
 
 app.set('view engine', 'pug');
@@ -29,17 +30,18 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-
-app.use(getLoggedInDetails);
+app.use(getSessionDetails);
 app.use('/user', userRouter);
-app.get('/blog/:id', getBlog);
-app.get('/', serveDashboard);
-app.use(express.static(`${__dirname}/../public`));
-app.use('/coverImage', express.static(`${__dirname}/../database/images`));
+
+app.get('/', serveHomepage);
 app.get('/signIn', signIn);
+app.get('/blog/:id', getBlog);
 app.get('/callback', githubCallback);
 app.get('/comments/:blogId', serveComments);
 app.get('/profile/:userId', serveProfile);
+
+app.use('/coverImage', express.static(`${__dirname}/../database/images`));
+app.use(express.static(`${__dirname}/../public`));
 app.use(serveErrorPage);
 
 module.exports = app;

@@ -2,19 +2,17 @@ const fs = require('fs');
 const { clientId, clientSecret } = require('../config');
 const lib = require('./lib');
 
-const getLoggedInDetails = async function (req, res, next) {
+const getSessionDetails = async function (req, res, next) {
   const sessions = req.app.locals.sessions;
-  if (sessions[req.cookies.sId] !== undefined) {
-    req.user = sessions[req.cookies.sId];
-    const userDetails = await req.app.locals.db.getUserById(req.user);
-    req.avatarUrl = userDetails.avatarUrl;
-    req.username = userDetails.username;
+  const userSession = sessions.getSession(req.cookies.sId);
+  if (userSession !== undefined) {
+    req.session = userSession;
   }
   next();
 };
 
 const ensureLogin = async function (req, res, next) {
-  if (req.user !== undefined) {
+  if (req.session !== undefined) {
     next();
   } else {
     res.redirect('/');
@@ -23,74 +21,78 @@ const ensureLogin = async function (req, res, next) {
 
 const signOut = function (req, res) {
   const sessions = req.app.locals.sessions;
-  delete sessions[req.cookies.sId];
+  sessions.removeSession(req.cookies.sId);
   res.clearCookie('sId');
   res.redirect('/');
 };
 
-const serveDashboard = async function (req, res, next) {
-  if (req.user !== undefined) {
+const serveHomepage = async function (req, res) {
+  if (req.session !== undefined) {
     res.render('dashBoard', {
       posts: await req.app.locals.db.getLatestPosts(10),
-      avatarUrl: req.avatarUrl,
-      username: req.username,
+      avatarUrl: req.session.avatarUrl,
+      username: req.session.username,
       takeMoment: lib.takeMoment,
     });
   } else {
-    req.url = '/signIn.html';
+    res.render('signIn', {});
+  }
+};
+
+const serveDraft = async function (req, res, next) {
+  const { id } = req.params;
+  if (!+id) {
+    return next();
+  }
+  const response = await req.app.locals.db.getPost(id, 0);
+  if (response) {
+    res.render('editor', {
+      data: response.content,
+      titleText: response.title,
+      avatarUrl: req.session.avatarUrl,
+      id: response.id,
+    });
+  } else {
     next();
   }
 };
 
-const serveEditor = async function (req, res, next) {
-  const { id } = req.params;
-  if (id === undefined) {
-    res.render('editor', {
-      data: '{}',
-      titleText: '',
-      avatarUrl: req.avatarUrl,
-      id: -1,
-    });
-  } else {
-    const response = await req.app.locals.db.getPost(id, 0);
-    if (response) {
-      res.render('editor', {
-        data: response.content,
-        titleText: response.title,
-        avatarUrl: req.avatarUrl,
-        id: response.id,
-      });
-    } else {
-      next();
-    }
-  }
+const serveEditor = async function (req, res) {
+  res.render('editor', {
+    data: '{}',
+    titleText: '',
+    avatarUrl: req.session.avatarUrl,
+    id: -1,
+  });
 };
 
 const autoSave = async function (req, res) {
-  let id = req.params.id;
+  let { id } = req.params;
   if (+id === -1) {
-    const postId = await req.app.locals.db.addPost(req.body, req.user);
-    id = postId;
+    id = await req.app.locals.db.addPost(req.body, req.session.userId);
+  } else {
+    await req.app.locals.db.updatePost(id, req.body);
   }
-  await req.app.locals.db.updatePost(id, req.body);
   res.send(JSON.stringify({ id }));
 };
 
 const serveDraftedPosts = async function (req, res) {
-  const drafts = await req.app.locals.db.getUsersPosts(req.user, 0);
+  const drafts =
+    await req.app.locals.db.getUsersPosts(req.session.userId, 0);
   res.render('posts', {
     posts: drafts,
-    avatarUrl: req.avatarUrl,
+    avatarUrl: req.session.avatarUrl,
     type: 0,
     takeMoment: lib.takeMoment,
   });
 };
 
 const servePublishedPosts = async function (req, res) {
-  const published = await req.app.locals.db.getUsersPosts(req.user, 1);
+  const published =
+    await req.app.locals.db.getUsersPosts(req.session.userId, 1);
   res.render('posts', {
     posts: published,
-    avatarUrl: req.avatarUrl,
+    avatarUrl: req.session.avatarUrl,
     type: 1,
     takeMoment: lib.takeMoment,
   });
@@ -111,15 +113,14 @@ const publish = async function (req, res) {
     await req.app.locals.db.addTags(tags, req.params.id);
   }
   await req.app.locals.db.publishPost(req.params.id, imageDetails.imageId);
-  res.send(JSON.stringify({ message: 'Published' }));
+  res.status(200).end();
 };
 
-const getClapsDetails = async function (req, id) {
-  const clapsCount = (await req.app.locals.db.getClapsCount(id)).count;
-
-  if (req.user) {
-    const clappedDetails = await req.app.locals.db.isClapped(id, req.user);
-    const isClapped = clappedDetails ? true : false;
+const getClapsDetails = async function (req, postId) {
+  const clapsCount = (await req.app.locals.db.getClapsCount(postId)).count;
+  if (req.session) {
+    const isClapped =
+      await req.app.locals.db.isClapped(postId, req.session.userId);
     return { clapsCount, isClapped };
   }
   return { clapsCount, isClapped: null };
@@ -130,11 +131,10 @@ const getBlog = async function (req, res, next) {
   if (!+id) {
     return next();
   }
-
   const response = await req.app.locals.db.getPost(id, 1);
-  const clap = await getClapsDetails(req, id);
 
   if (response) {
+    const clap = await getClapsDetails(req, id);
     const postDetails = await req.app.locals.db.getPostDetails(
       id,
       response.coverImageId
@@ -142,7 +142,7 @@ const getBlog = async function (req, res, next) {
 
     res.render('readBlog', {
       post: response,
-      avatarUrl: req.user ? req.avatarUrl : false,
+      avatarUrl: req.session ? req.session.avatarUrl : false,
       coverImage: postDetails.imagePath,
       tags: postDetails.tags,
       clap,
@@ -164,7 +164,7 @@ const serveProfile = async function (req, res, next) {
   const posts = await req.app.locals.db.getUsersPosts(userId, 1);
   res.render('userProfile', {
     posts,
-    avatarUrl: req.avatarUrl,
+    avatarUrl: req.session ? req.session.avatarUrl : false,
     authorAvatar: userDetails.avatarUrl,
     username: userDetails.username,
     takeMoment: lib.takeMoment,
@@ -186,32 +186,39 @@ const serveComments = async function (req, res, next) {
   const renderOptions = {
     comments: await req.app.locals.db.getComments(blogId),
     titleText: blog.title,
-    userId: req.user,
+    userId: req.session.user,
     takeMoment: lib.takeMoment,
     blogId,
   };
-  if (req.user) {
-    renderOptions.currentUser = req.username;
-    renderOptions.avatarUrl = req.avatarUrl;
+  if (req.session) {
+    renderOptions.currentUser = req.session.username;
+    renderOptions.avatarUrl = req.session.avatarUrl;
   }
   res.render('comments', renderOptions);
 };
 
-const publishComment = function (req, res) {
+const publishComment = async function (req, res) {
   const { comment, blogId } = req.body;
   const date = new Date().valueOf();
-  req.app.locals.db.addComment(comment, blogId, req.user, date);
-  res.send(JSON.stringify({ message: 'Published Comment' }));
+  await req.app.locals.db.addComment(comment, blogId, req.session.userId, date);
+  res.status(200).end();
 };
 
 const serveErrorPage = function (req, res) {
   res.status(404);
-  res.render('error', { avatarUrl: req.avatarUrl });
+  res.render(
+    'error',
+    { avatarUrl: req.session ? req.session.avatarUrl : false }
+  );
 };
 
 const signIn = function (req, res) {
-  const params = `client_id=${clientId}&client_secret=${clientSecret}`;
-  res.redirect(`https://github.com/login/oauth/authorize?${params}`);
+  if (req.session !== undefined) {
+    res.redirect('/');
+  } else {
+    const params = `client_id=${clientId}&client_secret=${clientSecret}`;
+    res.redirect(`https://github.com/login/oauth/authorize?${params}`);
+  }
 };
 
 const getUserDetail = (tokenDetails) => {
@@ -243,9 +250,10 @@ const githubCallback = function (req, res) {
     .makeRequest(url, params)
     .then(getUserDetail)
     .then((details) => lib.addUserDetails(req, details))
-    .then((userDetails) => {
-      const sId = Date.now();
-      req.app.locals.sessions[sId] = userDetails.userId;
+    .then(async (userDetails) => {
+      const { userId, username, avatarUrl } = userDetails;
+      const sessions = req.app.locals.sessions;
+      const sId = await sessions.addSession({ userId, username, avatarUrl });
       res.cookie('sId', sId);
       res.redirect('/');
     });
@@ -265,13 +273,13 @@ const clapOnPost = async function (req, res, next) {
   if (!+id) {
     return next();
   }
-  const status = await req.app.locals.db.clapOnPost(id, req.user);
+  const status = await req.app.locals.db.clapOnPost(id, req.session.userId);
   const clapsCount = (await req.app.locals.db.getClapsCount(id)).count;
   res.send({ clapped: status, clapsCount });
 };
 
 module.exports = {
-  serveDashboard,
+  serveHomepage,
   signIn,
   githubCallback,
   publish,
@@ -279,7 +287,7 @@ module.exports = {
   serveEditor,
   getBlog,
   serveErrorPage,
-  getLoggedInDetails,
+  getSessionDetails,
   signOut,
   serveComments,
   publishComment,
@@ -290,4 +298,5 @@ module.exports = {
   serveSearchResults,
   deletePost,
   clapOnPost,
+  serveDraft
 };

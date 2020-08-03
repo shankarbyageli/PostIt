@@ -1,18 +1,14 @@
+include ./lib/lib.pug
+
 doctype html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   link(rel='stylesheet' href='/css/signIn.css')
   link(rel='stylesheet' href='/css/menubar.css')
-  link(rel='stylesheet' href='/css/editor.css')
   title SignIn
-#menu-bar
-  #logoBox
-    img#logo
-  #actions
-    #buttonsBox
-      a#link_text(href='/signIn')
-        span.sign_in Sign in
+
++generateMenuBar(avatarUrl)
 .tag_lines
   p#tag_line1 Dive deeper on topics that matter to you.
   p#tag_line2 We'll help you find great things to read.

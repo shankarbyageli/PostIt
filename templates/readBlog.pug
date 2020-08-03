@@ -32,12 +32,12 @@ body(onload=`render(${post.content})`)
   .user-actions
     .clap-action
       if(clap.isClapped)
-        img#clap(src="/images/clapBlack.svg" alt="Clap" onclick=`clapOnPost(${post.id})`)
+        img#clap.icon(src="/images/clapBlack.svg" alt="Clap" onclick=`clapOnPost(${post.id})`)
       if(clap.isClapped == false)
-        img#clap(src="/images/clapWhite.svg" alt="Clap" onclick=`clapOnPost(${post.id})`)
+        img#clap.icon(src="/images/clapWhite.svg" alt="Clap" onclick=`clapOnPost(${post.id})`)
       if(clap.isClapped == null)
-        img#clap.unavailable(src="/images/clapWhite.svg" alt="Clap" )
-      span#clapCount=`${clap.clapsCount} Claps`
+        img#clap.icon.unavailable(src="/images/clapWhite.svg" alt="Clap" )
+      span#clapCount.action-text=`${clap.clapsCount} Claps`
     a.link-text.clap-action(href=`/comments/${post.id}`) 
-      img(class="comment-icon" src="/images/comment.svg" alt="" srcset="")
-      span.comment-text Comments
+      img(class="icon" src="/images/comment.svg" alt="" srcset="")
+      span#comment-text.action-text Comments

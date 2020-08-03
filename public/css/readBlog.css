@@ -54,20 +54,10 @@
   text-overflow: ellipsis;
 }
 
-#clap {
-  width: 36px;
-  cursor: pointer;
-}
-
 .clap-action {
   display: flex;
   align-items: center;
   margin-right: 60px;
-}
-
-#clapCount {
-  margin-left: 10px;
-  color: #292929;
 }
 
 .unavailable {
@@ -75,15 +65,16 @@
   pointer-events: none;
 }
 
-.comment-icon {
+.icon {
   width: 36px;
+  cursor: pointer;
 }
 
-.comment-text:hover {
+#comment-text:hover {
   text-decoration: underline;
 }
 
-.comment-text {
+.action-text {
   margin-left: 11px;
   text-decoration: none;
 }

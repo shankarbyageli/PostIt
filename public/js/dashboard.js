@@ -7,15 +7,15 @@ const convertHtmlToNode = function (html) {
 const generatePost = function (post) {
   const postInnerHtml = `<div class="container">
   <div class="post">
-    <div class="title-text">
-      <a class="title" href="/blog/${post.id}">${post.title}</a>
+    <div class="title-text title">
+      <a class="title-link link-text" href="/blog/${post.id}">${post.title}</a>
     </div>
     <div class="data">${JSON.parse(post.content).blocks[0].data.text}</div>
     <div class="user-details">
-      <img class="author-profile" src=${post.avatarUrl}>
+      <img class="author-profile profile" src=${post.avatarUrl}>
       <div class="details">
         <span class="author-name">
-          <a class="author_url" href="/profile/${post.userId}">
+          <a class="link-text author_url" href="/profile/${post.userId}">
           ${post.username}
           </a>
         </span>
@@ -23,9 +23,8 @@ const generatePost = function (post) {
       </div>
     </div>
   </div>
-  <img class="cover-image-post" src=/coverImage/${
-  post.imagePath
-} alt="Cover image"/>
+  <img class="cover-image-post" 
+    src=/coverImage/${post.imagePath} alt="Cover image"/>
   </div>`;
   return convertHtmlToNode(postInnerHtml);
 };

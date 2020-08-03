@@ -37,15 +37,16 @@
   flex-direction: row;
   margin: 0 22%;
   justify-content: flex-start;
+  flex-wrap: wrap;
   margin-top: -17rem;
 }
 
 .added-tag {
   height: 30px;
-  width: 78px;
+  width: fit-content;
   background-color: rgba(242, 242, 242, 1);
   color: rgb(116, 110, 110);
-  padding-top: 10px;
+  padding: 10px 10px 0px 10px;
   text-align: center;
   margin: 0px 25px 27px;
   overflow: hidden;

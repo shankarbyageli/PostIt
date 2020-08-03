@@ -3,7 +3,6 @@ include ./lib/lib.pug
 head
   meta(charset='UTF-8')
   link(rel='stylesheet' href='/css/comments.css')
-  link(rel='stylesheet' href='/css/post.css')
   script(src='/js/request.js')
   script(src="/user/js/comment.js")
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
@@ -19,7 +18,7 @@ if avatarUrl
       img.user-profile.author-profile(src=avatarUrl )
       span.username=currentUser
     p#new-comment.commentText(contenteditable='true' placeholder='Write your thoughts here ...' onkeyup='isAbleToPublish()')
-    button#publish(onclick=`publishComment(${blogId})`) Publish
+    button#publish.action-button(onclick=`publishComment(${blogId})`) Publish
 
 each value in comments
   .comment-box

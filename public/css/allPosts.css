@@ -64,16 +64,6 @@
   color: #58585b;
 }
 
-#delete-link:hover {
-  text-decoration: underline;
-  color: red;
-}
-
-#edit-link {
-  margin-right: 15px;
-}
-
-#edit-link:hover {
-  text-decoration: underline;
-  color: #03a87c;
+.trash-icon {
+  width: 22px;
 }

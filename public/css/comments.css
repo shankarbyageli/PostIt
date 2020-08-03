@@ -48,17 +48,10 @@
 
 #publish {
   background-color: #c5cac9;
-  text-align: center;
-  color: white;
-  border: none;
-  padding: 6px;
-  border-radius: 5px;
-  font-size: 15px;
-  height: 30px;
-  width: 95px;
   align-self: flex-end;
   margin: 0px 25px 26px;
   outline: none;
+  cursor: auto;
 }
 
 #title {

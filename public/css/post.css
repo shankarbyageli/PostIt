@@ -29,3 +29,15 @@
 .author_url:hover {
   text-decoration: underline;
 }
+
+.data {
+  font-size: 16px;
+  color: #58585b;
+  width: 97%;
+  margin-top: 5px;
+  font-weight: lighter;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 10px 14px 10px 1px;
+}

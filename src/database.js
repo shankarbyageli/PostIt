@@ -102,9 +102,8 @@ class Database {
   }
 
   getUser(username) {
-    const query = 'select * from users where username=?';
     return new Promise((resolve, reject) => {
-      this.db.get(query, [username], (err, row) => {
+      this.db.get(queries.getUser(username), (err, row) => {
         if (err) {
           reject(err);
         }
@@ -162,9 +161,8 @@ class Database {
     return this.run(queries.addTags(tags, postId));
   }
 
-  deletePost(id) {
-    const query = `delete from stories where id = ${id}`;
-    return this.run(query);
+  deletePost(postId) {
+    return this.run(queries.deletePost(postId));
   }
 
   isClapped(postId, userId) {
@@ -202,11 +200,7 @@ class Database {
   }
 
   getClapsCount(postId) {
-    const query = `
-    SELECT count(*) as count from claps 
-      WHERE storyId=${postId}
-    `;
-    return this.get(query);
+    return this.get(queries.getClapsCount(postId));
   }
 }
 

@@ -97,6 +97,15 @@ const addTags = (tags, postId) => {
   return `INSERT INTO tags VALUES ${values.join(',')}`;
 };
 
+const deletePost = (postId) => `DELETE from stories 
+    WHERE id=${postId}`;
+
+const getUser = (username) => `
+    SELECT * from users where username='${username}'`;
+
+const getClapsCount = (postId) => `
+    SELECT count(*) as count from claps WHERE storyId=${postId}`;
+
 const selectImages = () => 'select * from images order by imageId desc';
 module.exports = {
   addPost,
@@ -121,4 +130,7 @@ module.exports = {
   deleteClap,
   selectClaps,
   addTags,
+  deletePost,
+  getUser,
+  getClapsCount
 };

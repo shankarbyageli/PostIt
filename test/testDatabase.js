@@ -181,7 +181,7 @@ describe('addUser', () => {
 
 describe('getUser', () => {
   it('should give error if database failure', (done) => {
-    const db = { get: (query, params, callback) => callback('error') };
+    const db = { get: (query, callback) => callback('error') };
     const database = new Database(db);
     database.getUser('mama').then(null, (actual) => {
       assert.equal(actual, 'error');
@@ -191,7 +191,7 @@ describe('getUser', () => {
 
   it('should get user details of given id', (done) => {
     const db = {
-      get: (query, params, callback) => callback(null, { userId: 7 }),
+      get: (query, callback) => callback(null, { userId: 7 }),
     };
     const database = new Database(db);
     database.getUser('mama').then((actual) => {
@@ -201,7 +201,7 @@ describe('getUser', () => {
   });
 
   it('should return false if user id does not exist', (done) => {
-    const db = { get: (query, params, callback) => callback(null, null) };
+    const db = { get: (query, callback) => callback(null, null) };
     const database = new Database(db);
     database.getUser('mama').then((actual) => {
       assert.equal(actual, false);

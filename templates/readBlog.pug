@@ -23,7 +23,10 @@ body(onload=`render(${post.content})`)
   .user
     img.author-profile(src=post.avatarUrl)
     div.userInfo
-      a.link-text.author_url(href=`/profile/${post.userId}`)#name=post.displayName
+      if clap.isClapped == null
+        a#name=post.displayName
+      else
+        a.link-text.author_url(href=`/profile/${post.userId}`)#name=post.displayName
       .date=new Date(post.lastModified).toDateString()
   img.cover-image(src=`/pictures/${coverImage}`)
   #editorjs

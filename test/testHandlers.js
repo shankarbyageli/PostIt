@@ -132,7 +132,7 @@ describe('GET /blog/id', () => {
     request(app)
       .get('/blog/3')
       .set('Cookie', 'sId=1234')
-      .expect(/user-profile/)
+      .expect(/profile/)
       .expect(/Read this blog/, done);
   });
 
@@ -401,7 +401,7 @@ describe('GET /user/search', () => {
   it('should give all the published posts of requested author', (done) => {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/user/search?filter=author&searchText=User2')
+      .get('/user/search?searchText=@User2')
       .set('Cookie', 'sId=1234')
       .expect(/testing search/)
       .expect(/testing the search/)
@@ -411,7 +411,7 @@ describe('GET /user/search', () => {
   it('should give all the published posts to related title', (done) => {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/user/search?filter=title&searchText=testing')
+      .get('/user/search?searchText=testing')
       .set('Cookie', 'sId=1234')
       .expect(/testing search/)
       .expect(/testing the search/)
@@ -421,7 +421,7 @@ describe('GET /user/search', () => {
   it('should give all the published posts to related tags', (done) => {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/user/search?filter=tag&searchText=testing')
+      .get('/user/search?searchText=#testing')
       .set('Cookie', 'sId=1234')
       .expect(/testing search/)
       .expect(200, done);

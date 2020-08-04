@@ -57,3 +57,25 @@
   text-align: left;
   width: 100%;
 }
+
+.search-container input[type='search'] {
+  outline: none;
+  font-family: inherit;
+  font-size: 100%;
+  background: url('/images/search.svg') no-repeat;
+  padding: 9px 10px 9px 32px;
+  transition: all 0.5s;
+  width: 15px;
+  height: 25px;
+
+  color: transparent;
+  cursor: pointer;
+  border: none;
+}
+
+.search-container input[type='search']:focus {
+  width: 250px;
+  padding-left: 32px;
+  color: #000;
+  cursor: auto;
+}

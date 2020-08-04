@@ -1,6 +1,7 @@
+include ./lib/lib.pug
+
 head
   meta(charset='UTF-8')
-  include ./lib/lib.pug
   link(rel='stylesheet' href='/css/userProfile.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt | Profile
@@ -16,7 +17,7 @@ head
   each post in posts
     .post
       .user-details
-        img.author-profile(src=authorAvatar)
+        img.profile(src=authorAvatar)
         .details
           span.author-name=username
           span.date=takeMoment(post.lastModified)

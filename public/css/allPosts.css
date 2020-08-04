@@ -32,11 +32,12 @@
 
 .container-post {
   display: flex;
-  justify-content: space-between;
   width: 100%;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   border-bottom: 0.5px solid #ada6a6;
+  align-items: center;
+  justify-content: end;
 }
 
 .data-post {

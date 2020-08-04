@@ -77,8 +77,7 @@ const autoSave = async function (req, res) {
 };
 
 const serveDraftedPosts = async function (req, res) {
-  const drafts =
-    await req.app.locals.db.getUsersPosts(req.session.userId, 0);
+  const drafts = await req.app.locals.db.getUsersPosts(req.session.userId, 0);
   res.render('posts', {
     posts: drafts,
     avatarUrl: req.session.avatarUrl,
@@ -88,8 +87,10 @@ const serveDraftedPosts = async function (req, res) {
 };
 
 const servePublishedPosts = async function (req, res) {
-  const published =
-    await req.app.locals.db.getUsersPosts(req.session.userId, 1);
+  const published = await req.app.locals.db.getUsersPosts(
+    req.session.userId,
+    1
+  );
   res.render('posts', {
     posts: published,
     avatarUrl: req.session.avatarUrl,
@@ -119,8 +120,10 @@ const publish = async function (req, res) {
 const getClapsDetails = async function (req, postId) {
   const clapsCount = (await req.app.locals.db.getClapsCount(postId)).count;
   if (req.session) {
-    const isClapped =
-      await req.app.locals.db.isClapped(postId, req.session.userId);
+    const isClapped = await req.app.locals.db.isClapped(
+      postId,
+      req.session.userId
+    );
     return { clapsCount, isClapped };
   }
   return { clapsCount, isClapped: null };
@@ -172,7 +175,15 @@ const serveProfile = async function (req, res, next) {
 };
 
 const serveSearchResults = async function (req, res) {
-  const { filter, searchText } = req.query;
+  let { searchText } = req.query;
+  const filterHandler = { '@': 'author', '#': 'tag' };
+
+  let filter = 'title';
+  if (filterHandler[searchText[0]]) {
+    filter = filterHandler[searchText[0]];
+    searchText = searchText.slice(1);
+  }
+
   const posts = await req.app.locals.db.getSearchedPosts(filter, searchText);
   res.send({ posts });
 };
@@ -206,10 +217,9 @@ const publishComment = async function (req, res) {
 
 const serveErrorPage = function (req, res) {
   res.status(404);
-  res.render(
-    'error',
-    { avatarUrl: req.session ? req.session.avatarUrl : false }
-  );
+  res.render('error', {
+    avatarUrl: req.session ? req.session.avatarUrl : false,
+  });
 };
 
 const signIn = function (req, res) {
@@ -298,5 +308,5 @@ module.exports = {
   serveSearchResults,
   deletePost,
   clapOnPost,
-  serveDraft
+  serveDraft,
 };

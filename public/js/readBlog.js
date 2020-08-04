@@ -34,3 +34,17 @@ const clapOnPost = function (postId) {
     null
   );
 };
+
+const renderPage = function ({ posts }) {
+  const allPost = document.createElement('div');
+  allPost.classList.add('all-posts');
+  document.getElementById('post').parentNode.removeChild(post);
+  document.body.appendChild(allPost);
+  renderSearchResults({ posts });
+};
+
+const searchTag = function (event) {
+  const searchTag = event.target.innerText;
+  const url = `/user/search?searchText=%23${searchTag}`;
+  sendReq('GET', url, renderPage, null);
+};

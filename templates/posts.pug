@@ -36,5 +36,5 @@ title PostIt | My posts
               a.link-text(href=`/blog/${value.id}`)=value.title
           .info-post
             span.date=takeMoment(value.lastModified)
-            a(class="link-text" href=`/user/delete/${value.id}`)
-              img.trash-icon(src="/user/images/trash.svg", alt="delete")
+        a(class="link-text" href=`/user/delete/${value.id}`)
+          img.trash-icon(src="/user/images/trash.svg", alt="delete")

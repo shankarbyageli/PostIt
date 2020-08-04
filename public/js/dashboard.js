@@ -42,12 +42,14 @@ const renderSearchResults = function ({ posts }) {
 };
 
 const getSearchResults = function () {
-  const searchText = document.querySelector('.search-box input[type=text]')
-    .value;
-  const filter = document.querySelector('.filter select').value;
+  let searchText = document.querySelector(
+    '.search-container input[type=search]'
+  ).value;
+  searchText = searchText.replace('#', '%23');
+
   sendReq(
     'GET',
-    `/user/search?filter=${filter}&searchText=${searchText}`,
+    `/user/search?searchText=${searchText}`,
     renderSearchResults,
     null
   );

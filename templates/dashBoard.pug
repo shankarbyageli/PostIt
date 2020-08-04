@@ -15,14 +15,7 @@ head
       img#logo
   #actions
     .search-container
-      .filter
-        select.filter-select(name='filter')
-          option(value='title') Title
-          option(value='author') Author
-          option(value='tag') Tag
-      .search-box
-        input(type='text' placeholder='Search..' name='search' onkeyup='getSearchText(event)')
-      img.search-icon(src="/images/search.svg" alt="" onclick="getSearchResults()")
+      <input type="search" placeholder="Search..." onkeyup='getSearchText(event)'>
     +generatePop(avatarUrl)
 .all-posts
   each post in posts

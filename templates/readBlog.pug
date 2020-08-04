@@ -5,6 +5,7 @@ head
   meta(charset='UTF-8')
   link(rel='stylesheet' href='/css/editor.css')
   link(rel='stylesheet' href='/css/readBlog.css')
+  link(rel='stylesheet' href='/css/dashboard.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest')
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/header@latest')
@@ -12,6 +13,7 @@ head
   script(src='https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest')
   script(src='/js/request.js')
   script(src='/js/readBlog.js')
+  script(src='/js/dashboard.js')
   title PostIt | Blog
 
 body(onload=`render(${post.content})`)
@@ -27,7 +29,7 @@ body(onload=`render(${post.content})`)
   #editorjs
   .tags 
     each tag in tags
-      span.added-tag=tag
+      span.added-tag(onclick='searchTag(event)')=tag
   hr#horizontal-line
   .user-actions
     .clap-action

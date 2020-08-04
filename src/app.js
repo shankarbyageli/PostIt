@@ -17,6 +17,8 @@ const {
   serveProfile,
   getFollowers,
   getFollowing,
+  ensureLogin,
+  isValidRequest,
 } = require('./handlers');
 
 const app = express();
@@ -37,12 +39,12 @@ app.use('/user', userRouter);
 
 app.get('/', serveHomepage);
 app.get('/signIn', signIn);
-app.get('/blog/:id', getBlog);
+app.get('/blog/:id', isValidRequest, getBlog);
 app.get('/callback', githubCallback);
 app.get('/comments/:blogId', serveComments);
-app.get('/profile/:userId', serveProfile);
-app.get('/profile/:id/followers', getFollowers);
-app.get('/profile/:id/following', getFollowing);
+app.get('/profile/:userId', ensureLogin, serveProfile);
+app.get('/profile/:id/followers', ensureLogin, isValidRequest, getFollowers);
+app.get('/profile/:id/following', ensureLogin, isValidRequest, getFollowing);
 
 app.use('/pictures', express.static(`${__dirname}/../database/images`));
 app.use(express.static(`${__dirname}/../public`));

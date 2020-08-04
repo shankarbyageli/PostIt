@@ -18,6 +18,7 @@ const {
   followUser,
   serveProfileEditor,
   updateProfile,
+  isValidRequest,
 } = require('./handlers');
 
 userRouter.use(ensureLogin);
@@ -28,14 +29,14 @@ userRouter.get('/editor', serveEditor);
 userRouter.get('/posts/drafts', serveDraftedPosts);
 userRouter.get('/posts/published', servePublishedPosts);
 userRouter.post('/publishComment', publishComment);
-userRouter.post('/autosave/:id', autoSave);
-userRouter.post('/publish/:id', publish);
-userRouter.get('/draft/:id', serveDraft);
+userRouter.post('/autosave/:id', isValidRequest, autoSave);
+userRouter.post('/publish/:id', isValidRequest, publish);
+userRouter.get('/draft/:id', isValidRequest, serveDraft);
 userRouter.get('/search', serveSearchResults);
-userRouter.get('/delete/:id', deletePost);
+userRouter.get('/delete/:id', isValidRequest, deletePost);
 userRouter.get('/editProfile', serveProfileEditor);
-userRouter.post('/clap/:id', clapOnPost);
-userRouter.post('/follow/:id', followUser);
+userRouter.post('/clap/:id', isValidRequest, clapOnPost);
+userRouter.post('/follow/:id', isValidRequest, followUser);
 userRouter.post('/updateProfile', updateProfile);
 
 userRouter.use(serveErrorPage);

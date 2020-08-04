@@ -357,16 +357,10 @@ describe('GET /profile/id', function () {
   });
 
   it('should give error page if user does not exist', function (done) {
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/profile/3')
-      .expect(/dashboard/)
-      .expect(404, done);
-  });
-
-  it('should give error page if user does not exist', function (done) {
-    request(app)
-      .get('/profile/0')
-      .expect(/dashboard/)
+      .get('/profile/300')
+      .set('Cookie', 'sId=1234')
       .expect(404, done);
   });
 });
@@ -456,5 +450,75 @@ describe('GET /clap/:id', () => {
       .set('Cookie', 'sId=1234')
       .expect(/false/)
       .expect(200, done);
+  });
+});
+
+describe('POST /follow/:id', () => {
+  afterEach(() => {
+    app.locals.sessions = new Sessions({});
+  });
+
+  it('should give true when user is not already following', function (done) {
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
+    request(app)
+      .post('/user/follow/3')
+      .set('Cookie', 'sId=1234')
+      .expect(/true/)
+      .expect(200, done);
+  });
+
+  it('should give false when the user is already following', function (done) {
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
+    request(app)
+      .post('/user/follow/3')
+      .set('Cookie', 'sId=1234')
+      .expect(/false/)
+      .expect(200, done);
+  });
+});
+
+describe('GET /profile/:id/followers', function () {
+  afterEach(() => {
+    app.locals.sessions = new Sessions({});
+  });
+
+  it('should give the follower details of given user id', function (done) {
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
+    request(app)
+      .get('/profile/2/followers')
+      .set('Cookie', 'sId=1234')
+      .expect(/1 followers/)
+      .expect(/User1/, done);
+  });
+
+  it('should give error page if user does not exist', function (done) {
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
+    request(app)
+      .get('/profile/300/followers')
+      .set('Cookie', 'sId=1234')
+      .expect(404, done);
+  });
+});
+
+describe('GET /profile/:id/following', function () {
+  afterEach(() => {
+    app.locals.sessions = new Sessions({});
+  });
+
+  it('should give the following details of given user id', function (done) {
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
+    request(app)
+      .get('/profile/1/following')
+      .set('Cookie', 'sId=1234')
+      .expect(/1 following/)
+      .expect(/User1/, done);
+  });
+
+  it('should give error page if user does not exist', function (done) {
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
+    request(app)
+      .get('/profile/300/following')
+      .set('Cookie', 'sId=1234')
+      .expect(404, done);
   });
 });

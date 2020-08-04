@@ -29,3 +29,5 @@ INSERT INTO images (imagePath) VALUES ('myfile1');
 INSERT INTO images (imagePath) VALUES ('myfile2');
 
 INSERT INTO claps VALUES (4,1);
+
+INSERT INTO followers VALUES (2,1);

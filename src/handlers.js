@@ -2,6 +2,16 @@ const fs = require('fs');
 const { clientId, clientSecret } = require('../config');
 const lib = require('./lib');
 
+const isValidRequest = function (req, res, next) {
+  const { id } = req.params;
+  if (+id) {
+    return next();
+  }
+  res.render('error', {
+    avatarUrl: req.session ? req.session.avatarUrl : false,
+  });
+};
+
 const getSessionDetails = async function (req, res, next) {
   const sessions = req.app.locals.sessions;
   const userSession = sessions.getSession(req.cookies.sId);
@@ -41,9 +51,6 @@ const serveHomepage = async function (req, res) {
 
 const serveDraft = async function (req, res, next) {
   const { id } = req.params;
-  if (!+id) {
-    return next();
-  }
   const response = await req.app.locals.db.getPost(id, 0);
   if (response) {
     res.render('editor', {
@@ -131,9 +138,6 @@ const getClapsDetails = async function (req, postId) {
 
 const getBlog = async function (req, res, next) {
   const { id } = req.params;
-  if (!+id) {
-    return next();
-  }
   const response = await req.app.locals.db.getPost(id, 1);
 
   if (response) {
@@ -291,30 +295,21 @@ const githubCallback = function (req, res) {
     });
 };
 
-const deletePost = async function (req, res, next) {
+const deletePost = async function (req, res) {
   const { id } = req.params;
-  if (!+id) {
-    return next();
-  }
   await req.app.locals.db.deletePost(id);
   res.redirect(req.headers.referer);
 };
 
-const clapOnPost = async function (req, res, next) {
+const clapOnPost = async function (req, res) {
   const { id } = req.params;
-  if (!+id) {
-    return next();
-  }
   const status = await req.app.locals.db.clapOnPost(id, req.session.userId);
   const clapsCount = (await req.app.locals.db.getClapsCount(id)).count;
   res.send({ clapped: status, clapsCount });
 };
 
-const followUser = async function (req, res, next) {
+const followUser = async function (req, res) {
   const { id } = req.params;
-  if (!+id) {
-    return next();
-  }
   const status = await req.app.locals.db.followUser(id, req.session.userId);
   const followersCount = (await req.app.locals.db.getFollowersCount(id)).count;
   res.send({ followed: status, followersCount });
@@ -330,9 +325,6 @@ const serveProfileEditor = function (req, res) {
 
 const getFollowers = async function (req, res, next) {
   const { id } = req.params;
-  if (!+id) {
-    return next();
-  }
   const userDetails = await req.app.locals.db.getUserById(id);
   if (!userDetails) {
     return next();
@@ -357,9 +349,6 @@ const getFollowers = async function (req, res, next) {
 
 const getFollowing = async function (req, res, next) {
   const { id } = req.params;
-  if (!+id) {
-    return next();
-  }
   const userDetails = await req.app.locals.db.getUserById(id);
   if (!userDetails) {
     return next();
@@ -425,4 +414,5 @@ module.exports = {
   getFollowers,
   updateProfile,
   getFollowing,
+  isValidRequest,
 };

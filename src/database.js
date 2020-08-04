@@ -244,6 +244,10 @@ class Database {
   getFollowers(userId) {
     return this.all(queries.getFollowers(userId));
   }
+
+  updateProfile(userId, displayName) {
+    return this.run(queries.updateProfile(userId, displayName));
+  }
 }
 
 module.exports = Database;

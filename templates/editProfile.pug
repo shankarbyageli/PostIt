@@ -9,11 +9,13 @@ head
   title PostIt | Edit profile
 
 +generateMenuBar(avatarUrl)
-.user-profile
-  .user-info
-    .user-name
-      span.username(contenteditable='true')=displayName
-    .user-name
-      button.profile-action save
-      button.profile-action.cancel-button cancel
-  img.profile-picture(src=avatarUrl alt='cricket')
+form(action="/user/updateProfile", method="post")
+  .user-profile
+    .user-info
+      .user-name
+        input.username(value=displayName name="displayName" required)
+      .user-name
+        button.profile-action(type=submit) save
+        a.link-text(href=`/profile/${userId}`)
+          span.profile-action.cancel-button cancel
+    img.profile-picture(src=avatarUrl alt='cricket')

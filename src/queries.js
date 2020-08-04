@@ -126,6 +126,9 @@ const getFollowers = (userId) => `
     join users on users.userId=followers.userId 
     WHERE followers.userId=${userId}`;
 
+const updateProfile = (userId, displayName) =>
+  `UPDATE users SET displayName = '${displayName}' WHERE userId = ${userId}`;
+
 module.exports = {
   addPost,
   getAllStories,
@@ -157,4 +160,5 @@ module.exports = {
   unfollowUser,
   getFollowersCount,
   getFollowers,
+  updateProfile,
 };

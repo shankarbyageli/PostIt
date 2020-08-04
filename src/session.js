@@ -44,6 +44,12 @@ class Sessions {
     }
     return false;
   }
+
+  updateSession(sessionId, details) {
+    if (this.sessions[sessionId]) {
+      this.sessions[sessionId] = { ...details };
+    }
+  }
 }
 
 module.exports = Sessions;

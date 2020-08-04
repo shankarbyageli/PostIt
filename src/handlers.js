@@ -198,11 +198,12 @@ const serveComments = async function (req, res, next) {
   const renderOptions = {
     comments: await req.app.locals.db.getComments(blogId),
     titleText: blog.title,
-    userId: req.session.user,
+
     takeMoment: lib.takeMoment,
     blogId,
   };
   if (req.session) {
+    renderOptions.userId = req.session.user;
     renderOptions.currentUser = req.session.displayName;
     renderOptions.avatarUrl = req.session.avatarUrl;
   }
@@ -308,6 +309,7 @@ const followUser = async function (req, res, next) {
 
 const serveProfileEditor = function (req, res) {
   res.render('editProfile', {
+    userId: req.session.userId,
     avatarUrl: req.session.avatarUrl,
     displayName: req.session.displayName,
   });
@@ -329,6 +331,14 @@ const getFollowers = async function (req, res, next) {
     username: req.session.username,
     userId: req.session.userId,
   });
+};
+
+const updateProfile = async function (req, res) {
+  const { displayName } = req.body;
+  await req.app.locals.db.updateProfile(req.session.userId, displayName);
+  req.session.displayName = displayName;
+  req.app.locals.sessions.updateSession(req.cookies.sId, req.session);
+  res.redirect(`/profile/${req.session.userId}`);
 };
 
 module.exports = {
@@ -355,4 +365,5 @@ module.exports = {
   followUser,
   serveProfileEditor,
   getFollowers,
+  updateProfile,
 };

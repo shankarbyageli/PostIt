@@ -15,6 +15,7 @@ const {
   getSessionDetails,
   serveComments,
   serveProfile,
+  getFollowers,
 } = require('./handlers');
 
 const app = express();
@@ -39,6 +40,7 @@ app.get('/blog/:id', getBlog);
 app.get('/callback', githubCallback);
 app.get('/comments/:blogId', serveComments);
 app.get('/profile/:userId', serveProfile);
+app.get('/profile/:id/followers', getFollowers);
 
 app.use('/coverImage', express.static(`${__dirname}/../database/images`));
 app.use(express.static(`${__dirname}/../public`));

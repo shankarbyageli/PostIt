@@ -312,6 +312,24 @@ const serveProfileEditor = function (req, res) {
     displayName: req.session.displayName,
   });
 };
+const getFollowers = async function (req, res, next) {
+  const { id } = req.params;
+  if (!+id) {
+    return next();
+  }
+  const userDetails = await req.app.locals.db.getUserById(id);
+  if (!userDetails) {
+    return next();
+  }
+  const followers = await req.app.locals.db.getFollowers(id);
+  res.render('follower', {
+    followers,
+    authorAvatar: userDetails.avatarUrl,
+    avatarUrl: req.session ? req.session.avatarUrl : false,
+    username: req.session.username,
+    userId: req.session.userId,
+  });
+};
 
 module.exports = {
   serveHomepage,
@@ -336,4 +354,5 @@ module.exports = {
   serveDraft,
   followUser,
   serveProfileEditor,
+  getFollowers,
 };

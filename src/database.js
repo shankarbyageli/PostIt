@@ -240,6 +240,10 @@ class Database {
       });
     });
   }
+
+  getFollowers(userId) {
+    return this.all(queries.getFollowers(userId));
+  }
 }
 
 module.exports = Database;

@@ -6,17 +6,14 @@ head
   script(src="/js/profile.js")
   link(rel='stylesheet' href='/css/userProfile.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title PostIt | Profile
+  title PostIt | Followers
 +generateMenuBar(avatarUrl)
 +getProfileHeader(username, userId, avatarUrl, authorAvatar)
 .all-posts
-  each post in posts
+  each follower in followers
     .post
       .user-details
-        img.profile(src=authorAvatar)
+        img.profile(src=follower.avatarUrl)
         .details
-          span.author-name=username
-          span.date=takeMoment(post.lastModified)
-      .title.title-text
-        a.link-text(href=`/blog/${post.id}`)=post.title
-      .data=JSON.parse(post.content).blocks[0].data.text
+          span.author-name=follower.username
+          span.follow-option follow

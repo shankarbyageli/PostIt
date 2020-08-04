@@ -116,10 +116,15 @@ const selectFollowers = (userId, followerId) => `
     WHERE followerId=${followerId} AND userId=${userId}`;
 
 const unfollowUser = (userId, followerId) => `DELETE FROM followers 
-WHERE followerId=${followerId} AND userId=${userId}`;
+    WHERE followerId=${followerId} AND userId=${userId}`;
 
 const getFollowersCount = (userId) => `
     SELECT count(*) as count FROM followers WHERE userId=${userId}`;
+
+const getFollowers = (userId) => `
+    SELECT * FROM followers
+    join users on users.userId=followers.userId 
+    WHERE followers.userId=${userId}`;
 
 module.exports = {
   addPost,
@@ -151,4 +156,5 @@ module.exports = {
   selectFollowers,
   unfollowUser,
   getFollowersCount,
+  getFollowers,
 };

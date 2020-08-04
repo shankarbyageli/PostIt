@@ -155,6 +155,12 @@ const getBlog = async function (req, res, next) {
   }
 };
 
+const getFollowCount = async function (db, userId) {
+  const followersCount = (await db.getFollowersCount(userId)).count;
+  const followingCount = (await db.getFollowingCount(userId)).count;
+  return { followersCount, followingCount };
+};
+
 const serveProfile = async function (req, res, next) {
   const { userId } = req.params;
   if (!+userId) {
@@ -164,8 +170,14 @@ const serveProfile = async function (req, res, next) {
   if (!userDetails) {
     return next();
   }
+  const { followersCount, followingCount } = await getFollowCount(
+    req.app.locals.db,
+    userId
+  );
   const posts = await req.app.locals.db.getUsersPosts(userId, 1);
   res.render('userProfile', {
+    followersCount,
+    followingCount,
     posts,
     avatarUrl: req.session ? req.session.avatarUrl : false,
     authorAvatar: userDetails.avatarUrl,
@@ -314,6 +326,7 @@ const serveProfileEditor = function (req, res) {
     displayName: req.session.displayName,
   });
 };
+
 const getFollowers = async function (req, res, next) {
   const { id } = req.params;
   if (!+id) {
@@ -323,13 +336,48 @@ const getFollowers = async function (req, res, next) {
   if (!userDetails) {
     return next();
   }
+  const { followersCount, followingCount } = await getFollowCount(
+    req.app.locals.db,
+    id
+  );
+  const header = `${userDetails.displayName} is followed by`;
   const followers = await req.app.locals.db.getFollowers(id);
   res.render('follower', {
+    followersCount,
+    followingCount,
+    header,
     followers,
     authorAvatar: userDetails.avatarUrl,
     avatarUrl: req.session ? req.session.avatarUrl : false,
-    username: req.session.username,
-    userId: req.session.userId,
+    username: userDetails.displayName,
+    userId: userDetails.userId,
+  });
+};
+
+const getFollowing = async function (req, res, next) {
+  const { id } = req.params;
+  if (!+id) {
+    return next();
+  }
+  const userDetails = await req.app.locals.db.getUserById(id);
+  if (!userDetails) {
+    return next();
+  }
+  const { followersCount, followingCount } = await getFollowCount(
+    req.app.locals.db,
+    id
+  );
+  const header = `${userDetails.displayName} follows`;
+  const followers = await req.app.locals.db.getFollowing(id);
+  res.render('follower', {
+    followersCount,
+    followingCount,
+    header,
+    followers,
+    authorAvatar: userDetails.avatarUrl,
+    avatarUrl: req.session ? req.session.avatarUrl : false,
+    username: userDetails.displayName,
+    userId: userDetails.userId,
   });
 };
 
@@ -375,4 +423,5 @@ module.exports = {
   serveProfileEditor,
   getFollowers,
   updateProfile,
+  getFollowing,
 };

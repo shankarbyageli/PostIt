@@ -19,7 +19,7 @@ mixin generateMenuBar(avatarUrl)
           a.link-text(href='/signIn')
             span.sign_in.action-button Sign in
 
-mixin getProfileHeader(username, userId, avatarUrl, authorAvatar)
+mixin getProfileHeader(username, userId, avatarUrl, authorAvatar, followersCount, followingCount)
   .user-profile
     .user-info
       .user-name
@@ -31,8 +31,8 @@ mixin getProfileHeader(username, userId, avatarUrl, authorAvatar)
           a.link-text(onclick=`follow(${userId})`)
             span#follow.option='Follow'
       div
-        a(href=`/profile/${userId}/followers`)#followers.follow-details 45 followers 
-        a(href=`/profile/${userId}/following`)#following.follow-details 34 following 
+        a(href=`/profile/${userId}/followers`)#followers.follow-details=`${followersCount} followers` 
+        a(href=`/profile/${userId}/following`)#following.follow-details=`${followingCount} following`
     img.profile-picture(src=authorAvatar)
 
 head

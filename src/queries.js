@@ -121,9 +121,12 @@ const unfollowUser = (userId, followerId) => `DELETE FROM followers
 const getFollowersCount = (userId) => `
     SELECT count(*) as count FROM followers WHERE userId=${userId}`;
 
+const getFollowingCount = (userId) => `
+    SELECT count(*) as count FROM followers WHERE followerId=${userId}`;
+
 const getFollowers = (userId) => `
     SELECT * FROM followers
-    join users on users.userId=followers.userId 
+    join users on users.userId=followers.followerId 
     WHERE followers.userId=${userId}`;
 
 const updateDisplayName = (userId, displayName) =>
@@ -131,6 +134,10 @@ const updateDisplayName = (userId, displayName) =>
 
 const updateAvatar = (userId, avatarUrl) =>
   `UPDATE users SET avatarUrl = '${avatarUrl}' WHERE userId = ${userId}`;
+const getFollowing = (userId) => `
+    SELECT * FROM followers
+    join users on users.userId=followers.userId 
+    WHERE followers.followerId=${userId}`;
 
 module.exports = {
   addPost,
@@ -162,7 +169,9 @@ module.exports = {
   selectFollowers,
   unfollowUser,
   getFollowersCount,
+  getFollowingCount,
   getFollowers,
   updateDisplayName,
   updateAvatar,
+  getFollowing,
 };

@@ -221,6 +221,10 @@ class Database {
     return this.get(queries.getFollowersCount(userId));
   }
 
+  getFollowingCount(userId) {
+    return this.get(queries.getFollowingCount(userId));
+  }
+
   followUser(userId, followerId) {
     let queryString = queries.followUser(userId, followerId);
     let status = true;
@@ -250,6 +254,10 @@ class Database {
       this.run(queries.updateAvatar(userId, userDetails.avatarUrl));
     }
     return this.run(queries.updateDisplayName(userId, userDetails.displayName));
+  }
+
+  getFollowing(userId) {
+    return this.all(queries.getFollowing(userId));
   }
 }
 

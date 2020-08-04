@@ -356,13 +356,6 @@ describe('GET /profile/id', function () {
       .expect(/Read this blog/, done);
   });
 
-  it('should give the details of user given id if not signed in', function (done) {
-    request(app)
-      .get('/profile/1')
-      .expect(/User1/)
-      .expect(/Read this blog/, done);
-  });
-
   it('should give error page if user does not exist', function (done) {
     request(app)
       .get('/profile/3')

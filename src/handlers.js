@@ -155,10 +155,11 @@ const getBlog = async function (req, res, next) {
   }
 };
 
-const getFollowCount = async function (db, userId) {
+const getFollowCount = async function (db, userId, followerId) {
   const followersCount = (await db.getFollowersCount(userId)).count;
   const followingCount = (await db.getFollowingCount(userId)).count;
-  return { followersCount, followingCount };
+  const isFollowing = await db.isFollowing(userId, followerId);
+  return { followersCount, followingCount, isFollowing };
 };
 
 const serveProfile = async function (req, res, next) {
@@ -170,19 +171,19 @@ const serveProfile = async function (req, res, next) {
   if (!userDetails) {
     return next();
   }
-  const { followersCount, followingCount } = await getFollowCount(
+  const { followersCount, followingCount, isFollowing } = await getFollowCount(
     req.app.locals.db,
-    userId
+    userId,
+    req.session.userId
   );
   const posts = await req.app.locals.db.getUsersPosts(userId, 1);
   res.render('userProfile', {
+    isFollowing,
     followersCount,
     followingCount,
+    userDetails,
     posts,
     avatarUrl: req.session ? req.session.avatarUrl : false,
-    authorAvatar: userDetails.avatarUrl,
-    userId: userDetails.userId,
-    username: userDetails.displayName,
     takeMoment: lib.takeMoment,
   });
 };
@@ -336,21 +337,21 @@ const getFollowers = async function (req, res, next) {
   if (!userDetails) {
     return next();
   }
-  const { followersCount, followingCount } = await getFollowCount(
+  const { followersCount, followingCount, isFollowing } = await getFollowCount(
     req.app.locals.db,
-    id
+    id,
+    req.session.userId
   );
   const header = `${userDetails.displayName} is followed by`;
   const followers = await req.app.locals.db.getFollowers(id);
   res.render('follower', {
+    isFollowing,
     followersCount,
     followingCount,
     header,
     followers,
-    authorAvatar: userDetails.avatarUrl,
+    userDetails,
     avatarUrl: req.session ? req.session.avatarUrl : false,
-    username: userDetails.displayName,
-    userId: userDetails.userId,
   });
 };
 
@@ -363,21 +364,21 @@ const getFollowing = async function (req, res, next) {
   if (!userDetails) {
     return next();
   }
-  const { followersCount, followingCount } = await getFollowCount(
+  const { followersCount, followingCount, isFollowing } = await getFollowCount(
     req.app.locals.db,
-    id
+    id,
+    req.session.userId
   );
   const header = `${userDetails.displayName} follows`;
   const followers = await req.app.locals.db.getFollowing(id);
   res.render('follower', {
+    isFollowing,
     followersCount,
     followingCount,
     header,
     followers,
-    authorAvatar: userDetails.avatarUrl,
+    userDetails,
     avatarUrl: req.session ? req.session.avatarUrl : false,
-    username: userDetails.displayName,
-    userId: userDetails.userId,
   });
 };
 

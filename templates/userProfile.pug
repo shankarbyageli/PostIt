@@ -8,14 +8,14 @@ head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt | Profile
 +generateMenuBar(avatarUrl)
-+getProfileHeader(username, userId, avatarUrl, authorAvatar,  followersCount, followingCount)
++getProfileHeader(userDetails,avatarUrl,followersCount, followingCount)
 .all-posts
   each post in posts
     .post
       .user-details
-        img.profile(src=authorAvatar)
+        img.profile(src=userDetails.avatarUrl)
         .details
-          span.author-name=username
+          span.author-name=userDetails.displayName
           span.date=takeMoment(post.lastModified)
       .title.title-text
         a.link-text(href=`/blog/${post.id}`)=post.title

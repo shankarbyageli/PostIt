@@ -87,11 +87,12 @@
 
 .option {
   font-size: 11px;
-  border: 1px solid black;
+  border: 1px solid #03a87c;
   border-radius: 3px;
   padding: 2px;
   margin-left: 15px;
   cursor: pointer;
+  color: #03a87c;
 }
 
 .profile-action {

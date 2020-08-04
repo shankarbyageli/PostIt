@@ -19,21 +19,21 @@ mixin generateMenuBar(avatarUrl)
           a.link-text(href='/signIn')
             span.sign_in.action-button Sign in
 
-mixin getProfileHeader(username, userId, avatarUrl, authorAvatar, followersCount, followingCount)
+mixin getProfileHeader(userDetails,avatarUrl, followersCount, followingCount)
   .user-profile
     .user-info
       .user-name
-        span.username=username
-        if avatarUrl== authorAvatar
+        span.username=userDetails.displayName
+        if avatarUrl == userDetails.avatarUrl
           a.link-text(href=`/user/editProfile`)
             span.option='Edit profile'
         else 
-          a.link-text(onclick=`follow(${userId})`)
+          a.link-text(onclick=`follow(${userDetails.userId})`)
             span#follow.option='Follow'
       div
-        a(href=`/profile/${userId}/followers`)#followers.follow-details=`${followersCount} followers` 
-        a(href=`/profile/${userId}/following`)#following.follow-details=`${followingCount} following`
-    img.profile-picture(src=authorAvatar)
+        a(href=`/profile/${userDetails.userId}/followers`)#followers.follow-details=`${followersCount} followers` 
+        a(href=`/profile/${userDetails.userId}/following`)#following.follow-details=`${followingCount} following`
+    img.profile-picture(src=userDetails.avatarUrl)
 
 head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')

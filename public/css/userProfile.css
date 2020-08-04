@@ -21,6 +21,7 @@
 
 .profile-picture {
   width: 120px;
+  height: 120px;
   border-radius: 50%;
 }
 
@@ -90,4 +91,20 @@
   padding: 2px;
   margin-left: 15px;
   cursor: pointer;
+}
+
+.profile-action {
+  font-size: 15px;
+  color: #03a87c;
+  background-color: white;
+  border: 1px solid #03a87c;
+  padding: 5px 7px;
+  border-radius: 3px;
+  outline: none;
+}
+
+.cancel-button {
+  color: gray;
+  margin-left: 23px;
+  border-color: gray;
 }

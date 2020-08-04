@@ -1,0 +1,19 @@
+include ./lib/lib.pug
+
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Document
+  link(rel='stylesheet' href='/user/css/menubar.css')
+  link(rel='stylesheet' href='/user/css/userProfile.css')
+
++generateMenubar(avatarUrl)
+.user-profile
+  .user-info
+    .user-name
+      span.username(contenteditable='true') Anuja
+    .user-name
+      button.profile-action save
+      button.profile-action.cancel-button cancel
+  img.profile-picture(src='./images/cricket.jpeg' alt='cricket')

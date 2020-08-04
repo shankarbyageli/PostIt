@@ -16,7 +16,8 @@ head
         a.link-text(href=`/edit/${username}`)
           span.option='Edit profile'
       else 
-        button#follow(onclick=`follow(${userId})`) follow
+        a.link-text(onclick=`follow(${userId})`)
+          span#follow.option='Follow'
     div
       a(href=`/profile/${userId}/followers`)#followers.follow-details 45 followers 
       a(href=`/profile/${userId}/following`)#following.follow-details 34 following 

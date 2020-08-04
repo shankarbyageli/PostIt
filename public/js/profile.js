@@ -7,10 +7,10 @@ const follow = function (userId) {
         'followers'
       ).innerText = `${followersCount} followers`;
       if (followed) {
-        document.getElementById('follow').value = 'unfollow';
+        document.getElementById('follow').innerText = 'unfollow';
         return;
       }
-      document.getElementById('follow').value = 'follow';
+      document.getElementById('follow').innerText = 'follow';
     },
     null
   );

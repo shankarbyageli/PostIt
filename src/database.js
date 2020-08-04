@@ -40,15 +40,11 @@ class Database {
 
   addPost(data, userId) {
     return new Promise((resolve, reject) => {
-      this.db.serialize(() => {
-        this.db.run(queries.addPost(userId, data), (err) => {
-          if (err) {
-            reject(err);
-          }
-        });
-        this.get(queries.getAllStories())
-          .then((row) => resolve(row.id))
-          .catch((err) => reject(err));
+      this.db.run(queries.addPost(userId, data), function (err) {
+        if (err) {
+          reject(err);
+        }
+        resolve(this.lastID);
       });
     });
   }
@@ -57,8 +53,26 @@ class Database {
     return this.run(queries.updatePost(postId, data));
   }
 
-  publishPost(postId, imageId) {
-    return this.run(queries.publishPost(imageId, postId));
+  publishPost(postId, tags, imagePath) {
+    return new Promise((resolve, reject) => {
+      const dbInstance = this;
+      this.db.run(queries.insertImage(imagePath), async function (err) {
+        if (err) {
+          reject(err);
+        }
+        if (tags.length) {
+          await dbInstance.addTags(tags, postId);
+        }
+        const lastId = this.lastID;
+        dbInstance.db.run(queries.publishPost(lastId, postId),
+          (err) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(true);
+          });
+      });
+    });
   }
 
   getUsersPosts(userId, postType) {

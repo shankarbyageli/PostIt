@@ -3,8 +3,6 @@ const addPost = (userId, data) =>
     values ( ${0}, '${userId}','${data.title}',
     '${JSON.stringify(data.content)}', '${data.content.time}');`;
 
-const getAllStories = () => 'select id FROM stories ORDER BY id DESC';
-
 const updatePost = (postId, data) => `
       UPDATE stories SET title = '${data.title}', 
       content = '${JSON.stringify(data.content)}',
@@ -141,7 +139,6 @@ const getFollowing = (userId) => `
 
 module.exports = {
   addPost,
-  getAllStories,
   updatePost,
   publishPost,
   getUsersPosts,

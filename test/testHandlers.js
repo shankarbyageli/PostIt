@@ -54,40 +54,6 @@ describe('GET /signIn', () => {
   });
 });
 
-describe('POST /publish', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-  const data = {
-    title: 'my title',
-    content: {
-      time: 1552744582955,
-      blocks: [
-        {
-          type: 'text',
-          data: {
-            text:
-              'https://cdn.pixabay.com/photo/2017/09/01/21/53/blue-2705642_1280.jpg',
-          },
-        },
-      ],
-      version: '2.11.10',
-    },
-
-    tags: JSON.stringify([]),
-  };
-
-  it('Should publish the post', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
-    request(app)
-      .post('/user/publish/2')
-      .set('Cookie', 'sId=1234')
-      .set('Content-type', 'application/json')
-      .send(JSON.stringify(data))
-      .expect(200, done);
-  });
-});
-
 describe('Ensure login', () => {
   afterEach(() => {
     app.locals.sessions = new Sessions({});

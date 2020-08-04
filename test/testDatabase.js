@@ -5,24 +5,7 @@ const sinon = require('sinon');
 describe('addPost', () => {
   it('should give error if database failure in run', (done) => {
     const db = {
-      get: (query, callback) => callback(null, null),
-      run: (query, callback) => callback('error'),
-      serialize: (callback) => callback(run),
-    };
-    const database = new Database(db);
-    database
-      .addPost({ id: 1, title: 'title', content: { time: '1' } }, 2)
-      .then(null, (actual) => {
-        assert.equal(actual, 'error');
-        done();
-      });
-  });
-
-  it('should give error if database failure in get', (done) => {
-    const db = {
-      get: (query, callback) => callback('error'),
-      run: (query, callback) => callback(null),
-      serialize: (callback) => callback(run),
+      run: (query, callback) => callback.call({ lastID: 1 }, 'error')
     };
     const database = new Database(db);
     database
@@ -35,9 +18,7 @@ describe('addPost', () => {
 
   it('should add the post to database', (done) => {
     const db = {
-      get: (query, callback) => callback(null, { id: 1 }),
-      run: (query, callback) => callback(null),
-      serialize: (callback) => callback(),
+      run: (query, callback) => callback.call({ lastID: 1 }, null)
     };
     const database = new Database(db);
     database
@@ -75,18 +56,39 @@ describe('updatePost', () => {
 
 describe('publishPost', () => {
   it('should give error if database failure', (done) => {
-    const db = { run: (query, callback) => callback('error') };
+    const db = {
+      run: (query, callback) => callback.call({ lastID: 1 }, 'error'),
+      addTags: sinon.stub().resolves(true)
+    };
     const database = new Database(db);
-    database.publishPost(1).then(null, (actual) => {
+    database.publishPost(1, [], 'path').then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
     });
   });
 
-  it('should publish the drafted post given the id', (done) => {
-    const db = { run: (query, callback) => callback(null, true) };
+  it('should not addTags if there are no tags', (done) => {
+    const addTags = sinon.stub().resolves(true);
+    const db = {
+      run: (query, callback) => callback.call({ lastID: 1 }, null),
+      addTags
+    };
     const database = new Database(db);
-    database.publishPost(1).then((actual) => {
+    database.publishPost(1, [], 'path').then((actual) => {
+      assert.ok(actual);
+      assert.equal(addTags.calledOnce, false);
+      done();
+    }, null);
+  });
+
+  it('should publish the drafted post', (done) => {
+    const addTags = sinon.stub().resolves(true);
+    const db = {
+      run: (query, callback) => callback.call({ lastID: 1 }, null),
+      addTags
+    };
+    const database = new Database(db);
+    database.publishPost(1, ['tag'], 'path').then((actual) => {
       assert.ok(actual);
       done();
     }, null);

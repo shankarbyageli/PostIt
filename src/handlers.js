@@ -108,19 +108,14 @@ const servePublishedPosts = async function (req, res) {
 
 const publish = async function (req, res) {
   const coverImage = req.files && req.files.file;
-  let imageDetails = { imageId: null };
   if (coverImage) {
     fs.writeFileSync(
       `${__dirname}/../database/images/${coverImage.md5}`,
       coverImage.data
     );
-    imageDetails = await req.app.locals.db.addImage(coverImage.md5);
   }
   const tags = JSON.parse(req.body.tags);
-  if (tags.length) {
-    await req.app.locals.db.addTags(tags, req.params.id);
-  }
-  await req.app.locals.db.publishPost(req.params.id, imageDetails.imageId);
+  await req.app.locals.db.publishPost(req.params.id, tags, coverImage.md5);
   res.status(200).end();
 };
 

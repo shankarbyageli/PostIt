@@ -170,6 +170,7 @@ const serveProfile = async function (req, res, next) {
     avatarUrl: req.session ? req.session.avatarUrl : false,
     authorAvatar: userDetails.avatarUrl,
     username: userDetails.username,
+    userId: userDetails.userId,
     takeMoment: lib.takeMoment,
   });
 };
@@ -288,6 +289,16 @@ const clapOnPost = async function (req, res, next) {
   res.send({ clapped: status, clapsCount });
 };
 
+const followUser = async function (req, res, next) {
+  const { id } = req.params;
+  if (!+id) {
+    return next();
+  }
+  const status = await req.app.locals.db.followUser(id, req.session.userId);
+  const followersCount = (await req.app.locals.db.getFollowersCount(id)).count;
+  res.send({ followed: status, followersCount });
+};
+
 module.exports = {
   serveHomepage,
   signIn,
@@ -309,4 +320,5 @@ module.exports = {
   deletePost,
   clapOnPost,
   serveDraft,
+  followUser,
 };

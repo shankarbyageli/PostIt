@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS comments (
 CREATE TABLE IF NOT EXISTS followers (
   userId INTEGER,
   followerId INTEGER,
+  PRIMARY KEY (userId, followerId),
   FOREIGN KEY(userId) REFERENCES users(userId),
   FOREIGN KEY(followerId) REFERENCES users(userId)
 );

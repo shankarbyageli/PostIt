@@ -2,6 +2,8 @@ include ./lib/lib.pug
 
 head
   meta(charset='UTF-8')
+  script(src="/js/request.js")
+  script(src="/js/profile.js")
   link(rel='stylesheet' href='/css/userProfile.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt | Profile
@@ -13,9 +15,11 @@ head
       if avatarUrl== authorAvatar
         a.link-text(href=`/edit/${username}`)
           span.option='Edit profile'
+      else 
+        button#follow(onclick=`follow(${userId})`) follow
     div
-      span.follow-details 45 followers 
-      span.follow-details 34 following 
+      a(href=`/profile/${userId}/followers`)#followers.follow-details 45 followers 
+      a(href=`/profile/${userId}/following`)#following.follow-details 34 following 
   img.profile-picture(src=authorAvatar)
 .all-posts
   each post in posts

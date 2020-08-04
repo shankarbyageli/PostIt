@@ -3,7 +3,7 @@ const addPost = (userId, data) =>
     values ( ${0}, '${userId}','${data.title}',
     '${JSON.stringify(data.content)}', '${data.content.time}');`;
 
-const getAllStories = () => 'select id from stories order by id desc';
+const getAllStories = () => 'select id FROM stories ORDER BY id DESC';
 
 const updatePost = (postId, data) => `
       UPDATE stories SET title = '${data.title}', 
@@ -14,14 +14,14 @@ const publishPost = (imageId, postId) => `UPDATE stories SET isPublished = 1,
      coverImageId = ${imageId} where id = ${postId}`;
 
 const getUsersPosts = (userId, postType) => `
-    SELECT * from stories
+    SELECT * FROM stories
      join users on stories.authorId = users.userId 
      where authorId = ${userId} AND isPublished = ${postType}
-     order by lastModified desc
+     ORDER BY lastModified DESC
     `;
 
 const getPost = (id, postType) => `
-      select * from stories
+      select * FROM stories
        join users on stories.authorId = users.userId
        where id = ${id} AND isPublished = ${postType}
       `;
@@ -31,7 +31,7 @@ const imageQuery = (imageId) =>
 
 const tagsQuery = (blogId) => `SELECT * FROM tags where storyId = ${blogId}`;
 
-const selectUser = (userId) => `select * from users where userId = ${userId}`;
+const selectUser = (userId) => `select * FROM users where userId = ${userId}`;
 
 const addUser = (userDetails) =>
   `INSERT INTO users (username, avatarUrl) values (
@@ -39,45 +39,45 @@ const addUser = (userDetails) =>
     ;`;
 
 const getComments = (blogId) =>
-  `select * from comments 
+  `select * FROM comments 
       join users on comments.commentBy = users.userId
-      where commentOn = ${blogId} order by comments.id desc`;
+      where commentOn = ${blogId} ORDER BY comments.id DESC`;
 
 const addComment = (blogId, userId, date, comment) => `INSERT INTO comments 
       (commentOn,commentBy,commentedAt,comment) VALUES
       (${blogId},${userId},${date},'${comment}')`;
 
 const getLatestPosts = (count) => `
-    select * from stories
+    select * FROM stories
      join users on stories.authorId = users.userId 
      join images on stories.coverImageId = images.imageId
      where isPublished = 1 
-     order by stories.id desc limit ${count}
+     ORDER BY stories.id DESC limit ${count}
     `;
 
 const getPostsByTag = (tag) => `
-      select * from tags
+      select * FROM tags
        join stories on tags.storyId = stories.id 
        join users on stories.authorId = users.userId 
        join images on stories.coverImageId = images.imageId
        where isPublished = 1 AND tag like '%${tag}%' 
-       order by lastModified desc
+       ORDER BY lastModified DESC
       `;
 
 const getPostsByTitle = (title) => `
-      select * from stories
+      select * FROM stories
        join users on stories.authorId = users.userId 
        join images on stories.coverImageId = images.imageId
        where isPublished = 1 AND title like '%${title}%' 
-       order by stories.id desc
+       ORDER BY stories.id DESC
       `;
 
 const getPostsByAuthor = (author) => `
-      select * from stories
+      select * FROM stories
        join users on stories.authorId = users.userId 
        join images on stories.coverImageId = images.imageId
        where isPublished = 1 AND username like '%${author}%' 
-       order by lastModified desc
+       ORDER BY lastModified DESC
       `;
 
 const insertImage = (fileName) =>
@@ -86,10 +86,10 @@ const insertImage = (fileName) =>
 const insertClap = (postId, userId) => `INSERT INTO claps 
     VALUES (${postId},${userId})`;
 
-const deleteClap = (postId, userId) => `DELETE from claps 
+const deleteClap = (postId, userId) => `DELETE FROM claps 
      WHERE storyId=${postId} AND clappedBy=${userId}`;
 
-const selectClaps = (postId, userId) => `SELECT * from claps 
+const selectClaps = (postId, userId) => `SELECT * FROM claps 
     WHERE storyId=${postId} AND clappedBy=${userId}`;
 
 const addTags = (tags, postId) => {
@@ -97,16 +97,30 @@ const addTags = (tags, postId) => {
   return `INSERT INTO tags VALUES ${values.join(',')}`;
 };
 
-const deletePost = (postId) => `DELETE from stories 
+const deletePost = (postId) => `DELETE FROM stories 
     WHERE id=${postId}`;
 
 const getUser = (username) => `
-    SELECT * from users where username='${username}'`;
+    SELECT * FROM users where username='${username}'`;
 
 const getClapsCount = (postId) => `
-    SELECT count(*) as count from claps WHERE storyId=${postId}`;
+    SELECT count(*) as count FROM claps WHERE storyId=${postId}`;
 
-const selectImages = () => 'select * from images order by imageId desc';
+const selectImages = () => 'SELECT * FROM images ORDER BY imageId DESC';
+
+const followUser = (userId, followerId) => `
+    INSERT INTO followers VALUES (${userId},${followerId})`;
+
+const selectFollowers = (userId, followerId) => `
+    SELECT * FROM followers 
+    WHERE followerId=${followerId} AND userId=${userId}`;
+
+const unfollowUser = (userId, followerId) => `DELETE FROM followers 
+WHERE followerId=${followerId} AND userId=${userId}`;
+
+const getFollowersCount = (userId) => `
+    SELECT count(*) as count FROM followers WHERE userId=${userId}`;
+
 module.exports = {
   addPost,
   getAllStories,
@@ -132,5 +146,9 @@ module.exports = {
   addTags,
   deletePost,
   getUser,
-  getClapsCount
+  getClapsCount,
+  followUser,
+  selectFollowers,
+  unfollowUser,
+  getFollowersCount,
 };

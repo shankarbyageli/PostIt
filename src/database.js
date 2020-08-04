@@ -179,6 +179,20 @@ class Database {
     });
   }
 
+  isFollowing(userId, followerId) {
+    return new Promise((resolve, reject) => {
+      this.db.get(queries.selectFollowers(userId, followerId), (err, row) => {
+        if (err) {
+          reject(err);
+        }
+        if (row) {
+          resolve(true);
+        }
+        resolve(false);
+      });
+    });
+  }
+
   clapOnPost(postId, userId) {
     let queryString = queries.insertClap(postId, userId);
     let status = true;
@@ -201,6 +215,30 @@ class Database {
 
   getClapsCount(postId) {
     return this.get(queries.getClapsCount(postId));
+  }
+
+  getFollowersCount(userId) {
+    return this.get(queries.getFollowersCount(userId));
+  }
+
+  followUser(userId, followerId) {
+    let queryString = queries.followUser(userId, followerId);
+    let status = true;
+    return new Promise((resolve, reject) => {
+      this.isFollowing(userId, followerId).then((row) => {
+        if (row) {
+          queryString = queries.unfollowUser(userId, followerId);
+          status = false;
+        }
+        this.db.run(queryString, (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(status);
+          }
+        });
+      });
+    });
   }
 }
 

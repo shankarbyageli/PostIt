@@ -8,7 +8,11 @@ head
 +generateMenuBar(avatarUrl)
 .user-profile
   .user-info
-    span.username=username
+    .user-name
+      span.username=username
+      if avatarUrl== authorAvatar
+        a.link-text(href=`/edit/${username}`)
+          span.option='Edit profile'
     div
       span.follow-details 45 followers 
       span.follow-details 34 following 

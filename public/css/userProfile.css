@@ -17,7 +17,6 @@
 .username {
   font-size: 23px;
   font-weight: 550;
-  margin: 31px 0px 21px 0px;
 }
 
 .profile-picture {
@@ -76,4 +75,19 @@
   height: 35px;
   border-radius: 50%;
   margin: 21px;
+}
+
+.user-name {
+  margin: 31px 0px 21px 0px;
+  display: flex;
+  align-items: center;
+}
+
+.option {
+  font-size: 11px;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 2px;
+  margin-left: 15px;
+  cursor: pointer;
 }

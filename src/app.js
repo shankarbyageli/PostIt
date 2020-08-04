@@ -42,7 +42,7 @@ app.get('/comments/:blogId', serveComments);
 app.get('/profile/:userId', serveProfile);
 app.get('/profile/:id/followers', getFollowers);
 
-app.use('/coverImage', express.static(`${__dirname}/../database/images`));
+app.use('/pictures', express.static(`${__dirname}/../database/images`));
 app.use(express.static(`${__dirname}/../public`));
 app.use(serveErrorPage);
 

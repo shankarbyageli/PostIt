@@ -342,7 +342,7 @@ const updateProfile = async function (req, res) {
       `${__dirname}/../database/images/${newAvatar.md5}`,
       newAvatar.data
     );
-    newUserDetails.avatarUrl = `/coverImage/${newAvatar.md5}`;
+    newUserDetails.avatarUrl = `/pictures/${newAvatar.md5}`;
   }
   await req.app.locals.db.updateProfile(req.session.userId, newUserDetails);
   req.session = { ...req.session, ...newUserDetails };

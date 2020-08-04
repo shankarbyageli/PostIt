@@ -335,8 +335,17 @@ const getFollowers = async function (req, res, next) {
 
 const updateProfile = async function (req, res) {
   const { displayName } = req.body;
-  await req.app.locals.db.updateProfile(req.session.userId, displayName);
-  req.session.displayName = displayName;
+  const newAvatar = req.files && req.files.file;
+  const newUserDetails = { displayName };
+  if (newAvatar) {
+    fs.writeFileSync(
+      `${__dirname}/../database/images/${newAvatar.md5}`,
+      newAvatar.data
+    );
+    newUserDetails.avatarUrl = `/coverImage/${newAvatar.md5}`;
+  }
+  await req.app.locals.db.updateProfile(req.session.userId, newUserDetails);
+  req.session = { ...req.session, ...newUserDetails };
   req.app.locals.sessions.updateSession(req.cookies.sId, req.session);
   res.redirect(`/profile/${req.session.userId}`);
 };

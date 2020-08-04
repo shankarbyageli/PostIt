@@ -126,8 +126,11 @@ const getFollowers = (userId) => `
     join users on users.userId=followers.userId 
     WHERE followers.userId=${userId}`;
 
-const updateProfile = (userId, displayName) =>
+const updateDisplayName = (userId, displayName) =>
   `UPDATE users SET displayName = '${displayName}' WHERE userId = ${userId}`;
+
+const updateAvatar = (userId, avatarUrl) =>
+  `UPDATE users SET avatarUrl = '${avatarUrl}' WHERE userId = ${userId}`;
 
 module.exports = {
   addPost,
@@ -160,5 +163,6 @@ module.exports = {
   unfollowUser,
   getFollowersCount,
   getFollowers,
-  updateProfile,
+  updateDisplayName,
+  updateAvatar,
 };

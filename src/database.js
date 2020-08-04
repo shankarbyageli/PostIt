@@ -245,8 +245,11 @@ class Database {
     return this.all(queries.getFollowers(userId));
   }
 
-  updateProfile(userId, displayName) {
-    return this.run(queries.updateProfile(userId, displayName));
+  updateProfile(userId, userDetails) {
+    if (userDetails.avatarUrl) {
+      this.run(queries.updateAvatar(userId, userDetails.avatarUrl));
+    }
+    return this.run(queries.updateDisplayName(userId, userDetails.displayName));
   }
 }
 

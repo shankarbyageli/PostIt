@@ -264,11 +264,13 @@ const githubCallback = function (req, res) {
     .then(async (userDetails) => {
       const { userId, username, avatarUrl } = userDetails;
       const sessions = req.app.locals.sessions;
+      const displayName = (await req.app.locals.db.getUserById(userId))
+        .displayName;
       const sId = await sessions.addSession({
         userId,
         username,
         avatarUrl,
-        displayName: username,
+        displayName,
       });
       res.cookie('sId', sId);
       res.redirect('/');
@@ -307,7 +309,7 @@ const followUser = async function (req, res, next) {
 const serveProfileEditor = function (req, res) {
   res.render('editProfile', {
     avatarUrl: req.session.avatarUrl,
-    username: req.session.displayName,
+    displayName: req.session.displayName,
   });
 };
 

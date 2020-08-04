@@ -1,8 +1,8 @@
 INSERT INTO users
-  (username,avatarUrl)
+  (username,avatarUrl,displayName)
 VALUES
-  ('User1', 'https://avatars0.githubusercontent.com/u/58026823?v=4'),
-  ('User2', 'https://avatars0.githubusercontent.com/u/58026823?v=4');
+  ('User1', 'https://avatars0.githubusercontent.com/u/58026823?v=4','User1'),
+  ('User2', 'https://avatars0.githubusercontent.com/u/58026823?v=4','User2');
 
 INSERT INTO stories
   (isPublished, authorId, title, content, lastModified, coverImageId)

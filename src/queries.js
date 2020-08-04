@@ -34,9 +34,9 @@ const tagsQuery = (blogId) => `SELECT * FROM tags where storyId = ${blogId}`;
 const selectUser = (userId) => `select * FROM users where userId = ${userId}`;
 
 const addUser = (userDetails) =>
-  `INSERT INTO users (username, avatarUrl) values (
-      '${userDetails.login}', '${userDetails.avatar_url}')
-    ;`;
+  `INSERT INTO users (username, avatarUrl,displayName) values (
+      '${userDetails.login}', '${userDetails.avatar_url}','${userDetails.login}'
+      );`;
 
 const getComments = (blogId) =>
   `select * FROM comments 

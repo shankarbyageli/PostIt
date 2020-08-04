@@ -16,7 +16,7 @@ const generatePost = function (post) {
       <div class="details">
         <span class="author-name">
           <a class="link-text author_url" href="/profile/${post.userId}">
-          ${post.username}
+          ${post.displayName}
           </a>
         </span>
         <span class="date">${new Date(post.lastModified).toDateString()}</span>

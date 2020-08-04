@@ -16,6 +16,7 @@ const {
   clapOnPost,
   serveDraft,
   followUser,
+  serveProfileEditor,
 } = require('./handlers');
 
 userRouter.use(ensureLogin);
@@ -33,6 +34,8 @@ userRouter.get('/search', serveSearchResults);
 userRouter.get('/delete/:id', deletePost);
 userRouter.post('/clap/:id', clapOnPost);
 userRouter.post('/follow/:id', followUser);
+userRouter.get('/editProfile', serveProfileEditor);
+
 userRouter.use(serveErrorPage);
 
 module.exports = { userRouter };

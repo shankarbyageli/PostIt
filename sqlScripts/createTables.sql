@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS users (
   userId INTEGER PRIMARY KEY AUTOINCREMENT,
   username VARCHAR(50) UNIQUE,
+  displayName VARCHAR(50) ,
   avatarUrl TEXT
 );
 

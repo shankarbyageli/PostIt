@@ -31,7 +31,7 @@ const serveHomepage = async function (req, res) {
     res.render('dashBoard', {
       posts: await req.app.locals.db.getLatestPosts(10),
       avatarUrl: req.session.avatarUrl,
-      username: req.session.username,
+      username: req.session.displayName,
       takeMoment: lib.takeMoment,
     });
   } else {
@@ -169,8 +169,8 @@ const serveProfile = async function (req, res, next) {
     posts,
     avatarUrl: req.session ? req.session.avatarUrl : false,
     authorAvatar: userDetails.avatarUrl,
-    username: userDetails.username,
     userId: userDetails.userId,
+    username: userDetails.displayName,
     takeMoment: lib.takeMoment,
   });
 };
@@ -203,7 +203,7 @@ const serveComments = async function (req, res, next) {
     blogId,
   };
   if (req.session) {
-    renderOptions.currentUser = req.session.username;
+    renderOptions.currentUser = req.session.displayName;
     renderOptions.avatarUrl = req.session.avatarUrl;
   }
   res.render('comments', renderOptions);
@@ -264,7 +264,12 @@ const githubCallback = function (req, res) {
     .then(async (userDetails) => {
       const { userId, username, avatarUrl } = userDetails;
       const sessions = req.app.locals.sessions;
-      const sId = await sessions.addSession({ userId, username, avatarUrl });
+      const sId = await sessions.addSession({
+        userId,
+        username,
+        avatarUrl,
+        displayName: username,
+      });
       res.cookie('sId', sId);
       res.redirect('/');
     });
@@ -299,6 +304,13 @@ const followUser = async function (req, res, next) {
   res.send({ followed: status, followersCount });
 };
 
+const serveProfileEditor = function (req, res) {
+  res.render('editProfile', {
+    avatarUrl: req.session.avatarUrl,
+    username: req.session.displayName,
+  });
+};
+
 module.exports = {
   serveHomepage,
   signIn,
@@ -321,4 +333,5 @@ module.exports = {
   clapOnPost,
   serveDraft,
   followUser,
+  serveProfileEditor,
 };

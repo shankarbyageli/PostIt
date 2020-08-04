@@ -44,7 +44,7 @@ class Database {
         if (err) {
           reject(err);
         }
-        resolve(this.lastID);
+        resolve(this.lastID); // eslint-disable-line
       });
     });
   }
@@ -63,7 +63,7 @@ class Database {
         if (tags.length) {
           await dbInstance.addTags(tags, postId);
         }
-        const lastId = this.lastID;
+        const lastId = this.lastID; // eslint-disable-line
         dbInstance.db.run(queries.publishPost(lastId, postId),
           (err) => {
             if (err) {

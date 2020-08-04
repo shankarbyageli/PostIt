@@ -19,6 +19,6 @@ form(action="/user/updateProfile" method="post" enctype='multipart/form-data')
         button.profile-action(type=submit) save
         a.link-text(href=`/profile/${userId}`)
           span.profile-action.cancel-button cancel
-    input#file(type='file' name='file' onchange='renderImage(event)' style="display:none" required)
+    input#file(type='file' name='file' onchange='renderImage(event)' style="display:none")
     label#cover-image.profile-picture(for='file')
       img.profile-picture(src=avatarUrl alt='cricket')

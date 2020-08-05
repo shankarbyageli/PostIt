@@ -22,7 +22,7 @@ head
         img.profile(src=userDetails.avatarUrl)
         .details
           a(href=`/profile/${userDetails.userId}`).author-name=userDetails.displayName
-          span.date=takeMoment(post.lastModified)
+          span.date=new Date(post.lastModified).toDateString()
       .title.title-text
         a.link-text(href=`/blog/${post.id}`)=post.title
       .data=JSON.parse(post.content).blocks[0].data.text

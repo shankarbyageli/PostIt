@@ -140,7 +140,7 @@ const getFollowing = (userId) => `
 const getClappedPosts = (userId) =>
   `SELECT * FROM claps
     join stories on stories.id=claps.storyId
-    join users on users.userId=claps.clappedBy
+    join users on users.userId=stories.authorId
     where clappedBy=${userId}
   `;
 

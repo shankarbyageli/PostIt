@@ -177,3 +177,10 @@
   margin: 20px auto;
   color: #808080;
 }
+
+.separator {
+  border-width: 0px;
+  background-color: lightgrey;
+  width: 58%;
+  height: 1px;
+}

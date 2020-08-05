@@ -181,6 +181,7 @@ const serveProfile = async function (req, res, next) {
     req.session.userId
   );
   const posts = await req.app.locals.db.getUsersPosts(userId, 1);
+
   res.render('userProfile', {
     isFollowing,
     followersCount,
@@ -325,52 +326,41 @@ const serveProfileEditor = function (req, res) {
   });
 };
 
+const getFollowDetails = async function (req, id, displayName) {
+  const followersDetails = await getFollowCount(
+    req.app.locals.db,
+    id,
+    req.session.userId
+  );
+  let followers = await req.app.locals.db.getFollowers(id);
+  const following = await req.app.locals.db.getFollowing(id);
+  let header = `${displayName} is followed by`;
+  if (req.url.includes('following')) {
+    header = `${displayName} follows`;
+    followers = following;
+  }
+  return { followersDetails, followers, header };
+};
+
 const getFollowers = async function (req, res, next) {
   const { id } = req.params;
   const userDetails = await req.app.locals.db.getUserById(id);
   if (!userDetails) {
     return next();
   }
-  const { followersCount, followingCount, isFollowing } = await getFollowCount(
-    req.app.locals.db,
+  const renderOptions = await getFollowDetails(
+    req,
     id,
-    req.session.userId
+    userDetails.displayName
   );
-  const header = `${userDetails.displayName} is followed by`;
-  const followers = await req.app.locals.db.getFollowers(id);
+
   res.render('follower', {
-    isFollowing,
-    followersCount,
-    followingCount,
-    header,
-    followers,
+    followersDetails: renderOptions.followersDetails,
+    header: renderOptions.header,
+    followers: renderOptions.followers,
     userDetails,
     avatarUrl: req.session ? req.session.avatarUrl : false,
     userId: req.session.userId,
-  });
-};
-
-const getFollowing = async function (req, res, next) {
-  const { id } = req.params;
-  const userDetails = await req.app.locals.db.getUserById(id);
-  if (!userDetails) {
-    return next();
-  }
-  const { followersCount, followingCount, isFollowing } = await getFollowCount(
-    req.app.locals.db,
-    id,
-    req.session.userId
-  );
-  const header = `${userDetails.displayName} follows`;
-  const followers = await req.app.locals.db.getFollowing(id);
-  res.render('follower', {
-    isFollowing,
-    followersCount,
-    followingCount,
-    header,
-    followers,
-    userDetails,
-    avatarUrl: req.session ? req.session.avatarUrl : false,
   });
 };
 
@@ -416,6 +406,5 @@ module.exports = {
   serveProfileEditor,
   getFollowers,
   updateProfile,
-  getFollowing,
   isValidRequest,
 };

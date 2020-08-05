@@ -25,6 +25,8 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
+  position: relative;
+  cursor: pointer;
 }
 
 .follow-details {
@@ -123,4 +125,15 @@
 
 #follow-text {
   margin-left: 21%;
+}
+
+.svgIcon {
+  fill: grey;
+  position: absolute;
+  left: 24%;
+  top: 24%;
+}
+
+.profile-picture:hover .svgIcon {
+  fill: rgba(255, 255, 255, 0.65);
 }

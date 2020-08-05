@@ -9,7 +9,7 @@ const isValidRequest = function (req, res, next) {
   }
   res.render('error', {
     avatarUrl: req.session ? req.session.avatarUrl : false,
-    userId: req.session.userId,
+    userId: req.session ? req.session.userId : false,
   });
 };
 
@@ -60,6 +60,7 @@ const serveDraft = async function (req, res, next) {
       titleText: response.title,
       avatarUrl: req.session.avatarUrl,
       id: response.id,
+      userId: req.session.userId,
     });
   } else {
     next();
@@ -168,20 +169,17 @@ const getFollowCount = async function (db, userId, followerId) {
 };
 
 const serveProfile = async function (req, res, next) {
-  const { userId } = req.params;
-  if (!+userId) {
-    return next();
-  }
-  const userDetails = await req.app.locals.db.getUserById(userId);
+  const { id } = req.params;
+  const userDetails = await req.app.locals.db.getUserById(id);
   if (!userDetails) {
     return next();
   }
   const { followersCount, followingCount, isFollowing } = await getFollowCount(
     req.app.locals.db,
-    userId,
+    id,
     req.session.userId
   );
-  const posts = await req.app.locals.db.getUsersPosts(userId, 1);
+  const posts = await req.app.locals.db.getUsersPosts(id, 1);
 
   res.render('userProfile', {
     isFollowing,
@@ -210,16 +208,16 @@ const serveSearchResults = async function (req, res) {
 };
 
 const serveComments = async function (req, res, next) {
-  const { blogId } = req.params;
-  const blog = await req.app.locals.db.getPost(blogId, 1);
+  const { id } = req.params;
+  const blog = await req.app.locals.db.getPost(id, 1);
   if (!blog) {
     return next();
   }
   const renderOptions = {
-    comments: await req.app.locals.db.getComments(blogId),
+    comments: await req.app.locals.db.getComments(id),
     titleText: blog.title,
     takeMoment: lib.takeMoment,
-    blogId,
+    blogId: id,
   };
   if (req.session) {
     renderOptions.userId = req.session.userId;
@@ -313,9 +311,14 @@ const clapOnPost = async function (req, res) {
 
 const followUser = async function (req, res) {
   const { id } = req.params;
-  const status = await req.app.locals.db.followUser(id, req.session.userId);
-  const followersCount = (await req.app.locals.db.getFollowersCount(id)).count;
-  res.send({ followed: status, followersCount });
+  if (+id !== req.session.userId) {
+    const status = await req.app.locals.db.followUser(id, req.session.userId);
+    const followersCount = (await req.app.locals.db.getFollowersCount(id))
+      .count;
+    res.send({ followed: status, followersCount });
+  } else {
+    res.status(400).send();
+  }
 };
 
 const serveProfileEditor = function (req, res) {

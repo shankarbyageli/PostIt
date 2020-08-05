@@ -40,8 +40,8 @@ app.get('/', serveHomepage);
 app.get('/signIn', signIn);
 app.get('/blog/:id', isValidRequest, getBlog);
 app.get('/callback', githubCallback);
-app.get('/comments/:blogId', serveComments);
-app.get('/profile/:userId', ensureLogin, serveProfile);
+app.get('/comments/:id', isValidRequest, serveComments);
+app.get('/profile/:id', ensureLogin, isValidRequest, serveProfile);
 app.get('/profile/:id/followers', ensureLogin, isValidRequest, getFollowers);
 app.get('/profile/:id/following', ensureLogin, isValidRequest, getFollowers);
 

@@ -127,6 +127,7 @@
   text-align: center;
   color: red;
   margin-top: 13px;
+  position: relative;
 }
 
 .cross-button {

@@ -441,6 +441,14 @@ describe('POST /follow/:id', () => {
       .expect(/false/)
       .expect(200, done);
   });
+
+  it('should give bad request when the userId and followerId are same', function (done) {
+    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
+    request(app)
+      .post('/user/follow/1')
+      .set('Cookie', 'sId=1234')
+      .expect(400, done);
+  });
 });
 
 describe('GET /profile/:id/followers', function () {

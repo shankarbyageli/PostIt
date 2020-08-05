@@ -3,4 +3,5 @@ node_modules/
 .DS_Store
 database/*.db
 database/images/*
-data/
+data/*
+shell_scripts/setDb.sh

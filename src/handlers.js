@@ -105,6 +105,7 @@ const servePublishedPosts = async function (req, res) {
   res.render('posts', {
     posts: published,
     avatarUrl: req.session.avatarUrl,
+    userId: req.session.userId,
     type: 1,
     takeMoment: lib.takeMoment,
   });
@@ -379,6 +380,12 @@ const updateProfile = async function (req, res) {
   res.redirect(`/profile/${req.session.userId}`);
 };
 
+const serveClappedPosts = async function (req, res) {
+  const { userId } = req.params;
+  const posts = await req.app.locals.db.getClappedPosts(userId);
+  res.send(posts);
+};
+
 module.exports = {
   serveHomepage,
   signIn,
@@ -405,4 +412,5 @@ module.exports = {
   getFollowers,
   updateProfile,
   isValidRequest,
+  serveClappedPosts,
 };

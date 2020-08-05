@@ -64,13 +64,12 @@ class Database {
           await dbInstance.addTags(tags, postId);
         }
         const lastId = this.lastID; // eslint-disable-line
-        dbInstance.db.run(queries.publishPost(lastId, postId),
-          (err) => {
-            if (err) {
-              reject(err);
-            }
-            resolve(true);
-          });
+        dbInstance.db.run(queries.publishPost(lastId, postId), (err) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(true);
+        });
       });
     });
   }
@@ -272,6 +271,9 @@ class Database {
 
   getFollowing(userId) {
     return this.all(queries.getFollowing(userId));
+  }
+  getClappedPosts(userId) {
+    return this.all(queries.getClappedPosts(userId));
   }
 }
 

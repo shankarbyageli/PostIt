@@ -16,3 +16,39 @@ const follow = function (userId) {
     null
   );
 };
+
+const postHtml = function (post) {
+  return `
+  <div class="post">
+    <div class="user-details">
+      <img class="profile" src=${post.avatarUrl}/>
+      <div class="details">
+        <span class="author-name">${post.displayName}</span>
+        <span class="date">${new Date(post.lastModified).toDateString()}</span>
+      </div>
+    </div>
+    <div class="title title-text">
+      <a class="link-text" href="/blog/${post.id}">${post.title}</a>
+    </div>
+    <div class="data">${JSON.parse(post.content).blocks[0].data.text}</div>
+</div>`;
+};
+
+const renderResults = function (posts) {
+  const container = document.querySelector('.all-posts');
+  let html = '';
+  posts.forEach((post) => {
+    html += postHtml(post);
+  });
+  if (html) {
+    container.innerHTML = html;
+  } else {
+    container.innerHTML = '<span class="message">No clapped posts yet</span>';
+  }
+};
+
+const getClappedPosts = function (userId) {
+  document.getElementById('posts').classList.remove('selected');
+  document.getElementById('clapped').classList.add('selected');
+  sendReq('GET', `/user/clappedPosts/${userId}`, renderResults, null);
+};

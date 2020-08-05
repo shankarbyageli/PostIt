@@ -172,3 +172,8 @@
 .follow-text {
   text-decoration: underline;
 }
+
+.message {
+  margin: 20px auto;
+  color: #808080;
+}

@@ -19,6 +19,7 @@ const {
   serveProfileEditor,
   updateProfile,
   isValidRequest,
+  serveClappedPosts,
 } = require('./handlers');
 
 userRouter.use(ensureLogin);
@@ -38,6 +39,7 @@ userRouter.get('/editProfile', serveProfileEditor);
 userRouter.post('/clap/:id', isValidRequest, clapOnPost);
 userRouter.post('/follow/:id', isValidRequest, followUser);
 userRouter.post('/updateProfile', updateProfile);
+userRouter.get('/clappedPosts/:userId', serveClappedPosts);
 
 userRouter.use(serveErrorPage);
 

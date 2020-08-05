@@ -389,6 +389,11 @@ const serveClappedPosts = async function (req, res) {
   res.send(posts);
 };
 
+const getRespondedPosts = function (req, res) {
+  const { id } = req.params;
+  res.end(id);
+};
+
 module.exports = {
   serveHomepage,
   signIn,
@@ -416,4 +421,5 @@ module.exports = {
   updateProfile,
   isValidRequest,
   serveClappedPosts,
+  getRespondedPosts,
 };

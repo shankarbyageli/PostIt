@@ -18,6 +18,7 @@ const {
   getFollowers,
   ensureLogin,
   isValidRequest,
+  getRespondedPosts,
 } = require('./handlers');
 
 const app = express();
@@ -44,6 +45,12 @@ app.get('/comments/:id', isValidRequest, serveComments);
 app.get('/profile/:id', ensureLogin, isValidRequest, serveProfile);
 app.get('/profile/:id/followers', ensureLogin, isValidRequest, getFollowers);
 app.get('/profile/:id/following', ensureLogin, isValidRequest, getFollowers);
+app.get(
+  '/profile/:id/responses',
+  ensureLogin,
+  isValidRequest,
+  getRespondedPosts
+);
 
 app.use('/pictures', express.static(`${__dirname}/../database/images`));
 app.use(express.static(`${__dirname}/../public`));

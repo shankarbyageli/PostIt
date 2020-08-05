@@ -13,6 +13,9 @@ head
   a.link-text(href=`/profile/${userDetails.userId}`)
     span#posts.profile-menu.selected='Profile'
   span#clapped.profile-menu(onclick=`getClappedPosts(${userDetails.userId})`)='Claps'
+  a.link-text(href=`#`)
+    span#posts.profile-menu='Responses'
+
 .all-posts
   if posts.length == 0
     span.message='No posts yet'

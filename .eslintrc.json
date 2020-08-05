@@ -95,7 +95,7 @@
   "overrides": [
     {
       "files": [
-        "test*.js"
+        "test/*.js"
       ],
       "rules": {
         "max-len": "warn",

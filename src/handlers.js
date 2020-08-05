@@ -217,7 +217,6 @@ const serveComments = async function (req, res, next) {
   const renderOptions = {
     comments: await req.app.locals.db.getComments(blogId),
     titleText: blog.title,
-
     takeMoment: lib.takeMoment,
     blogId,
   };
@@ -253,7 +252,7 @@ const signIn = function (req, res) {
   }
 };
 
-const getUserDetail = (tokenDetails) => {
+const fetchUserDetails = (tokenDetails) => {
   const token = tokenDetails.split('&')[0].split('=')[1];
   const options = {
     hostname: 'api.github.com',
@@ -280,7 +279,7 @@ const githubCallback = function (req, res) {
   };
   lib
     .makeRequest(url, params)
-    .then(getUserDetail)
+    .then(fetchUserDetails)
     .then((details) => lib.addUserDetails(req, details))
     .then(async (userDetails) => {
       const { userId, username, avatarUrl } = userDetails;

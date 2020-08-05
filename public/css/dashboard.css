@@ -25,6 +25,8 @@
 .cover-image-post {
   width: 20%;
   height: 140px;
+  overflow: hidden;
+  object-fit: cover;
 }
 
 .user-details {

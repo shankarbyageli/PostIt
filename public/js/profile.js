@@ -23,7 +23,9 @@ const postHtml = function (post) {
     <div class="user-details">
       <img class="profile" src=${post.avatarUrl}/>
       <div class="details">
-        <span class="author-name">${post.displayName}</span>
+        <a class="author-name" href="/profile/${post.userId}">
+          ${post.displayName}
+        </a>
         <span class="date">${new Date(post.lastModified).toDateString()}</span>
       </div>
     </div>

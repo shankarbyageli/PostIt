@@ -80,7 +80,7 @@ body {
 .popup .drop-down-container::before {
   content: '';
   position: absolute;
-  bottom: 92%;
+  bottom: 94%;
   left: 45%;
   border-width: 8px;
   border-style: solid;

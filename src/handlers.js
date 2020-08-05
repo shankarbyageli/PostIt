@@ -9,6 +9,7 @@ const isValidRequest = function (req, res, next) {
   }
   res.render('error', {
     avatarUrl: req.session ? req.session.avatarUrl : false,
+    userId: req.session.userId,
   });
 };
 
@@ -42,6 +43,7 @@ const serveHomepage = async function (req, res) {
       posts: await req.app.locals.db.getLatestPosts(10),
       avatarUrl: req.session.avatarUrl,
       username: req.session.displayName,
+      userId: req.session.userId,
       takeMoment: lib.takeMoment,
     });
   } else {
@@ -69,6 +71,7 @@ const serveEditor = async function (req, res) {
     data: '{}',
     titleText: '',
     avatarUrl: req.session.avatarUrl,
+    userId: req.session.userId,
     id: -1,
   });
 };
@@ -88,6 +91,7 @@ const serveDraftedPosts = async function (req, res) {
   res.render('posts', {
     posts: drafts,
     avatarUrl: req.session.avatarUrl,
+    userId: req.session.userId,
     type: 0,
     takeMoment: lib.takeMoment,
   });
@@ -145,6 +149,7 @@ const getBlog = async function (req, res, next) {
     res.render('readBlog', {
       post: response,
       avatarUrl: req.session ? req.session.avatarUrl : false,
+      userId: req.session.userId,
       coverImage: postDetails.imagePath,
       tags: postDetails.tags,
       clap,
@@ -183,6 +188,7 @@ const serveProfile = async function (req, res, next) {
     userDetails,
     posts,
     avatarUrl: req.session ? req.session.avatarUrl : false,
+    userId: req.session.userId,
     takeMoment: lib.takeMoment,
   });
 };
@@ -215,7 +221,7 @@ const serveComments = async function (req, res, next) {
     blogId,
   };
   if (req.session) {
-    renderOptions.userId = req.session.user;
+    renderOptions.userId = req.session.userId;
     renderOptions.currentUser = req.session.displayName;
     renderOptions.avatarUrl = req.session.avatarUrl;
   }
@@ -233,6 +239,7 @@ const serveErrorPage = function (req, res) {
   res.status(404);
   res.render('error', {
     avatarUrl: req.session ? req.session.avatarUrl : false,
+    userId: req.session.userId,
   });
 };
 
@@ -339,6 +346,7 @@ const getFollowers = async function (req, res, next) {
     followers,
     userDetails,
     avatarUrl: req.session ? req.session.avatarUrl : false,
+    userId: req.session.userId,
   });
 };
 

@@ -352,7 +352,6 @@ const getFollowers = async function (req, res, next) {
     id,
     userDetails.displayName
   );
-
   res.render('follower', {
     followersDetails: renderOptions.followersDetails,
     header: renderOptions.header,

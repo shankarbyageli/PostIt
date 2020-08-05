@@ -9,6 +9,9 @@ head
   title PostIt | Profile
 +generateMenuBar(avatarUrl,userId)
 +getProfileHeader(userDetails,avatarUrl,followersCount, followingCount,isFollowing)
+.profile-menubar
+  span.profile-menu.selected='Profile'
+  span.profile-menu='Claps'
 .all-posts
   each post in posts
     .post

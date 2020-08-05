@@ -5,7 +5,7 @@
   margin: 50px auto auto;
   justify-content: space-around;
   padding-bottom: 45px;
-  border-bottom: solid 0.5px #c2bfbf;
+  /* border-bottom: solid 0.5px #c2bfbf; */
 }
 
 .user-info {
@@ -136,4 +136,28 @@
 
 .profile-picture:hover .svgIcon {
   fill: rgba(255, 255, 255, 0.65);
+}
+
+.profile-menubar {
+  width: 58%;
+  border-bottom: solid 0.5px #c2bfbf;
+  margin: 0px auto;
+  height: 23px;
+}
+
+.profile-menu {
+  cursor: pointer;
+  font-size: 14px;
+  margin: 2px 20px 2px 0px;
+  color: rgba(0, 0, 0, 0.6);
+  padding-bottom: 6px;
+}
+
+.profile-menu:hover {
+  color: black;
+}
+
+.selected {
+  border-bottom: 1px solid black;
+  color: black;
 }

@@ -149,7 +149,7 @@ const getBlog = async function (req, res, next) {
     res.render('readBlog', {
       post: response,
       avatarUrl: req.session ? req.session.avatarUrl : false,
-      userId: req.session.userId,
+      userId: req.session ? req.session.userId : false,
       coverImage: postDetails.imagePath,
       tags: postDetails.tags,
       clap,
@@ -239,7 +239,7 @@ const serveErrorPage = function (req, res) {
   res.status(404);
   res.render('error', {
     avatarUrl: req.session ? req.session.avatarUrl : false,
-    userId: req.session.userId,
+    userId: req.session ? req.session.userId : false,
   });
 };
 

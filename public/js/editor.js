@@ -40,6 +40,7 @@ const addTag = function (event) {
   if (tag && event.keyCode === 13) {
     event.preventDefault();
     addNewTag(tag);
+    tagElement.scrollIntoView();
     tagElement.value = '';
   }
 };

@@ -40,8 +40,8 @@ form#preview-form
       input#file(type='file' name='file' onchange='renderImage(event)' required)
       label#cover-image(for='file')
         span#instruction='Add cover image here'
-      span Add or change tags (up to 4)
+      span Add or change tags
     .actions
-      #tag
+      #tag(scrollbar-width-auto)
         input#tag-input(type='text' onkeydown='addTag(event)')
       button.action-button#preview-publish(type='submit') Publish

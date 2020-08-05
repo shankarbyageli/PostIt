@@ -10,9 +10,9 @@ head
 +generateMenuBar(avatarUrl,userId)
 +getProfileHeader(userDetails,avatarUrl,followersCount, followingCount,isFollowing)
 .profile-menubar
-  a.link-text(href=`/profile/${userId}`)
+  a.link-text(href=`/profile/${userDetails.userId}`)
     span#posts.profile-menu.selected='Profile'
-  span#clapped.profile-menu(onclick=`getClappedPosts(${userId})`)='Claps'
+  span#clapped.profile-menu(onclick=`getClappedPosts(${userDetails.userId})`)='Claps'
 .all-posts
   if posts.length == 0
     span.message='No posts yet'

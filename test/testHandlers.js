@@ -308,7 +308,7 @@ describe('GET /user/posts/published', () => {
   });
 });
 
-describe('GET /profile/id', function () {
+describe('GET /user/profile/id', function () {
   afterEach(() => {
     app.locals.sessions = new Sessions({});
   });
@@ -316,7 +316,7 @@ describe('GET /profile/id', function () {
   it('should give the details of user given id', function (done) {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/profile/1')
+      .get('/user/profile/1')
       .set('Cookie', 'sId=1234')
       .expect(/User1/)
       .expect(/Read this blog/, done);
@@ -325,7 +325,7 @@ describe('GET /profile/id', function () {
   it('should give error page if user does not exist', function (done) {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/profile/300')
+      .get('/user/profile/300')
       .set('Cookie', 'sId=1234')
       .expect(404, done);
   });
@@ -451,7 +451,7 @@ describe('POST /follow/:id', () => {
   });
 });
 
-describe('GET /profile/:id/followers', function () {
+describe('GET /user/profile/:id/followers', function () {
   afterEach(() => {
     app.locals.sessions = new Sessions({});
   });
@@ -459,7 +459,7 @@ describe('GET /profile/:id/followers', function () {
   it('should give the follower details of given user id', function (done) {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/profile/2/followers')
+      .get('/user/profile/2/followers')
       .set('Cookie', 'sId=1234')
       .expect(/1/)
       .expect(/followers/)
@@ -469,13 +469,13 @@ describe('GET /profile/:id/followers', function () {
   it('should give error page if user does not exist', function (done) {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/profile/300/followers')
+      .get('/user/profile/300/followers')
       .set('Cookie', 'sId=1234')
       .expect(404, done);
   });
 });
 
-describe('GET /profile/:id/following', function () {
+describe('GET /user/profile/:id/following', function () {
   afterEach(() => {
     app.locals.sessions = new Sessions({});
   });
@@ -483,7 +483,7 @@ describe('GET /profile/:id/following', function () {
   it('should give the following details of given user id', function (done) {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/profile/1/following')
+      .get('/user/profile/1/following')
       .set('Cookie', 'sId=1234')
       .expect(/1/)
       .expect(/following/)
@@ -493,7 +493,7 @@ describe('GET /profile/:id/following', function () {
   it('should give error page if user does not exist', function (done) {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/profile/300/following')
+      .get('/user/profile/300/following')
       .set('Cookie', 'sId=1234')
       .expect(404, done);
   });

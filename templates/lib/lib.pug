@@ -4,7 +4,7 @@ mixin generatePop(avatarUrl,userId)
     #drop-down.drop-down-container
       a.menu(href='/user/editor') Write new post
       a.menu(href='/user/posts/drafts') My posts
-      a.menu(href=`/profile/${userId}`) Profile
+      a.menu(href=`/user/profile/${userId}`) Profile
       a.menu(href='/user/signOut') Sign out
 
 mixin generateMenuBar(avatarUrl,userId)
@@ -32,10 +32,10 @@ mixin getProfileHeader(userDetails,avatarUrl, followersCount, followingCount,isF
           a.link-text(onclick=`follow(${userDetails.userId})`)
             span#follow.option=`${isFollowing ? 'Following' : 'Follow'}`
       div
-        a(href=`/profile/${userDetails.userId}/followers`)#followers.follow-details
+        a(href=`/user/profile/${userDetails.userId}/followers`)#followers.follow-details
           span.count=followersCount
           span.follow-text Followers 
-        a(href=`/profile/${userDetails.userId}/following`)#following.follow-details
+        a(href=`/user/profile/${userDetails.userId}/following`)#following.follow-details
           span.count=followingCount
           span.follow-text Following
     img.profile-picture(src=userDetails.avatarUrl)

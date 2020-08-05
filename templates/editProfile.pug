@@ -14,10 +14,10 @@ form(action="/user/updateProfile" method="post" enctype='multipart/form-data')
   .user-profile
     .user-info
       .user-name
-        input.username(value=displayName name="displayName" spellcheck="false"  onfocus="this.select()" autofocus required)
+        input.username(value=displayName name="displayName" spellcheck="false" onfocus="this.select()" autofocus required)
       .user-name
         button.profile-action(type=submit) save
-        a.link-text(href=`/profile/${userId}`)
+        a.link-text(href=`/user/profile/${userId}`)
           span.profile-action.cancel-button cancel
     input#file(type='file' name='file' onchange='renderImage(event)' style="display:none")
     label#cover-image.profile-picture(for='file')

@@ -380,7 +380,7 @@ const updateProfile = async function (req, res) {
   await req.app.locals.db.updateProfile(req.session.userId, newUserDetails);
   req.session = { ...req.session, ...newUserDetails };
   req.app.locals.sessions.updateSession(req.cookies.sId, req.session);
-  res.redirect(`/profile/${req.session.userId}`);
+  res.redirect(`/user/profile/${req.session.userId}`);
 };
 
 const serveClappedPosts = async function (req, res) {

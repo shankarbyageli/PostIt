@@ -28,6 +28,6 @@ head
           img.author-profile.profile(src=post.avatarUrl)
           .details
             span.author-name
-              a.link-text.author-url( href=`/profile/${post.userId}`)=post.displayName
+              a.link-text.author-url( href=`/user/profile/${post.userId}`)=post.displayName
             span.date=takeMoment(post.lastModified)
       img.cover-image-post(src=`/pictures/${post.imagePath}` alt='Cover image')

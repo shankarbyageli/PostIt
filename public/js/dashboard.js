@@ -15,7 +15,7 @@ const generatePost = function (post) {
       <img class="author-profile profile" src=${post.avatarUrl}>
       <div class="details">
         <span class="author-name">
-          <a class="link-text author-url" href="/profile/${post.userId}">
+          <a class="link-text author-url" href="/user/profile/${post.userId}">
           ${post.displayName}
           </a>
         </span>

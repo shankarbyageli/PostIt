@@ -3,7 +3,7 @@ include ./lib/lib.pug
 head
   meta(charset='UTF-8')
   script(src="/js/request.js")
-  script(src="/js/profile.js")
+  script(src="/js/user/profile.js")
   link(rel='stylesheet' href='/css/userProfile.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt | User profile
@@ -19,4 +19,4 @@ hr.separator
       .user-details
         img.profile(src=follower.avatarUrl)
         .details
-          a(href=`/profile/${follower.userId}`).author-name=follower.displayName
+          a(href=`/user/profile/${follower.userId}`).author-name=follower.displayName

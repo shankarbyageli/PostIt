@@ -51,6 +51,7 @@ const renderImage = function (event) {
     container.style.content = `url(${reader.result})`;
   };
   if (file) {
+    document.getElementById('preview-error').innerText = '';
     reader.readAsDataURL(file);
   }
 };

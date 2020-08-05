@@ -61,7 +61,7 @@
 #preview-publish {
   border-radius: 5px;
   font-size: 17px;
-  margin: 0 15px;
+  margin: 4px 15px;
   height: 39px;
   width: 15%;
 }
@@ -71,26 +71,37 @@
   width: 85%;
   display: flex;
   justify-content: flex-start;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
+  border: solid 1px gray;
+  padding: 4px 5px;
+  border-radius: 5px;
+  overflow: scroll;
+  right: 0;
+  overscroll-behavior: auto contain;
 }
 
 #tag input {
   height: 39px;
   max-width: 100%;
   flex-grow: 1;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 15px;
 }
 
 .added-tag {
-  height: 30px;
+  height: 24px;
   width: fit-content;
   display: flex;
   flex-direction: row;
   background-color: grey;
   color: white;
-  padding: 10px 9px 0px 9px;
+  padding: 6px 9px 0px 9px;
   text-align: left;
-  margin: 0 5px;
+  margin: 3px 5px;
   border-radius: 5px;
+  font-size: 14px;
 }
 
 #exit-icon {

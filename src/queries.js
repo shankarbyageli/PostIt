@@ -141,7 +141,14 @@ const getClappedPosts = (userId) =>
   `SELECT * FROM claps
     join stories on stories.id=claps.storyId
     join users on users.userId=stories.authorId
-    where clappedBy=${userId}
+    where clappedBy=${userId};
+  `;
+
+const getCommentedPosts = (userId) =>
+  `SELECT * from comments 
+    join stories on  stories.id=comments.commentOn
+    join users on users.userId=stories.authorId
+    WHERE commentBy=${userId}; 
   `;
 
 module.exports = {
@@ -179,4 +186,5 @@ module.exports = {
   updateAvatar,
   getFollowing,
   getClappedPosts,
+  getCommentedPosts,
 };

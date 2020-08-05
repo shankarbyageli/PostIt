@@ -165,10 +165,10 @@
 .count {
   margin-right: 5px;
   font-size: 17px;
-  color: black;
+  color: rgb(68, 66, 66);
 }
 
-.follow-text {
+.follow-text:hover {
   text-decoration: underline;
 }
 
@@ -182,4 +182,10 @@
   background-color: lightgrey;
   width: 58%;
   height: 1px;
+}
+
+.comment-title {
+  width: 90%;
+  margin-left: 20px;
+  padding: 10px 19px;
 }

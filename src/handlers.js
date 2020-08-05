@@ -390,9 +390,10 @@ const serveClappedPosts = async function (req, res) {
   res.send(posts);
 };
 
-const getRespondedPosts = function (req, res) {
+const getRespondedPosts = async function (req, res) {
   const { id } = req.params;
-  res.end(id);
+  const comments = await req.app.locals.db.getCommentedPosts(id);
+  res.send(comments);
 };
 
 module.exports = {

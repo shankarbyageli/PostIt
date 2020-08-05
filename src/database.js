@@ -272,8 +272,13 @@ class Database {
   getFollowing(userId) {
     return this.all(queries.getFollowing(userId));
   }
+
   getClappedPosts(userId) {
     return this.all(queries.getClappedPosts(userId));
+  }
+
+  getCommentedPosts(userId) {
+    return this.all(queries.getCommentedPosts(userId));
   }
 }
 

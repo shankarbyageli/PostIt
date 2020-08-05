@@ -2,8 +2,8 @@ include ./lib/lib.pug
 
 head
   meta(charset='UTF-8')
-  script(src="/js/request.js")
-  script(src="/js/user/profile.js")
+  script(src="/user/js/request.js")
+  script(src="/user/js/profile.js")
   link(rel='stylesheet' href='/css/userProfile.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt | Profile
@@ -13,8 +13,7 @@ head
   a.link-text(href=`/user/profile/${userDetails.userId}`)
     span#posts.profile-menu.selected='Profile'
   span#clapped.profile-menu(onclick=`getClappedPosts(${userDetails.userId})`)='Claps'
-  a.link-text(href=`#`)
-    span#posts.profile-menu='Responses'
+  span#comments.profile-menu(onclick=`getComments(${userDetails.userId})`)='Comments'
 
 .all-posts
   if posts.length == 0

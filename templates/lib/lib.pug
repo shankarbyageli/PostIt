@@ -32,8 +32,12 @@ mixin getProfileHeader(userDetails,avatarUrl, followersCount, followingCount,isF
           a.link-text(onclick=`follow(${userDetails.userId})`)
             span#follow.option=`${isFollowing ? 'Following' : 'Follow'}`
       div
-        a(href=`/profile/${userDetails.userId}/followers`)#followers.follow-details=`${followersCount} followers` 
-        a(href=`/profile/${userDetails.userId}/following`)#following.follow-details=`${followingCount} following`
+        a(href=`/profile/${userDetails.userId}/followers`)#followers.follow-details
+          span.count=followersCount
+          span.follow-text Followers 
+        a(href=`/profile/${userDetails.userId}/following`)#following.follow-details
+          span.count=followingCount
+          span.follow-text Following
     img.profile-picture(src=userDetails.avatarUrl)
 
 head

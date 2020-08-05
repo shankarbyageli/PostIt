@@ -18,5 +18,4 @@ head
       .user-details
         img.profile(src=follower.avatarUrl)
         .details
-          span.author-name=follower.username
-          span.follow-option follow
+          a(href=`/profile/${follower.userId}`).author-name=follower.username

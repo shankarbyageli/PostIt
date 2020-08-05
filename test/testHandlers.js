@@ -453,7 +453,8 @@ describe('GET /profile/:id/followers', function () {
     request(app)
       .get('/profile/2/followers')
       .set('Cookie', 'sId=1234')
-      .expect(/1 followers/)
+      .expect(/1/)
+      .expect(/followers/)
       .expect(/User1/, done);
   });
 
@@ -476,7 +477,8 @@ describe('GET /profile/:id/following', function () {
     request(app)
       .get('/profile/1/following')
       .set('Cookie', 'sId=1234')
-      .expect(/1 following/)
+      .expect(/1/)
+      .expect(/following/)
       .expect(/User1/, done);
   });
 

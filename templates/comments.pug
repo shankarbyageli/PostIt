@@ -26,7 +26,7 @@ each value in comments
       img.user-profile.author-profile(src=value.avatarUrl)
       div.details
         span.username
-          a.link-text.author_url(href=`/profile/${value.commentBy}`)=value.displayName
+          a.link-text.author-url(href=`/profile/${value.commentBy}`)=value.displayName
         br
         span.date=takeMoment(value.commentedAt)
     p.commentText

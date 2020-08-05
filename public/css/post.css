@@ -12,6 +12,8 @@
 
 .author-name {
   font-size: 16px;
+  text-decoration: none;
+  color: black;
 }
 
 .date {
@@ -26,7 +28,8 @@
   border-radius: 50%;
 }
 
-.author_url:hover {
+.author-url:hover,
+.author-name:hover {
   text-decoration: underline;
 }
 

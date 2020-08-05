@@ -18,7 +18,7 @@ head
       .user-details
         img.profile(src=userDetails.avatarUrl)
         .details
-          span.author-name=userDetails.displayName
+          a(href=`/profile/${userDetails.userId}`).author-name=userDetails.displayName
           span.date=takeMoment(post.lastModified)
       .title.title-text
         a.link-text(href=`/blog/${post.id}`)=post.title

@@ -8,9 +8,10 @@ const follow = function (userId) {
       ).innerText = `${followersCount} followers`;
       if (followed) {
         document.getElementById('follow').innerText = 'Following';
-        return;
+      } else {
+        document.getElementById('follow').innerText = 'Follow';
       }
-      document.getElementById('follow').innerText = 'Follow';
+      window.location.reload();
     },
     null
   );

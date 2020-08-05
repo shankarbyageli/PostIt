@@ -30,6 +30,7 @@
 }
 
 .follow-details {
+  text-decoration: none;
   margin-right: 10px;
   font-size: 14px;
   color: gray;
@@ -50,7 +51,7 @@
   display: flex;
   flex-direction: column;
   width: 58%;
-  margin: 20px auto;
+  margin: 10px auto;
   padding-right: 22px;
 }
 
@@ -160,4 +161,14 @@
 .selected {
   border-bottom: 1px solid black;
   color: black;
+}
+
+.count {
+  margin-right: 5px;
+  font-size: 17px;
+  color: black;
+}
+
+.follow-text {
+  text-decoration: underline;
 }

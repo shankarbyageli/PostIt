@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { clientId, clientSecret } = require('../config');
 const lib = require('./lib');
+const status = require('./statusCodes');
 
 const isValidRequest = function (req, res, next) {
   const { id } = req.params;
@@ -122,7 +123,7 @@ const publish = async function (req, res) {
   }
   const tags = JSON.parse(req.body.tags);
   await req.app.locals.db.publishPost(req.params.id, tags, coverImage.md5);
-  res.status(200).end();
+  res.status(status.OK).end();
 };
 
 const getClapsDetails = async function (req, postId) {
@@ -231,11 +232,11 @@ const publishComment = async function (req, res) {
   const { comment, blogId } = req.body;
   const date = new Date().valueOf();
   await req.app.locals.db.addComment(comment, blogId, req.session.userId, date);
-  res.status(200).end();
+  res.status(status.OK).end();
 };
 
 const serveErrorPage = function (req, res) {
-  res.status(404);
+  res.status(status.NOTFOUND);
   res.render('error', {
     avatarUrl: req.session ? req.session.avatarUrl : false,
     userId: req.session ? req.session.userId : false,
@@ -317,7 +318,7 @@ const followUser = async function (req, res) {
       .count;
     res.send({ followed: status, followersCount });
   } else {
-    res.status(400).send();
+    res.status(status.BADREQ).send();
   }
 };
 

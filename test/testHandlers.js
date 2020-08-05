@@ -3,6 +3,7 @@ const request = require('supertest');
 const app = require('../src/app');
 const Sessions = require('../src/session');
 const lib = require('../src/lib');
+const status = require('../src/statusCodes');
 
 describe('GET', () => {
   afterEach(() => {
@@ -50,7 +51,7 @@ describe('GET /signIn', () => {
     app.locals.sessions = new Sessions({});
   });
   it('should redirect to github authentication', (done) => {
-    request(app).get('/signIn').expect(302, done);
+    request(app).get('/signIn').expect(status.REDIRECT, done);
   });
 });
 
@@ -65,11 +66,14 @@ describe('Ensure login', () => {
       .get('/user/css/editor.css')
       .set('Cookie', 'sId=1234')
       .expect('Content-type', /text\/css/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 
   it('should give sign in if cookie are not there', (done) => {
-    request(app).get('/user/editor').expect('Location', '/').expect(302, done);
+    request(app)
+      .get('/user/editor')
+      .expect('Location', '/')
+      .expect(status.REDIRECT, done);
   });
 });
 
@@ -84,7 +88,7 @@ describe('GET /user/editor', () => {
       .get('/user/editor')
       .set('Cookie', 'sId=1234')
       .expect(/editorjs/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 });
 
@@ -107,7 +111,7 @@ describe('GET /blog/id', () => {
     request(app)
       .get('/blog/104540')
       .set('Cookie', 'sId=1234')
-      .expect(/404 : Page Not Found/, done);
+      .expect(/Page Not Found/, done);
   });
 
   it('should return not found for string as blog Id ', (done) => {
@@ -115,7 +119,7 @@ describe('GET /blog/id', () => {
     request(app)
       .get('/blog/1string')
       .set('Cookie', 'sId=1234')
-      .expect(/404 : Page Not Found/, done);
+      .expect(/Page Not Found/, done);
   });
 });
 
@@ -129,7 +133,7 @@ describe('GET /user/signOut', () => {
     request(app)
       .get('/user/signOut')
       .set('Cookie', 'sId=1234')
-      .expect(302, done);
+      .expect(status.REDIRECT, done);
   });
 });
 
@@ -144,15 +148,15 @@ describe('GET /comments/:blogId', () => {
       .get('/comments/4')
       .set('Cookie', 'sId=1234')
       .expect(/superb/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 
-  it('should give 404 error page if blog id doesnot exist', (done) => {
+  it('should give status.NOTFOUND error page if blog id doesnot exist', (done) => {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/comments/10')
       .set('Cookie', 'sId=1234')
-      .expect(404, done);
+      .expect(status.NOTFOUND, done);
   });
 });
 
@@ -223,7 +227,7 @@ describe('POST /autosave', () => {
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
       .expect('Location', '/')
-      .expect(302, done);
+      .expect(status.REDIRECT, done);
   });
 });
 
@@ -240,7 +244,7 @@ describe('/user/publishComment', () => {
       .set('Cookie', 'sId=1234')
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 });
 
@@ -262,11 +266,11 @@ describe('GET /user/draft/:id', () => {
     request(app)
       .get('/user/draft/10')
       .set('Cookie', 'sId=1234')
-      .expect(404, done);
+      .expect(status.NOTFOUND, done);
   });
 
   it('should give redirect to sign in page if not signed in', (done) => {
-    request(app).get('/user/draft/10').expect(302, done);
+    request(app).get('/user/draft/10').expect(status.REDIRECT, done);
   });
 });
 
@@ -281,11 +285,11 @@ describe('GET /user/posts/drafts', () => {
       .get('/user/posts/drafts')
       .set('Cookie', 'sId=1234')
       .expect(/Sample Post/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 
   it('should redirect to sign in page if not signed in', (done) => {
-    request(app).get('/user/posts/drafts').expect(302, done);
+    request(app).get('/user/posts/drafts').expect(status.REDIRECT, done);
   });
 });
 
@@ -300,11 +304,11 @@ describe('GET /user/posts/published', () => {
       .get('/user/posts/published')
       .set('Cookie', 'sId=1234')
       .expect(/Read this blog/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 
   it('should redirect to sign in page if not signed in', (done) => {
-    request(app).get('/user/posts/published').expect(302, done);
+    request(app).get('/user/posts/published').expect(status.REDIRECT, done);
   });
 });
 
@@ -327,7 +331,7 @@ describe('GET /user/profile/id', function () {
     request(app)
       .get('/user/profile/300')
       .set('Cookie', 'sId=1234')
-      .expect(404, done);
+      .expect(status.NOTFOUND, done);
   });
 });
 
@@ -342,7 +346,10 @@ describe('GET /callback', () => {
         JSON.stringify({ login: 'user', avatarUrl: 'https://img.com' })
       );
     sinon.replace(lib, 'makeRequest', stubbed);
-    request(app).get('/callback').expect('Location', '/').expect(302, done);
+    request(app)
+      .get('/callback')
+      .expect('Location', '/')
+      .expect(status.REDIRECT, done);
   });
 });
 
@@ -358,7 +365,7 @@ describe('GET /user/search', () => {
       .set('Cookie', 'sId=1234')
       .expect(/testing search/)
       .expect(/testing the search/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 
   it('should give all the published posts to related title', (done) => {
@@ -368,7 +375,7 @@ describe('GET /user/search', () => {
       .set('Cookie', 'sId=1234')
       .expect(/testing search/)
       .expect(/testing the search/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 
   it('should give all the published posts to related tags', (done) => {
@@ -377,7 +384,7 @@ describe('GET /user/search', () => {
       .get('/user/search?searchText=#testing')
       .set('Cookie', 'sId=1234')
       .expect(/testing search/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 });
 
@@ -391,7 +398,7 @@ describe('GET /delete/:id', () => {
     request(app)
       .get('/user/delete/1')
       .set('Cookie', 'sId=1234')
-      .expect(302, done);
+      .expect(status.REDIRECT, done);
   });
 });
 
@@ -406,7 +413,7 @@ describe('GET /clap/:id', () => {
       .post('/user/clap/3')
       .set('Cookie', 'sId=1234')
       .expect(/true/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 
   it('should give false when the user is already clapped', function (done) {
@@ -415,7 +422,7 @@ describe('GET /clap/:id', () => {
       .post('/user/clap/4')
       .set('Cookie', 'sId=1234')
       .expect(/false/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 });
 
@@ -430,7 +437,7 @@ describe('POST /follow/:id', () => {
       .post('/user/follow/3')
       .set('Cookie', 'sId=1234')
       .expect(/true/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 
   it('should give false when the user is already following', function (done) {
@@ -439,7 +446,7 @@ describe('POST /follow/:id', () => {
       .post('/user/follow/3')
       .set('Cookie', 'sId=1234')
       .expect(/false/)
-      .expect(200, done);
+      .expect(status.OK, done);
   });
 
   it('should give bad request when the userId and followerId are same', function (done) {
@@ -447,7 +454,7 @@ describe('POST /follow/:id', () => {
     request(app)
       .post('/user/follow/1')
       .set('Cookie', 'sId=1234')
-      .expect(400, done);
+      .expect(status.BADREQ, done);
   });
 });
 
@@ -471,7 +478,7 @@ describe('GET /user/profile/:id/followers', function () {
     request(app)
       .get('/user/profile/300/followers')
       .set('Cookie', 'sId=1234')
-      .expect(404, done);
+      .expect(status.NOTFOUND, done);
   });
 });
 
@@ -495,6 +502,6 @@ describe('GET /user/profile/:id/following', function () {
     request(app)
       .get('/user/profile/300/following')
       .set('Cookie', 'sId=1234')
-      .expect(404, done);
+      .expect(status.NOTFOUND, done);
   });
 });

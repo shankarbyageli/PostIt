@@ -52,7 +52,10 @@ const renderImage = function (event) {
     container.style.content = `url(${reader.result})`;
   };
   if (file) {
-    document.getElementById('preview-error').innerText = '';
+    const previewError = document.getElementById('preview-error');
+    if (previewError) {
+      previewError.innerText = '';
+    }
     reader.readAsDataURL(file);
   }
 };

@@ -385,8 +385,8 @@ const updateProfile = async function (req, res) {
 };
 
 const serveClappedPosts = async function (req, res) {
-  const { userId } = req.params;
-  const posts = await req.app.locals.db.getClappedPosts(userId);
+  const { id } = req.params;
+  const posts = await req.app.locals.db.getClappedPosts(id);
   res.send(posts);
 };
 

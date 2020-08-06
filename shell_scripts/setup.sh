@@ -19,3 +19,5 @@ fi
 EOF
 
 chmod +x .git/hooks/pre-push
+mkdir -p database/images
+

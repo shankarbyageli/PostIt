@@ -21,7 +21,7 @@ const postHtml = function (post) {
   return `
   <div class="post">
     <div class="user-details">
-      <img class="profile" src=${post.avatarUrl}/>
+      <img class="profile" src="${post.avatarUrl}">
       <div class="details">
         <a class="author-name" href="/user/profile/${post.userId}">
           ${post.displayName}

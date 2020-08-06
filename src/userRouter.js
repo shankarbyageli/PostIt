@@ -36,7 +36,7 @@ userRouter.get('/draft/:id', isValidRequest, serveDraft);
 userRouter.get('/search', serveSearchResults);
 userRouter.get('/delete/:id', isValidRequest, deletePost);
 userRouter.get('/editProfile', serveProfileEditor);
-userRouter.get('/clappedPosts/:userId', serveClappedPosts);
+userRouter.get('/clappedPosts/:id', isValidRequest, serveClappedPosts);
 userRouter.get('/profile/:id/comments', isValidRequest, getRespondedPosts);
 userRouter.get('/profile/:id', isValidRequest, serveProfile);
 userRouter.get('/profile/:id/followers', isValidRequest, getFollowers);

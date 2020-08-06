@@ -175,7 +175,18 @@ class Database {
   }
 
   deletePost(postId) {
-    return this.run(queries.deletePost(postId));
+    return new Promise((resolve, reject) => {
+      this.db.serialize(() => {
+        this.db
+          .run('PRAGMA foreign_keys = ON;')
+          .run(queries.deletePost(postId), (err) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(true);
+          });
+      });
+    });
   }
 
   isClapped(postId, userId) {
@@ -262,9 +273,9 @@ class Database {
     return this.all(queries.getFollowers(userId));
   }
 
-  updateProfile(userId, userDetails) {
+  async updateProfile(userId, userDetails) {
     if (userDetails.avatarUrl) {
-      this.run(queries.updateAvatar(userId, userDetails.avatarUrl));
+      await this.run(queries.updateAvatar(userId, userDetails.avatarUrl));
     }
     return this.run(queries.updateDisplayName(userId, userDetails.displayName));
   }

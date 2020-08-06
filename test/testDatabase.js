@@ -417,3 +417,66 @@ describe('clapOnPost', () => {
     null
   );
 });
+
+describe('updateProfile', () => {
+  it('should update the displayName if just name is edited', (done) => {
+    const db = {};
+    const database = new Database(db);
+    database.run = sinon.stub().resolves(true);
+    database.updateProfile(1, {}).then(() => {
+      assert.ok(database.run.calledOnce);
+      done();
+    });
+  });
+
+  it('should update avatarUrl if new image is uploaded', (done) => {
+    const db = {};
+    const database = new Database(db);
+    database.run = sinon.stub().resolves(true);
+    database.updateProfile(1, { avatarUrl: '/user/image' }).then(() => {
+      assert.ok(database.run.calledTwice);
+      done();
+    });
+  });
+});
+
+describe('getPostDetails', () => {
+  it('should give error if database failure', (done) => {
+    const db = {
+      serialize: (callback) => callback(),
+      all: (query, callback) => callback(null, 'error'),
+      get: (query, callback) => callback('error')
+    };
+    const database = new Database(db);
+    database.getPostDetails(1, 1).then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it('should give error if database failure', (done) => {
+    const db = {
+      serialize: (callback) => callback(),
+      all: (query, callback) => callback('error'),
+      get: (query, callback) => callback(null, { imagePath: 'path' })
+    };
+    const database = new Database(db);
+    database.getPostDetails(1, 1).then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it('should add the tags to details if tags are there', (done) => {
+    const db = {
+      serialize: (callback) => callback(),
+      all: (query, callback) => callback(null, [{ tag: 't1' }, { tag: 't2' }]),
+      get: (query, callback) => callback(null, { imagePath: 'path' })
+    };
+    const database = new Database(db);
+    database.getPostDetails(1, 1).then((actual) => {
+      assert.deepStrictEqual(actual, { imagePath: 'path', tags: ['t1', 't2'] });
+      done();
+    });
+  });
+});

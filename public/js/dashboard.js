@@ -1,8 +1,3 @@
-const renderPage = function (response) {
-  document.open();
-  document.write(response);
-  document.close();
-};
 const getSearchResults = function () {
   let searchText = document.querySelector(
     '.search-container input[type=search]'

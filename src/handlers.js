@@ -71,13 +71,6 @@ const getBlog = async function (req, res, next) {
   }
 };
 
-const getFollowCount = async function (db, userId, followerId) {
-  const followersCount = (await db.getFollowersCount(userId)).count;
-  const followingCount = (await db.getFollowingCount(userId)).count;
-  const isFollowing = await db.isFollowing(userId, followerId);
-  return { followersCount, followingCount, isFollowing };
-};
-
 const serveComments = async function (req, res, next) {
   const { id } = req.params;
   const blog = await req.app.locals.db.getPost(id, 1);
@@ -158,124 +151,6 @@ const githubCallback = function (req, res) {
       res.cookie('sId', sId);
       res.redirect('/');
     });
-};
-
-const deletePost = async function (req, res) {
-  const { id } = req.params;
-  await req.app.locals.db.deletePost(id);
-  res.redirect(req.headers.referer);
-};
-
-const clapOnPost = async function (req, res) {
-  const { id } = req.params;
-  const status = await req.app.locals.db.clapOnPost(id, req.session.userId);
-  const clapsCount = (await req.app.locals.db.getClapsCount(id)).count;
-  res.send({ clapped: status, clapsCount });
-};
-
-const followUser = async function (req, res) {
-  const { id } = req.params;
-  if (+id !== req.session.userId) {
-    const status = await req.app.locals.db.followUser(id, req.session.userId);
-    const followersCount = (await req.app.locals.db.getFollowersCount(id))
-      .count;
-    res.send({ followed: status, followersCount });
-  } else {
-    res.status(status.BADREQ).send();
-  }
-};
-
-const serveProfileEditor = function (req, res) {
-  res.render('editProfile', {
-    userId: req.session.userId,
-    avatarUrl: req.session.avatarUrl,
-    displayName: req.session.displayName,
-  });
-};
-
-const getFollowDetails = async function (req, id, displayName) {
-  const followersDetails = await getFollowCount(
-    req.app.locals.db,
-    id,
-    req.session.userId
-  );
-  let followers = await req.app.locals.db.getFollowers(id);
-  const following = await req.app.locals.db.getFollowing(id);
-  let header = `${displayName} is followed by`;
-  if (req.url.includes('following')) {
-    header = `${displayName} follows`;
-    followers = following;
-  }
-  return { followersDetails, followers, header };
-};
-
-const getFollowers = async function (req, res, next) {
-  const { id } = req.params;
-  const userDetails = await req.app.locals.db.getUserById(id);
-  if (!userDetails) {
-    return next();
-  }
-  const renderOptions = await getFollowDetails(
-    req,
-    id,
-    userDetails.displayName
-  );
-  res.render('follower', {
-    followersDetails: renderOptions.followersDetails,
-    header: renderOptions.header,
-    followers: renderOptions.followers,
-    userDetails,
-    avatarUrl: req.session ? req.session.avatarUrl : false,
-    userId: req.session.userId,
-  });
-};
-
-const updateProfile = async function (req, res) {
-  const { displayName } = req.body;
-  const newAvatar = req.files && req.files.file;
-  const newUserDetails = { displayName };
-  if (newAvatar) {
-    fs.writeFileSync(
-      `${__dirname}/../database/images/${newAvatar.md5}`,
-      newAvatar.data
-    );
-    newUserDetails.avatarUrl = `/pictures/${newAvatar.md5}`;
-  }
-  await req.app.locals.db.updateProfile(req.session.userId, newUserDetails);
-  req.session = { ...req.session, ...newUserDetails };
-  req.app.locals.sessions.updateSession(req.cookies.sId, req.session);
-  res.redirect(`/user/profile/${req.session.userId}`);
-};
-
-const serveClappedPosts = async function (req, res, next) {
-  const { id } = req.params;
-  const userDetails = await req.app.locals.db.getUserById(id);
-  if (!userDetails) {
-    return next();
-  }
-  const { followersCount, followingCount, isFollowing } = await getFollowCount(
-    req.app.locals.db,
-    id,
-    req.session.userId
-  );
-  const posts = await req.app.locals.db.getClappedPosts(id);
-  res.render('userProfile', {
-    isFollowing,
-    followersCount,
-    followingCount,
-    userDetails,
-    posts,
-    avatarUrl: req.session ? req.session.avatarUrl : false,
-    userId: req.session.userId,
-    takeMoment: lib.takeMoment,
-    selectedMenu: 'clapped',
-  });
-};
-
-const getRespondedPosts = async function (req, res) {
-  const { id } = req.params;
-  const comments = await req.app.locals.db.getCommentedPosts(id);
-  res.send(comments);
 };
 
 module.exports = {

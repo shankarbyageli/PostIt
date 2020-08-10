@@ -191,6 +191,7 @@ const serveProfile = async function (req, res, next) {
     avatarUrl: req.session ? req.session.avatarUrl : false,
     userId: req.session.userId,
     takeMoment: lib.takeMoment,
+    selectedMenu: 'posts',
   });
 };
 
@@ -384,10 +385,29 @@ const updateProfile = async function (req, res) {
   res.redirect(`/user/profile/${req.session.userId}`);
 };
 
-const serveClappedPosts = async function (req, res) {
+const serveClappedPosts = async function (req, res, next) {
   const { id } = req.params;
+  const userDetails = await req.app.locals.db.getUserById(id);
+  if (!userDetails) {
+    return next();
+  }
+  const { followersCount, followingCount, isFollowing } = await getFollowCount(
+    req.app.locals.db,
+    id,
+    req.session.userId
+  );
   const posts = await req.app.locals.db.getClappedPosts(id);
-  res.send(posts);
+  res.render('userProfile', {
+    isFollowing,
+    followersCount,
+    followingCount,
+    userDetails,
+    posts,
+    avatarUrl: req.session ? req.session.avatarUrl : false,
+    userId: req.session.userId,
+    takeMoment: lib.takeMoment,
+    selectedMenu: 'clapped',
+  });
 };
 
 const getRespondedPosts = async function (req, res) {

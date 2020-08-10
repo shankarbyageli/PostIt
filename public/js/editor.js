@@ -44,6 +44,7 @@ const addTag = function (event) {
     tagElement.value = '';
   }
 };
+
 const renderImage = function (event) {
   const file = event.target.files[0];
   const reader = new FileReader();

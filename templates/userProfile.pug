@@ -4,27 +4,30 @@ head
   meta(charset='UTF-8')
   script(src="/user/js/request.js")
   script(src="/user/js/profile.js")
-  link(rel='stylesheet' href='/css/userProfile.css')
+  link(rel='stylesheet' href='/user/css/userProfile.css')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title PostIt | Profile
 +generateMenuBar(avatarUrl,userId)
 +getProfileHeader(userDetails,avatarUrl,followersCount, followingCount,isFollowing)
-.profile-menubar
-  a.link-text(href=`/user/profile/${userDetails.userId}`)
-    span#posts.profile-menu.selected='Profile'
-  span#clapped.profile-menu(onclick=`getClappedPosts(${userDetails.userId})`)='Claps'
-  span#comments.profile-menu(onclick=`getComments(${userDetails.userId})`)='Comments'
 
-.all-posts
-  if posts.length == 0
-    span.message='No posts yet'
-  each post in posts
-    .post
-      .user-details
-        img.profile(src=userDetails.avatarUrl)
-        .details
-          a(href=`/user/profile/${userDetails.userId}`).author-name=userDetails.displayName
-          span.date=new Date(post.lastModified).toDateString()
-      .title.title-text
-        a.link-text(href=`/blog/${post.id}`)=post.title
-      .data=JSON.parse(post.content).blocks[0].data.text
+body(onload=`selectMenu(${selectedMenu})`)
+  .profile-menubar
+    a.link-text(href=`/user/profile/${userDetails.userId}`)
+      span#posts.profile-menu='Profile'
+    span
+      a.link-text#clapped.profile-menu(href=`/user/clappedPosts/${userDetails.userId}`)='Claps'
+    span#comments.profile-menu(onclick=`getComments(${userDetails.userId})`)='Comments'
+
+  .all-posts
+    if posts.length == 0
+      span.message='No posts yet'
+    each post in posts
+      .post
+        .user-details
+          img.profile(src=post.avatarUrl)
+          .details
+            a(href=`/user/profile/${post.userId}`).author-name=post.displayName
+            span.date=new Date(post.lastModified).toDateString()
+        .title.title-text
+          a.link-text(href=`/blog/${post.id}`)=post.title
+        .data=JSON.parse(post.content).blocks[0].data.text

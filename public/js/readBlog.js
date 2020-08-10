@@ -19,32 +19,21 @@ const render = function (data) {
   });
 };
 
-const clapOnPost = function (postId) {
-  sendReq(
-    'POST',
-    `/user/clap/${postId}`,
-    ({ clapped, clapsCount }) => {
-      document.getElementById('clapCount').innerText = `${clapsCount} Claps`;
-      if (clapped) {
-        document.getElementById('clap').src = '/images/clapBlack.svg';
-        return;
-      }
-      document.getElementById('clap').src = '/images/clapWhite.svg';
-    },
-    null
-  );
+const renderClap = function ({ clapped, clapsCount }) {
+  document.getElementById('clapCount').innerText = `${clapsCount} Claps`;
+  if (clapped) {
+    document.getElementById('clap').src = '/images/clapBlack.svg';
+    return;
+  }
+  document.getElementById('clap').src = '/images/clapWhite.svg';
 };
 
-const renderPage = function ({ posts }) {
-  const allPost = document.createElement('div');
-  allPost.classList.add('all-posts');
-  document.getElementById('post').parentNode.removeChild(post);
-  document.body.appendChild(allPost);
-  renderSearchResults({ posts });
+const clapOnPost = function (postId) {
+  sendReq('POST', `/user/clap/${postId}`, renderClap, null);
 };
 
 const searchTag = function (event) {
   const searchTag = event.target.innerText;
   const url = `/user/search?searchText=%23${searchTag}`;
-  sendReq('GET', url, renderPage, null);
+  sendPost('GET', url, renderPage, null);
 };

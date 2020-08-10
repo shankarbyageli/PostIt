@@ -1,6 +1,6 @@
 const { clientId, clientSecret } = require('../config');
 const lib = require('./lib');
-const status = require('./statusCodes');
+const { status, types } = require('./statusCodes');
 
 const isValidRequest = function (req, res, next, id) {
   if (+id) {
@@ -49,7 +49,7 @@ const getClapsDetails = async function (req, postId) {
 
 const getBlog = async function (req, res, next) {
   const { id } = req.params;
-  const response = await req.app.locals.db.getPost(id, 1);
+  const response = await req.app.locals.db.getPost(id, types.PUBLISHED);
 
   if (response) {
     const clap = await getClapsDetails(req, id);
@@ -73,7 +73,7 @@ const getBlog = async function (req, res, next) {
 
 const serveComments = async function (req, res, next) {
   const { id } = req.params;
-  const blog = await req.app.locals.db.getPost(id, 1);
+  const blog = await req.app.locals.db.getPost(id, types.PUBLISHED);
   if (!blog) {
     return next();
   }

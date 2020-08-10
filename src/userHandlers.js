@@ -1,6 +1,6 @@
 const lib = require('./lib');
 const fs = require('fs');
-const status = require('./statusCodes');
+const { status, types } = require('./statusCodes');
 
 const ensureLogin = async function (req, res, next) {
   if (req.session !== undefined) {
@@ -28,7 +28,10 @@ const serveEditor = async function (req, res) {
 };
 
 const serveDraftedPosts = async function (req, res) {
-  const drafts = await req.app.locals.db.getUsersPosts(req.session.userId, 0);
+  const drafts = await req.app.locals.db.getUsersPosts(
+    req.session.userId,
+    types.DRAFT
+  );
   res.render('posts', {
     posts: drafts,
     avatarUrl: req.session.avatarUrl,
@@ -41,7 +44,7 @@ const serveDraftedPosts = async function (req, res) {
 const servePublishedPosts = async function (req, res) {
   const published = await req.app.locals.db.getUsersPosts(
     req.session.userId,
-    1
+    types.PUBLISHED
   );
   res.render('posts', {
     posts: published,
@@ -61,7 +64,7 @@ const publishComment = async function (req, res) {
 
 const serveDraft = async function (req, res, next) {
   const { id } = req.params;
-  const response = await req.app.locals.db.getPost(id, 0);
+  const response = await req.app.locals.db.getPost(id, types.DRAFT);
   if (response) {
     res.render('editor', {
       data: response.content,
@@ -116,7 +119,7 @@ const serveProfile = async function (req, res, next) {
     id,
     req.session.userId
   );
-  const posts = await req.app.locals.db.getUsersPosts(id, 1);
+  const posts = await req.app.locals.db.getUsersPosts(id, types.PUBLISHED);
 
   res.render('userProfile', {
     isFollowing,

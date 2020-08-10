@@ -3,7 +3,7 @@ const request = require('supertest');
 const app = require('../src/app');
 const Sessions = require('../src/session');
 const lib = require('../src/lib');
-const status = require('../src/statusCodes');
+const { status } = require('../src/statusCodes');
 
 describe('GET', () => {
   afterEach(() => {

@@ -6,10 +6,10 @@ head
   meta(http-equiv='X-UA-Compatible' content='IE=edge')
   meta(name='viewport' content='width=device-width, initial-scale=1')
   link(type='text/css' rel='stylesheet' href='/css/error.css')
-  title 404 Not found
+  title=`${code} ${msg}`
 
 +generateMenuBar(avatarUrl,userId)
 .notfound
   h1.oops oops!
-  h2.error-msg Error 404 : Page Not Found
+  h2.error-msg=`Error ${code} : ${msg}`
   a.action-button.dashboard-button(href='/') Go to home

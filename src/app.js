@@ -15,6 +15,7 @@ const {
   getSessionDetails,
   serveComments,
   isValidRequest,
+  errorHandler,
 } = require('./handlers');
 
 const app = express();
@@ -44,6 +45,7 @@ app.get('/comments/:id', serveComments);
 
 app.use('/pictures', express.static(`${__dirname}/../database/images`));
 app.use(express.static(`${__dirname}/../public`));
+app.use(errorHandler);
 app.use(serveErrorPage);
 
 module.exports = app;

@@ -6,10 +6,7 @@ const isValidRequest = function (req, res, next, id) {
   if (+id) {
     return next();
   }
-  res.render('error', {
-    avatarUrl: req.session ? req.session.avatarUrl : false,
-    userId: req.session ? req.session.userId : false,
-  });
+  serveErrorPage(req, res);
 };
 
 const getSessionDetails = async function (req, res, next) {
@@ -96,6 +93,8 @@ const serveErrorPage = function (req, res) {
   res.render('error', {
     avatarUrl: req.session ? req.session.avatarUrl : false,
     userId: req.session ? req.session.userId : false,
+    code: status.NOTFOUND,
+    msg: 'Page Not Found',
   });
 };
 
@@ -153,6 +152,17 @@ const githubCallback = function (req, res) {
     });
 };
 
+// eslint-disable-next-line
+const errorHandler = function (error, req, res, next) {
+  res.status(status.INERR);
+  res.render('error', {
+    avatarUrl: req.session ? req.session.avatarUrl : false,
+    userId: req.session ? req.session.userId : false,
+    msg: 'Internal server error',
+    code: status.INERR,
+  });
+};
+
 module.exports = {
   serveHomepage,
   signIn,
@@ -161,5 +171,6 @@ module.exports = {
   serveErrorPage,
   getSessionDetails,
   serveComments,
+  errorHandler,
   isValidRequest,
 };

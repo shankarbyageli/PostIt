@@ -32,7 +32,7 @@
   "dependencies": {
     "cookie-parser": "^1.4.5",
     "eslint": "^7.5.0",
-    "express": "^4.17.1",
+    "express": "^5.0.0-alpha.8",
     "express-fileupload": "^1.1.8",
     "moment": "^2.27.0",
     "morgan": "^1.10.0",

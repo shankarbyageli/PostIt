@@ -1,7 +1,7 @@
 const express = require('express');
 const userRouter = express.Router();
 
-const { serveErrorPage, isValidRequest } = require('./handlers');
+const { errorHandler, serveErrorPage, isValidRequest } = require('./handlers');
 
 const {
   publish,
@@ -53,6 +53,7 @@ userRouter.post('/publish/:id', publish);
 userRouter.post('/clap/:id', clapOnPost);
 userRouter.get('/follow/:id', followUser);
 
+userRouter.use(errorHandler);
 userRouter.use(serveErrorPage);
 
 module.exports = { userRouter };

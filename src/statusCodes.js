@@ -4,6 +4,7 @@ module.exports = {
     REDIRECT: 302,
     BADREQ: 400,
     NOTFOUND: 404,
+    INERR: 500,
   },
   types: {
     PUBLISHED: 1,

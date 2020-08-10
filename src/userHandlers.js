@@ -263,10 +263,29 @@ const serveClappedPosts = async function (req, res, next) {
   });
 };
 
-const getRespondedPosts = async function (req, res) {
+const getRespondedPosts = async function (req, res, next) {
   const { id } = req.params;
+  const userDetails = await req.app.locals.db.getUserById(id);
+  if (!userDetails) {
+    return next();
+  }
+  const { followersCount, followingCount, isFollowing } = await getFollowCount(
+    req.app.locals.db,
+    id,
+    req.session.userId
+  );
   const comments = await req.app.locals.db.getCommentedPosts(id);
-  res.send(comments);
+  res.render('commented', {
+    isFollowing,
+    followersCount,
+    followingCount,
+    userDetails,
+    comments,
+    avatarUrl: req.session ? req.session.avatarUrl : false,
+    userId: req.session.userId,
+    takeMoment: lib.takeMoment,
+    selectedMenu: 'comments',
+  });
 };
 
 module.exports = {

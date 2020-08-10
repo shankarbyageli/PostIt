@@ -444,7 +444,7 @@ describe('GET /clap/:id', () => {
   });
 });
 
-describe('POST /follow/:id', () => {
+describe('GET /follow/:id', () => {
   afterEach(() => {
     app.locals.sessions = new Sessions({});
   });
@@ -452,7 +452,7 @@ describe('POST /follow/:id', () => {
   it('should give true when user is not already following', (done) => {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .post('/user/follow/3')
+      .get('/user/follow/3')
       .set('Cookie', 'sId=1234')
       .expect(/true/)
       .expect(status.OK, done);
@@ -461,7 +461,7 @@ describe('POST /follow/:id', () => {
   it('should give false when the user is already following', (done) => {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .post('/user/follow/3')
+      .get('/user/follow/3')
       .set('Cookie', 'sId=1234')
       .expect(/false/)
       .expect(status.OK, done);
@@ -470,7 +470,7 @@ describe('POST /follow/:id', () => {
   it('should give bad request when the userId and followerId are same', (done) => {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .post('/user/follow/1')
+      .get('/user/follow/1')
       .set('Cookie', 'sId=1234')
       .expect(status.BADREQ, done);
   });

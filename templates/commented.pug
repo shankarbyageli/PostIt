@@ -20,15 +20,15 @@ body(onload=`selectMenu(${selectedMenu})`)
       a.link-text#comments.profile-menu(href=`/user/profile/${userId}/comments`)='Comments'
 
   .all-posts
-    if posts.length == 0
+    if comments.length == 0
       span.message='No posts yet'
-    each post in posts
+    each comment in comments
       .post
         .user-details
-          img.profile(src=post.avatarUrl)
+          img.profile(src=comment.avatarUrl)
           .details
-            a(href=`/user/profile/${post.userId}`).author-name=post.displayName
-            span.date=new Date(post.lastModified).toDateString()
-        .title.title-text
-          a.link-text(href=`/blog/${post.id}`)=post.title
-        .data=JSON.parse(post.content).blocks[0].data.text
+            a(href=`/user/profile/${comment.userId}`).author-name=comment.displayName
+            span.date=takeMoment(comment.commentedAt)
+        .title.post.comment-title
+          a.link-text(href=`/blog/${comment.id}`)=comment.title
+        .data=comment.comment

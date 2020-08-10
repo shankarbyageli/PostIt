@@ -51,7 +51,7 @@ userRouter.get('/profile/:id/following', getFollowers);
 userRouter.post('/autosave/:id', autoSave);
 userRouter.post('/publish/:id', publish);
 userRouter.post('/clap/:id', clapOnPost);
-userRouter.post('/follow/:id', followUser);
+userRouter.get('/follow/:id', followUser);
 
 userRouter.use(serveErrorPage);
 

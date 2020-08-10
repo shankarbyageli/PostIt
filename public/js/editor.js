@@ -45,6 +45,12 @@ const addTag = function (event) {
   }
 };
 
+const renderPreview = function (event) {
+  const previewError = document.getElementById('preview-error');
+  previewError.innerText = '';
+  renderImage(event);
+};
+
 const renderImage = function (event) {
   const file = event.target.files[0];
   const reader = new FileReader();
@@ -53,10 +59,6 @@ const renderImage = function (event) {
     container.style.content = `url(${reader.result})`;
   };
   if (file) {
-    const previewError = document.getElementById('preview-error');
-    if (previewError) {
-      previewError.innerText = '';
-    }
     reader.readAsDataURL(file);
   }
 };

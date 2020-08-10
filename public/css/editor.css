@@ -59,3 +59,7 @@
   width: 213px;
   color: red;
 }
+
+.ce-toolbox--opened {
+  transform: translate3d(-71px, calc(22px - 51%), 0px);
+}

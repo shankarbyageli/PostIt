@@ -37,7 +37,7 @@ form#preview-form
     img#exit-icon(src='/images/cross-icon.svg' alt='close' onclick='hidePreview()')
     .preview-content
       span#preview-title
-      input#file(type='file' name='file' onchange='renderImage(event)' required)
+      input#file(type='file' name='file' onchange='renderPreview(event)' required)
       label#cover-image(for='file')
         span#instruction='Add cover image here'
       span Add or change tags

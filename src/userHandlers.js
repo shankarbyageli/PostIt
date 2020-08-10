@@ -1,70 +1,74 @@
-const { clientId, clientSecret } = require('../config');
 const lib = require('./lib');
+const fs = require('fs');
 const status = require('./statusCodes');
 
-const isValidRequest = function (req, res, next, id) {
-  if (+id) {
-    return next();
+const ensureLogin = async function (req, res, next) {
+  if (req.session !== undefined) {
+    next();
+  } else {
+    res.redirect('/');
   }
-  res.render('error', {
-    avatarUrl: req.session ? req.session.avatarUrl : false,
-    userId: req.session ? req.session.userId : false,
+};
+
+const signOut = function (req, res) {
+  const sessions = req.app.locals.sessions;
+  sessions.removeSession(req.cookies.sId);
+  res.clearCookie('sId');
+  res.redirect('/');
+};
+
+const serveEditor = async function (req, res) {
+  res.render('editor', {
+    data: '{}',
+    titleText: '',
+    avatarUrl: req.session.avatarUrl,
+    userId: req.session.userId,
+    id: -1,
   });
 };
 
-const getSessionDetails = async function (req, res, next) {
-  const sessions = req.app.locals.sessions;
-  const userSession = sessions.getSession(req.cookies.sId);
-  if (userSession !== undefined) {
-    req.session = userSession;
-  }
-  next();
+const serveDraftedPosts = async function (req, res) {
+  const drafts = await req.app.locals.db.getUsersPosts(req.session.userId, 0);
+  res.render('posts', {
+    posts: drafts,
+    avatarUrl: req.session.avatarUrl,
+    userId: req.session.userId,
+    type: 0,
+    takeMoment: lib.takeMoment,
+  });
 };
 
-const serveHomepage = async function (req, res) {
-  if (req.session !== undefined) {
-    res.render('dashBoard', {
-      posts: await req.app.locals.db.getLatestPosts(10),
-      avatarUrl: req.session.avatarUrl,
-      username: req.session.displayName,
-      userId: req.session.userId,
-      takeMoment: lib.takeMoment,
-    });
-  } else {
-    res.render('signIn', {});
-  }
+const servePublishedPosts = async function (req, res) {
+  const published = await req.app.locals.db.getUsersPosts(
+    req.session.userId,
+    1
+  );
+  res.render('posts', {
+    posts: published,
+    avatarUrl: req.session.avatarUrl,
+    userId: req.session.userId,
+    type: 1,
+    takeMoment: lib.takeMoment,
+  });
 };
 
-const getClapsDetails = async function (req, postId) {
-  const clapsCount = (await req.app.locals.db.getClapsCount(postId)).count;
-  if (req.session) {
-    const isClapped = await req.app.locals.db.isClapped(
-      postId,
-      req.session.userId
-    );
-    return { clapsCount, isClapped };
-  }
-  return { clapsCount, isClapped: null };
+const publishComment = async function (req, res) {
+  const { comment, blogId } = req.body;
+  const date = new Date().valueOf();
+  await req.app.locals.db.addComment(comment, blogId, req.session.userId, date);
+  res.status(status.OK).end();
 };
 
-const getBlog = async function (req, res, next) {
+const serveDraft = async function (req, res, next) {
   const { id } = req.params;
-  const response = await req.app.locals.db.getPost(id, 1);
-
+  const response = await req.app.locals.db.getPost(id, 0);
   if (response) {
-    const clap = await getClapsDetails(req, id);
-    const postDetails = await req.app.locals.db.getPostDetails(
-      id,
-      response.coverImageId
-    );
-
-    res.render('readBlog', {
-      post: response,
-      avatarUrl: req.session ? req.session.avatarUrl : false,
-      userId: req.session ? req.session.userId : false,
-      coverImage: postDetails.imagePath,
-      tags: postDetails.tags,
-      clap,
+    res.render('editor', {
+      data: response.content,
+      titleText: response.title,
+      avatarUrl: req.session.avatarUrl,
+      id: response.id,
+      userId: req.session.userId,
     });
   } else {
     next();
@@ -78,86 +82,67 @@ const getFollowCount = async function (db, userId, followerId) {
   return { followersCount, followingCount, isFollowing };
 };
 
-const serveComments = async function (req, res, next) {
-  const { id } = req.params;
-  const blog = await req.app.locals.db.getPost(id, 1);
-  if (!blog) {
-    return next();
+const autoSave = async function (req, res) {
+  let { id } = req.params;
+  if (+id === -1) {
+    id = await req.app.locals.db.addPost(req.body, req.session.userId);
+  } else {
+    await req.app.locals.db.updatePost(id, req.body);
   }
-  const renderOptions = {
-    comments: await req.app.locals.db.getComments(id),
-    titleText: blog.title,
-    takeMoment: lib.takeMoment,
-    blogId: id,
-  };
-  if (req.session) {
-    renderOptions.userId = req.session.userId;
-    renderOptions.currentUser = req.session.displayName;
-    renderOptions.avatarUrl = req.session.avatarUrl;
-  }
-  res.render('comments', renderOptions);
+  res.send(JSON.stringify({ id }));
 };
 
-const serveErrorPage = function (req, res) {
-  res.status(status.NOTFOUND);
-  res.render('error', {
+const publish = async function (req, res) {
+  const coverImage = req.files && req.files.file;
+  if (coverImage) {
+    fs.writeFileSync(
+      `${__dirname}/../database/images/${coverImage.md5}`,
+      coverImage.data
+    );
+  }
+  const tags = JSON.parse(req.body.tags);
+  await req.app.locals.db.publishPost(req.params.id, tags, coverImage.md5);
+  res.status(status.OK).end();
+};
+
+const serveProfile = async function (req, res, next) {
+  const { id } = req.params;
+  const userDetails = await req.app.locals.db.getUserById(id);
+  if (!userDetails) {
+    return next();
+  }
+  const { followersCount, followingCount, isFollowing } = await getFollowCount(
+    req.app.locals.db,
+    id,
+    req.session.userId
+  );
+  const posts = await req.app.locals.db.getUsersPosts(id, 1);
+
+  res.render('userProfile', {
+    isFollowing,
+    followersCount,
+    followingCount,
+    userDetails,
+    posts,
     avatarUrl: req.session ? req.session.avatarUrl : false,
-    userId: req.session ? req.session.userId : false,
+    userId: req.session.userId,
+    takeMoment: lib.takeMoment,
+    selectedMenu: 'posts',
   });
 };
 
-const signIn = function (req, res) {
-  if (req.session !== undefined) {
-    res.redirect('/');
-  } else {
-    const params = `client_id=${clientId}&client_secret=${clientSecret}`;
-    res.redirect(`https://github.com/login/oauth/authorize?${params}`);
+const serveSearchResults = async function (req, res) {
+  let { searchText } = req.query;
+  const filterHandler = { '@': 'author', '#': 'tag' };
+
+  let filter = 'title';
+  if (filterHandler[searchText[0]]) {
+    filter = filterHandler[searchText[0]];
+    searchText = searchText.slice(1);
   }
-};
 
-const fetchUserDetails = (tokenDetails) => {
-  const token = tokenDetails.split('&')[0].split('=')[1];
-  const options = {
-    hostname: 'api.github.com',
-    path: '/user',
-    headers: {
-      'user-agent': 'node.js',
-      Authorization: `token ${token}`,
-    },
-  };
-  return lib.makeRequest(options, {});
-};
-
-const githubCallback = function (req, res) {
-  const code = req.url.split('=')[1];
-  const params = {
-    client_id: clientId, // eslint-disable-line
-    client_secret: clientSecret, // eslint-disable-line
-    code,
-  };
-  const url = {
-    hostname: 'github.com',
-    path: '/login/oauth/access_token',
-    method: 'POST',
-  };
-  lib
-    .makeRequest(url, params)
-    .then(fetchUserDetails)
-    .then((details) => lib.addUserDetails(req, details))
-    .then(async (userDetails) => {
-      const { userId, username, avatarUrl } = userDetails;
-      const sessions = req.app.locals.sessions;
-      const displayName = (await req.app.locals.db.getUserById(userId))
-        .displayName;
-      const sId = await sessions.addSession({
-        userId,
-        username,
-        avatarUrl,
-        displayName,
-      });
-      res.cookie('sId', sId);
-      res.redirect('/');
-    });
+  const posts = await req.app.locals.db.getSearchedPosts(filter, searchText);
+  res.send({ posts });
 };
 
 const deletePost = async function (req, res) {
@@ -279,12 +264,23 @@ const getRespondedPosts = async function (req, res) {
 };
 
 module.exports = {
-  serveHomepage,
-  signIn,
-  githubCallback,
-  getBlog,
-  serveErrorPage,
-  getSessionDetails,
-  serveComments,
-  isValidRequest,
+  ensureLogin,
+  signOut,
+  publishComment,
+  autoSave,
+  serveDraftedPosts,
+  servePublishedPosts,
+  serveProfile,
+  serveSearchResults,
+  deletePost,
+  clapOnPost,
+  serveDraft,
+  followUser,
+  serveProfileEditor,
+  getFollowers,
+  updateProfile,
+  serveClappedPosts,
+  getRespondedPosts,
+  serveEditor,
+  publish,
 };

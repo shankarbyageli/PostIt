@@ -1,14 +1,12 @@
 const express = require('express');
 const userRouter = express.Router();
 
+const { serveErrorPage, isValidRequest } = require('./handlers');
+
 const {
   publish,
   ensureLogin,
-  serveEditor,
   signOut,
-  publishComment,
-  autoSave,
-  serveErrorPage,
   serveDraftedPosts,
   servePublishedPosts,
   serveSearchResults,
@@ -18,12 +16,14 @@ const {
   followUser,
   serveProfileEditor,
   updateProfile,
-  isValidRequest,
   serveClappedPosts,
   serveProfile,
   getFollowers,
   getRespondedPosts,
-} = require('./handlers');
+  serveEditor,
+  publishComment,
+  autoSave,
+} = require('./userHandlers');
 
 userRouter.use(ensureLogin);
 userRouter.use(express.static(`${__dirname}/../public`));
@@ -38,8 +38,8 @@ userRouter.get('/editProfile', serveProfileEditor);
 userRouter.post('/publishComment', publishComment);
 userRouter.post('/updateProfile', updateProfile);
 
-// userRouter.use(/.*:id.*/, isValidRequest);
 userRouter.param('id', isValidRequest);
+
 userRouter.get('/draft/:id', serveDraft);
 userRouter.get('/delete/:id', deletePost);
 userRouter.get('/clappedPosts/:id', serveClappedPosts);

@@ -35,9 +35,12 @@ app.use('/user', userRouter);
 
 app.get('/', serveHomepage);
 app.get('/signIn', signIn);
-app.get('/blog/:id', isValidRequest, getBlog);
 app.get('/callback', githubCallback);
-app.get('/comments/:id', isValidRequest, serveComments);
+
+app.param('id', isValidRequest);
+
+app.get('/blog/:id', getBlog);
+app.get('/comments/:id', serveComments);
 
 app.use('/pictures', express.static(`${__dirname}/../database/images`));
 app.use(express.static(`${__dirname}/../public`));

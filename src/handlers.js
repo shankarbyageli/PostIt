@@ -3,8 +3,7 @@ const { clientId, clientSecret } = require('../config');
 const lib = require('./lib');
 const status = require('./statusCodes');
 
-const isValidRequest = function (req, res, next) {
-  const { id } = req.params;
+const isValidRequest = function (req, res, next, id) {
   if (+id) {
     return next();
   }

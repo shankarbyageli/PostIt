@@ -125,7 +125,7 @@ describe('GET /blog/id', () => {
   it('should return not found for string as blog Id ', (done) => {
     app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
-      .get('/blog/1string')
+      .get('/blog/string')
       .set('Cookie', 'sId=1234')
       .expect(/Page Not Found/, done);
   });
@@ -440,9 +440,7 @@ describe('GET /clap/:id', () => {
   });
 
   it('should give null if user is not signed in', (done) => {
-    request(app)
-      .post('/user/clap/4')
-      .expect(status.REDIRECT, done);
+    request(app).post('/user/clap/4').expect(status.REDIRECT, done);
   });
 });
 

@@ -99,17 +99,6 @@ const getTags = function () {
     .map((tag) => tag.firstChild.innerText);
 };
 
-const sendPost = function (method, url, callback, content) {
-  const xhr = new XMLHttpRequest();
-  xhr.onload = function () {
-    if (this.status === 200 || this.status === 302) {
-      callback && callback(this.response);
-    }
-  };
-  xhr.open(method, url);
-  xhr.send(content);
-};
-
 const displayPreviewError = function () {
   document.getElementById('preview-error').innerText =
     'Please add cover image !';

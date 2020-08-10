@@ -142,7 +142,13 @@ const serveSearchResults = async function (req, res) {
   }
 
   const posts = await req.app.locals.db.getSearchedPosts(filter, searchText);
-  res.send({ posts });
+  res.render('dashBoard', {
+    posts,
+    avatarUrl: req.session.avatarUrl,
+    username: req.session.displayName,
+    userId: req.session.userId,
+    takeMoment: lib.takeMoment,
+  });
 };
 
 const deletePost = async function (req, res) {

@@ -54,27 +54,51 @@ class Database {
   }
 
   updatePost(postId, data) {
-    return this.run(queries.updatePost(postId, data));
+    return new Promise((resolve, reject) => {
+      this.newDb('stories')
+        .update({
+          title: data.title,
+          content: data.content,
+          lastModified: data.content.time,
+        })
+        .where({ id: postId })
+        .then(() => resolve(true))
+        .catch(reject);
+    });
   }
 
-  publishPost(postId, tags, imagePath) {
+  // publishPost(postId, tags, imagePath) {
+  //   return new Promise((resolve, reject) => {
+  //     const dbInstance = this;
+  //     this.db.run(queries.insertImage(imagePath), async function (err) {
+  //       if (err) {
+  //         reject(err);
+  //       }
+  //       if (tags.length) {
+  //         await dbInstance.addTags(tags, postId);
+  //       }
+  //       const lastId = this.lastID; // eslint-disable-line
+  //       dbInstance.db.run(queries.publishPost(lastId, postId), (err) => {
+  //         if (err) {
+  //           reject(err);
+  //         }
+  //         resolve(true);
+  //       });
+  //     });
+  //   });
+  // }
+
+  async publishPost(postId, tags, imagePath) {
+    const [coverImageId] = await this.newDb('images').insert(imagePath);
+    if (tags.length) {
+      await this.addTags(tags, postId);
+    }
     return new Promise((resolve, reject) => {
-      const dbInstance = this;
-      this.db.run(queries.insertImage(imagePath), async function (err) {
-        if (err) {
-          reject(err);
-        }
-        if (tags.length) {
-          await dbInstance.addTags(tags, postId);
-        }
-        const lastId = this.lastID; // eslint-disable-line
-        dbInstance.db.run(queries.publishPost(lastId, postId), (err) => {
-          if (err) {
-            reject(err);
-          }
-          resolve(true);
-        });
-      });
+      this.newDb('stories')
+        .update({ isPublished: 1, coverImageId })
+        .where({ id: postId })
+        .then(() => resolve(true))
+        .catch(reject);
     });
   }
 
@@ -174,8 +198,16 @@ class Database {
     });
   }
 
-  addTags(tags, postId) {
-    return this.run(queries.addTags(tags, postId));
+  addTags(tags, storyId) {
+    const fields = tags.map((tag) => {
+      return { tag, storyId };
+    });
+    return new Promise((resolve, reject) => {
+      this.newDb('tags')
+        .insert(fields)
+        .then(() => resolve(true))
+        .catch(reject);
+    });
   }
 
   deletePost(postId) {

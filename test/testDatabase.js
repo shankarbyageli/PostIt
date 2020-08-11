@@ -32,8 +32,11 @@ describe('addPost', () => {
 
 describe('updatePost', () => {
   it('should give error if database failure', (done) => {
-    const db = { run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, 'error') };
-    const database = new Database(db);
+    const where = sinon.stub().rejects('error');
+    const update = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ update });
+
+    const database = new Database(null, newDb);
     database
       .updatePost(1, { title: 'title', content: { time: '1' } })
       .then(null, (actual) => {
@@ -43,10 +46,10 @@ describe('updatePost', () => {
   });
 
   it('should update the content of given post id', (done) => {
-    const db = {
-      run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, null, true),
-    };
-    const database = new Database(db);
+    const where = sinon.stub().resolves(true);
+    const update = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ update });
+    const database = new Database(null, newDb);
     database
       .updatePost(1, { title: 'title', content: { time: '1' } })
       .then((actual) => {
@@ -58,11 +61,12 @@ describe('updatePost', () => {
 
 describe('publishPost', () => {
   it('should give error if database failure', (done) => {
-    const db = {
-      run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, 'error'),
-      addTags: sinon.stub().resolves(true),
-    };
-    const database = new Database(db);
+    const where = sinon.stub().rejects('error');
+    const update = sinon.stub().returns({ where });
+    const insert = sinon.stub().resolves([1]);
+    const newDb = sinon.stub().returns({ update, insert });
+
+    const database = new Database(null, newDb);
     database.publishPost(1, [], 'path').then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -70,12 +74,15 @@ describe('publishPost', () => {
   });
 
   it('should not addTags if there are no tags', (done) => {
+    const where = sinon.stub().resolves(true);
+    const update = sinon.stub().returns({ where });
+    const insert = sinon.stub().resolves([1]);
+    const newDb = sinon.stub().returns({ update, insert });
+
     const addTags = sinon.stub().resolves(true);
-    const db = {
-      run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, null),
-      addTags,
-    };
-    const database = new Database(db);
+    const database = new Database(null, newDb);
+    database.addTags = addTags;
+
     database.publishPost(1, [], 'path').then((actual) => {
       assert.ok(actual);
       assert.equal(addTags.calledOnce, false);
@@ -84,14 +91,17 @@ describe('publishPost', () => {
   });
 
   it('should publish the drafted post', (done) => {
+    const where = sinon.stub().resolves(true);
+    const update = sinon.stub().returns({ where });
+    const insert = sinon.stub().resolves([1]);
+    const newDb = sinon.stub().returns({ update, insert });
+
     const addTags = sinon.stub().resolves(true);
-    const db = {
-      run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, null),
-      addTags,
-    };
-    const database = new Database(db);
+    const database = new Database(null, newDb);
+    database.addTags = addTags;
     database.publishPost(1, ['tag'], 'path').then((actual) => {
       assert.ok(actual);
+      assert.ok(addTags.calledOnce);
       done();
     }, null);
   });
@@ -338,26 +348,24 @@ describe('addImage', () => {
 
 describe('addTags', () => {
   it('should give error if database failure', (done) => {
-    const db = { run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, 'error') };
-    const database = new Database(db);
+    const insert = sinon.stub().rejects('error');
+    const newDb = sinon.stub().returns({ insert });
+    const database = new Database(null, newDb);
     database.addTags(['tag1']).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
     });
   });
 
-  it(
-    'should add the tag',
-    (done) => {
-      const db = { run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, null) };
-      const database = new Database(db);
-      database.addTags(['tag1'], 1).then((actual) => {
-        assert.equal(actual, true);
-        done();
-      });
-    },
-    null
-  );
+  it('should add the tag', (done) => {
+    const insert = sinon.stub().resolves(true);
+    const newDb = sinon.stub().returns({ insert });
+    const database = new Database(null, newDb);
+    database.addTags(['tag1'], 1).then((actual) => {
+      assert.equal(actual, true);
+      done();
+    });
+  });
 });
 
 describe('isClapped', () => {

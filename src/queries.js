@@ -1,11 +1,3 @@
-const updatePost = (postId, data) => `
-      UPDATE stories SET title = '${data.title}', 
-      content = '${JSON.stringify(data.content)}',
-      lastModified = '${data.content.time}' where id = ${postId};`;
-
-const publishPost = (imageId, postId) => `UPDATE stories SET isPublished = 1,
-     coverImageId = ${imageId} where id = ${postId}`;
-
 const getUsersPosts = (userId, postType) => `
     SELECT * FROM stories
      join users on stories.authorId = users.userId 
@@ -85,11 +77,6 @@ const deleteClap = (postId, userId) => `DELETE FROM claps
 const selectClaps = (postId, userId) => `SELECT * FROM claps 
     WHERE storyId=${postId} AND clappedBy=${userId}`;
 
-const addTags = (tags, postId) => {
-  const values = tags.map((tag) => `(${postId}, '${tag}')`);
-  return `INSERT INTO tags VALUES ${values.join(',')}`;
-};
-
 const deletePost = (postId) => `DELETE FROM stories 
     WHERE id=${postId}`;
 
@@ -147,8 +134,6 @@ const getCommentedPosts = (userId) =>
   `;
 
 module.exports = {
-  updatePost,
-  publishPost,
   getUsersPosts,
   getPost,
   imageQuery,
@@ -166,7 +151,6 @@ module.exports = {
   insertClap,
   deleteClap,
   selectClaps,
-  addTags,
   deletePost,
   getUser,
   getClapsCount,

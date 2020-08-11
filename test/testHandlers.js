@@ -5,11 +5,15 @@ const Sessions = require('../src/session');
 const lib = require('../src/lib');
 const { status } = require('../src/statusCodes');
 
-describe('GET', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
+beforeEach(() => {
+  app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
+});
 
+afterEach(() => {
+  app.locals.sessions = new Sessions({});
+});
+
+describe('GET', () => {
   it('should serve the static html and css files', (done) => {
     request(app)
       .get('/')
@@ -27,9 +31,6 @@ describe('GET', () => {
 });
 
 describe('GET /', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
   it('should serve sign in page if not signed in', (done) => {
     request(app)
       .get('/')
@@ -38,7 +39,6 @@ describe('GET /', () => {
   });
 
   it('should serve dashboard if signed in', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/')
       .set('Cookie', 'sId=1234')
@@ -47,15 +47,11 @@ describe('GET /', () => {
 });
 
 describe('GET /signIn', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
   it('should redirect to github authentication', (done) => {
     request(app).get('/signIn').expect(status.REDIRECT, done);
   });
 
   it('should redirect to home page if already signed in', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/signIn')
       .set('Cookie', 'sId=1234')
@@ -64,12 +60,7 @@ describe('GET /signIn', () => {
 });
 
 describe('Ensure login', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should get css file if session is there', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/css/editor.css')
       .set('Cookie', 'sId=1234')
@@ -86,12 +77,7 @@ describe('Ensure login', () => {
 });
 
 describe('GET /user/editor', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should get editor', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/editor')
       .set('Cookie', 'sId=1234')
@@ -101,12 +87,7 @@ describe('GET /user/editor', () => {
 });
 
 describe('GET /blog/id', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should return the blog content if the blog is published', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/blog/3')
       .set('Cookie', 'sId=1234')
@@ -115,7 +96,6 @@ describe('GET /blog/id', () => {
   });
 
   it('should return page not found for invalid blogId', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/blog/104540')
       .set('Cookie', 'sId=1234')
@@ -123,7 +103,6 @@ describe('GET /blog/id', () => {
   });
 
   it('should return not found for string as blog Id ', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/blog/string')
       .set('Cookie', 'sId=1234')
@@ -138,12 +117,7 @@ describe('GET /blog/id', () => {
 });
 
 describe('GET /user/signOut', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('user should be redirected to the signIn page after signOut', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/signOut')
       .set('Cookie', 'sId=1234')
@@ -152,12 +126,7 @@ describe('GET /user/signOut', () => {
 });
 
 describe('GET /comments/:blogId', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give the comments on the given blog id', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/comments/4')
       .set('Cookie', 'sId=1234')
@@ -166,7 +135,6 @@ describe('GET /comments/:blogId', () => {
   });
 
   it('should give status.NOTFOUND error page if blog id doesnot exist', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/comments/10')
       .set('Cookie', 'sId=1234')
@@ -175,12 +143,7 @@ describe('GET /comments/:blogId', () => {
 });
 
 describe('POST /autosave', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should return back id of the new drafted post if request id is -1', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     const data = {
       title: 'my title',
       content: {
@@ -207,7 +170,6 @@ describe('POST /autosave', () => {
   });
 
   it('should return back id of the already drafted post on autosave', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     const data = {
       title: 'my title',
       content: {
@@ -233,11 +195,10 @@ describe('POST /autosave', () => {
       .expect(/2/, done);
   });
 
-  it('should return back id of the already drafted post on autosave', (done) => {
+  it('should redirect to home page if not signed in', (done) => {
     const data = {};
     request(app)
       .post('/user/autosave/2')
-      .set('Cookie', 'sId=1234')
       .set('Content-type', 'application/json')
       .send(JSON.stringify(data))
       .expect('Location', '/')
@@ -246,12 +207,7 @@ describe('POST /autosave', () => {
 });
 
 describe('/user/publishComment', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should publish the given comment', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     const data = { comment: 'hiii', blogId: 1 };
     request(app)
       .post('/user/publishComment/')
@@ -263,12 +219,7 @@ describe('/user/publishComment', () => {
 });
 
 describe('GET /user/draft/:id', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should serve the editor with draft content', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/draft/1')
       .set('Cookie', 'sId=1234')
@@ -276,7 +227,6 @@ describe('GET /user/draft/:id', () => {
   });
 
   it('should give error page if not signed in non-existing id', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/draft/10')
       .set('Cookie', 'sId=1234')
@@ -289,12 +239,7 @@ describe('GET /user/draft/:id', () => {
 });
 
 describe('GET /user/posts/drafts', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give all the drafts of requested user', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/posts/drafts')
       .set('Cookie', 'sId=1234')
@@ -308,12 +253,7 @@ describe('GET /user/posts/drafts', () => {
 });
 
 describe('GET /user/posts/published', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give all the published of requested user', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/posts/published')
       .set('Cookie', 'sId=1234')
@@ -327,12 +267,7 @@ describe('GET /user/posts/published', () => {
 });
 
 describe('GET /user/profile/id', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give the details of user given id', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/profile/1')
       .set('Cookie', 'sId=1234')
@@ -341,7 +276,6 @@ describe('GET /user/profile/id', () => {
   });
 
   it('should give error page if user does not exist', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/profile/300')
       .set('Cookie', 'sId=1234')
@@ -368,12 +302,7 @@ describe('GET /callback', () => {
 });
 
 describe('GET /user/search', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give all the published posts of requested author', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/search?searchText=@User2')
       .set('Cookie', 'sId=1234')
@@ -383,7 +312,6 @@ describe('GET /user/search', () => {
   });
 
   it('should give all the published posts to related title', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/search?searchText=testing')
       .set('Cookie', 'sId=1234')
@@ -393,7 +321,6 @@ describe('GET /user/search', () => {
   });
 
   it('should give all the published posts to related tags', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/search?searchText=#testing')
       .set('Cookie', 'sId=1234')
@@ -403,12 +330,7 @@ describe('GET /user/search', () => {
 });
 
 describe('GET /delete/:id', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give the details of user given id', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/delete/1')
       .set('Cookie', 'sId=1234')
@@ -417,12 +339,7 @@ describe('GET /delete/:id', () => {
 });
 
 describe('GET /clap/:id', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give true when the user is not already clapped', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .post('/user/clap/3')
       .set('Cookie', 'sId=1234')
@@ -431,7 +348,6 @@ describe('GET /clap/:id', () => {
   });
 
   it('should give false when the user is already clapped', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .post('/user/clap/4')
       .set('Cookie', 'sId=1234')
@@ -445,12 +361,7 @@ describe('GET /clap/:id', () => {
 });
 
 describe('GET /follow/:id', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give true when user is not already following', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/follow/3')
       .set('Cookie', 'sId=1234')
@@ -459,7 +370,6 @@ describe('GET /follow/:id', () => {
   });
 
   it('should give false when the user is already following', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/follow/3')
       .set('Cookie', 'sId=1234')
@@ -468,7 +378,6 @@ describe('GET /follow/:id', () => {
   });
 
   it('should give bad request when the userId and followerId are same', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/follow/1')
       .set('Cookie', 'sId=1234')
@@ -477,12 +386,7 @@ describe('GET /follow/:id', () => {
 });
 
 describe('GET /user/profile/:id/followers', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give the follower details of given user id', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/profile/2/followers')
       .set('Cookie', 'sId=1234')
@@ -492,7 +396,6 @@ describe('GET /user/profile/:id/followers', () => {
   });
 
   it('should give error page if user does not exist', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/profile/300/followers')
       .set('Cookie', 'sId=1234')
@@ -501,12 +404,7 @@ describe('GET /user/profile/:id/followers', () => {
 });
 
 describe('GET /user/profile/:id/following', () => {
-  afterEach(() => {
-    app.locals.sessions = new Sessions({});
-  });
-
   it('should give the following details of given user id', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/profile/1/following')
       .set('Cookie', 'sId=1234')
@@ -516,7 +414,6 @@ describe('GET /user/profile/:id/following', () => {
   });
 
   it('should give error page if user does not exist', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/profile/300/following')
       .set('Cookie', 'sId=1234')
@@ -526,7 +423,6 @@ describe('GET /user/profile/:id/following', () => {
 
 describe('GET /user/editProfile', () => {
   it('should give edit profile page if signed in', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/editProfile')
       .set('Cookie', 'sId=1234')
@@ -536,7 +432,6 @@ describe('GET /user/editProfile', () => {
 
 describe('GET /clappedPosts', () => {
   it('should give posts on which user has clapped', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/clappedPosts/1')
       .set('Cookie', 'sId=1234')
@@ -546,7 +441,6 @@ describe('GET /clappedPosts', () => {
 
 describe('GET /profile/:id/comments', () => {
   it('should give posts on which user has commented', (done) => {
-    app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
     request(app)
       .get('/user/profile/1/comments')
       .set('Cookie', 'sId=1234')

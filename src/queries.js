@@ -1,8 +1,3 @@
-const addPost = (userId, data) =>
-  ` INSERT INTO stories (isPublished,authorId,title,content,lastModified) 
-    values ( ${0}, '${userId}','${data.title}',
-    '${JSON.stringify(data.content)}', '${data.content.time}');`;
-
 const updatePost = (postId, data) => `
       UPDATE stories SET title = '${data.title}', 
       content = '${JSON.stringify(data.content)}',
@@ -152,7 +147,6 @@ const getCommentedPosts = (userId) =>
   `;
 
 module.exports = {
-  addPost,
   updatePost,
   publishPost,
   getUsersPosts,

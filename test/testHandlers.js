@@ -8,6 +8,7 @@ const { status } = require('../src/statusCodes');
 beforeEach(() => {
   app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
 });
+after(() => app.locals.db.destroy());
 
 afterEach(() => {
   app.locals.sessions = new Sessions({});

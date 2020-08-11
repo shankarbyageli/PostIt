@@ -9,6 +9,6 @@ module.exports = {
   test: {
     client: 'sqlite3',
     connection: { filename: knexTest },
+    useNullAsDefault: true,
   },
-  useNullAsDefault: true,
 };

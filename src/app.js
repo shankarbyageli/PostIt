@@ -5,6 +5,9 @@ const cookieParser = require('cookie-parser');
 const sqlite = require('sqlite3').verbose();
 const Database = require('./database');
 const Sessions = require('./session');
+const { knexEnv } = require('../config');
+const knexConfig = require('../knexfile');
+const knex = require('knex')(knexConfig[knexEnv]);
 const { userRouter } = require('./userRouter');
 const {
   serveHomepage,
@@ -22,7 +25,7 @@ const app = express();
 const db = new sqlite.Database(`database/${process.env.db}`);
 
 app.locals.sessions = new Sessions({});
-app.locals.db = new Database(db);
+app.locals.db = new Database(db, knex);
 
 app.set('view engine', 'pug');
 app.set('views', `${__dirname}/../templates`);

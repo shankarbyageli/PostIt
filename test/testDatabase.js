@@ -4,10 +4,10 @@ const sinon = require('sinon');
 
 describe('addPost', () => {
   it('should give error if database failure in run', (done) => {
-    const db = {
-      run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, 'error'),
-    };
-    const database = new Database(db);
+    const insert = sinon.stub().rejects('error');
+    const newDb = sinon.stub().returns({ insert });
+
+    const database = new Database(null, newDb);
     database
       .addPost({ id: 1, title: 'title', content: { time: '1' } }, 2)
       .then(null, (actual) => {
@@ -17,11 +17,10 @@ describe('addPost', () => {
   });
 
   it('should add the post to database', (done) => {
-    const db = {
-      run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, null),
-    };
+    const insert = sinon.stub().resolves([1]);
+    const newDb = sinon.stub().returns({ insert });
 
-    const database = new Database(db);
+    const database = new Database(null, newDb);
     database
       .addPost({ title: 'title', content: { time: '1' } }, 2)
       .then((actual) => {

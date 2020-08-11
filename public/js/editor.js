@@ -89,7 +89,7 @@ const getEditorOptions = function (data) {
 const autoSaveCallback = function (res) {
   const postId = document.getElementsByClassName('post')[0].id;
   if (+postId === -1) {
-    document.getElementsByClassName('post')[0].id = res.id;
+    document.getElementsByClassName('post')[0].id = JSON.parse(res).id;
   }
   document.getElementById('status').innerText = 'Saved';
 };

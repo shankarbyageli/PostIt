@@ -4,4 +4,5 @@ module.exports = {
   clientSecret: process.env.client_secret,
   knexDevelopment: process.env.knex_development,
   knexTest: process.env.knex_test,
+  knexEnv: process.env.knex_env,
 };

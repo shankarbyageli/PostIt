@@ -1,8 +1,9 @@
 const queries = require('./queries');
 
 class Database {
-  constructor(db) {
+  constructor(db, newDb) {
     this.db = db;
+    this.newDb = newDb;
   }
 
   run(query) {
@@ -40,12 +41,15 @@ class Database {
 
   addPost(data, userId) {
     return new Promise((resolve, reject) => {
-      this.db.run(queries.addPost(userId, data), function (err) {
-        if (err) {
-          reject(err);
-        }
-        resolve(this.lastID); // eslint-disable-line
-      });
+      this.newDb('stories')
+        .insert({
+          authorId: userId,
+          title: data.title,
+          content: JSON.stringify(data.content),
+          lastModified: data.content.time,
+        })
+        .then(([draftId]) => resolve(draftId))
+        .catch(reject);
     });
   }
 
@@ -290,6 +294,10 @@ class Database {
 
   getCommentedPosts(userId) {
     return this.all(queries.getCommentedPosts(userId));
+  }
+
+  destroy() {
+    this.newDb.destroy();
   }
 }
 

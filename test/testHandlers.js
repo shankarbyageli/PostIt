@@ -15,6 +15,28 @@ afterEach(() => {
   app.locals.sessions = new Sessions({});
 });
 
+describe('GET /clap/:id', () => {
+  it('should give true when the user is not already clapped', (done) => {
+    request(app)
+      .post('/user/clap/3')
+      .set('Cookie', 'sId=1234')
+      .expect(/true/)
+      .expect(status.OK, done);
+  });
+
+  it('should give false when the user is already clapped', (done) => {
+    request(app)
+      .post('/user/clap/4')
+      .set('Cookie', 'sId=1234')
+      .expect(/false/)
+      .expect(status.OK, done);
+  });
+
+  it('should give null if user is not signed in', (done) => {
+    request(app).post('/user/clap/4').expect(status.REDIRECT, done);
+  });
+});
+
 describe('GET', () => {
   it('should serve the static html and css files', (done) => {
     request(app)
@@ -337,28 +359,6 @@ describe('GET /delete/:id', () => {
       .get('/user/delete/1')
       .set('Cookie', 'sId=1234')
       .expect(status.REDIRECT, done);
-  });
-});
-
-describe('GET /clap/:id', () => {
-  it('should give true when the user is not already clapped', (done) => {
-    request(app)
-      .post('/user/clap/3')
-      .set('Cookie', 'sId=1234')
-      .expect(/true/)
-      .expect(status.OK, done);
-  });
-
-  it('should give false when the user is already clapped', (done) => {
-    request(app)
-      .post('/user/clap/4')
-      .set('Cookie', 'sId=1234')
-      .expect(/false/)
-      .expect(status.OK, done);
-  });
-
-  it('should give null if user is not signed in', (done) => {
-    request(app).post('/user/clap/4').expect(status.REDIRECT, done);
   });
 });
 

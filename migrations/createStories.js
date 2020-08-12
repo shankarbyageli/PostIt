@@ -1,7 +1,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable('stories', function (table) {
     table.increments('id').primary();
-    table.decimal('isPublished').notNullable().defaultTo(0);
+    table.integer('isPublished').notNullable().defaultTo(0);
     table.integer('authorId');
     table.integer('coverImageId');
     table.foreign('authorId').references('userId').inTable('users');

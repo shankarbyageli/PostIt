@@ -3,7 +3,7 @@ exports.up = function (knex) {
     table.increments('userId').primary();
     table.string('username', 255).notNullable().unique();
     table.string('displayName', 255).notNullable();
-    table.string('avatarUrl', 1000).notNullable();
+    table.string('avatarUrl', 1000);
   });
 };
 

@@ -1,4 +1,5 @@
 const queries = require('./queries');
+const e = require('express');
 
 class Database {
   constructor(db, newDb) {
@@ -358,29 +359,40 @@ class Database {
   }
 
   getFollowersCount(userId) {
-    return this.get(queries.getFollowersCount(userId));
+    return new Promise((resolve, reject) => {
+      this.newDb('followers')
+        .where({ userId })
+        .count('userId', { as: 'count' })
+        .then(([count]) => resolve(count))
+        .catch(reject);
+    });
   }
 
   getFollowingCount(userId) {
-    return this.get(queries.getFollowingCount(userId));
+    return new Promise((resolve, reject) => {
+      this.newDb('followers')
+        .where({ followerId: userId })
+        .count('followerId', { as: 'count' })
+        .then(([count]) => resolve(count))
+        .catch(reject);
+    });
   }
 
   followUser(userId, followerId) {
-    let queryString = queries.followUser(userId, followerId);
-    let status = true;
     return new Promise((resolve, reject) => {
       this.isFollowing(userId, followerId).then((row) => {
         if (row) {
-          queryString = queries.unfollowUser(userId, followerId);
-          status = false;
+          this.newDb('followers')
+            .where({ followerId, userId })
+            .del()
+            .then(() => resolve(false))
+            .catch(reject);
+        } else {
+          this.newDb('followers')
+            .insert({ userId, followerId })
+            .then(() => resolve(true))
+            .catch(reject);
         }
-        this.db.run(queryString, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(status);
-          }
-        });
       });
     });
   }
@@ -395,11 +407,18 @@ class Database {
     });
   }
 
-  async updateProfile(userId, userDetails) {
-    if (userDetails.avatarUrl) {
-      await this.run(queries.updateAvatar(userId, userDetails.avatarUrl));
-    }
-    return this.run(queries.updateDisplayName(userId, userDetails.displayName));
+  updateProfile(userId, userDetails) {
+    return new Promise((resolve, reject) => {
+      const update = { displayName: userDetails.displayName };
+      if (userDetails.avatarUrl) {
+        update.avatarUrl = userDetails.avatarUrl;
+      }
+      this.newDb('users')
+        .update(update)
+        .where({ userId })
+        .then(() => resolve(true))
+        .catch(reject);
+    });
   }
 
   getFollowing(userId) {
@@ -424,7 +443,14 @@ class Database {
   }
 
   getCommentedPosts(userId) {
-    return this.all(queries.getCommentedPosts(userId));
+    return new Promise((resolve, reject) => {
+      this.newDb('comments')
+        .join('stories', 'stories.id', 'comments.commentOn')
+        .join('users', 'users.userId', 'stories.authorId')
+        .where({ commentBy: userId })
+        .then(resolve)
+        .catch(reject);
+    });
   }
 
   destroy() {

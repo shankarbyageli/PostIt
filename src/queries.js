@@ -114,6 +114,7 @@ const updateDisplayName = (userId, displayName) =>
 
 const updateAvatar = (userId, avatarUrl) =>
   `UPDATE users SET avatarUrl = '${avatarUrl}' WHERE userId = ${userId}`;
+
 const getFollowing = (userId) => `
     SELECT * FROM followers
     join users on users.userId=followers.userId 

@@ -550,28 +550,6 @@ describe('clapOnPost', () => {
   );
 });
 
-describe('updateProfile', () => {
-  it('should update the displayName if just name is edited', (done) => {
-    const db = {};
-    const database = new Database(db);
-    database.run = sinon.stub().resolves(true);
-    database.updateProfile(1, {}).then(() => {
-      assert.ok(database.run.calledOnce);
-      done();
-    });
-  });
-
-  it('should update avatarUrl if new image is uploaded', (done) => {
-    const db = {};
-    const database = new Database(db);
-    database.run = sinon.stub().resolves(true);
-    database.updateProfile(1, { avatarUrl: '/user/image' }).then(() => {
-      assert.ok(database.run.calledTwice);
-      done();
-    });
-  });
-});
-
 describe('getPostDetails', () => {
   it('should give error if database failure', (done) => {
     const where = sinon.stub().rejects('error');

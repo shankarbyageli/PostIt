@@ -173,8 +173,12 @@ describe('getUsersPosts', () => {
 
 describe('getUserById', () => {
   it('should give error if database failure', (done) => {
-    const db = { get: sinon.stub().callsArgOnWith(1, null, 'error') };
-    const database = new Database(db);
+    const first = sinon.stub().rejects('error');
+    const where = sinon.stub().returns({ first });
+    const select = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getUserById(2).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -182,10 +186,12 @@ describe('getUserById', () => {
   });
 
   it('should get the user details of given id', (done) => {
-    const db = {
-      get: sinon.stub().callsArgOnWith(1, null, null, { username: 'ramu' }),
-    };
-    const database = new Database(db);
+    const first = sinon.stub().resolves({ username: 'ramu' });
+    const where = sinon.stub().returns({ first });
+    const select = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getUserById(2).then((actual) => {
       assert.deepStrictEqual(actual, { username: 'ramu' });
       done();
@@ -195,8 +201,10 @@ describe('getUserById', () => {
 
 describe('addUser', () => {
   it('should give error if database failure', (done) => {
-    const db = { run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, 'error') };
-    const database = new Database(db);
+    const insert = sinon.stub().rejects('error');
+    const newDb = sinon.stub().returns({ insert });
+
+    const database = new Database(null, newDb);
     database
       .addUser({ login: 'kaka', avatarUrl: 'https://img.com' })
       .then(null, (actual) => {
@@ -206,8 +214,10 @@ describe('addUser', () => {
   });
 
   it('should add the given user details to users table and return true', (done) => {
-    const db = { run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, null) };
-    const database = new Database(db);
+    const insert = sinon.stub().resolves(true);
+    const newDb = sinon.stub().returns({ insert });
+
+    const database = new Database(null, newDb);
     database
       .addUser({ login: 'kaka', avatarUrl: 'https://img.com' })
       .then((actual) => {

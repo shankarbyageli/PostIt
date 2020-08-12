@@ -102,7 +102,7 @@ class Database {
         .join('users', { 'stories.authorId': 'users.userId' })
         .where({ isPublished: postType, id })
         .first()
-        .then((data) => resolve(data))
+        .then(resolve)
         .catch(reject);
     });
   }
@@ -131,11 +131,27 @@ class Database {
   }
 
   getUserById(userId) {
-    return this.get(queries.selectUser(userId));
+    return new Promise((resolve, reject) => {
+      this.newDb('users')
+        .select('*')
+        .where({ userId })
+        .first()
+        .then(resolve)
+        .catch(reject);
+    });
   }
 
   addUser(userDetails) {
-    return this.run(queries.addUser(userDetails));
+    return new Promise((resolve, reject) => {
+      this.newDb('users')
+        .insert({
+          username: userDetails.login,
+          avatarUrl: userDetails.avatar_url,
+          displayName: userDetails.login,
+        })
+        .then(() => resolve(true))
+        .catch(reject);
+    });
   }
 
   getUser(username) {

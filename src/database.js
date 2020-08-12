@@ -68,7 +68,7 @@ class Database {
   }
 
   async publishPost(postId, tags, imagePath) {
-    const [coverImageId] = await this.newDb('images').insert(imagePath);
+    const [coverImageId] = await this.newDb('images').insert({ imagePath });
     if (tags.length) {
       await this.addTags(tags, postId);
     }
@@ -81,8 +81,22 @@ class Database {
     });
   }
 
+  // getUsersPosts(userId, postType) {
+  //   return this.all(queries.getUsersPosts(userId, postType));
+  // }
+
   getUsersPosts(userId, postType) {
-    return this.all(queries.getUsersPosts(userId, postType));
+    return new Promise((resolve, reject) => {
+      this.newDb('stories')
+        .select('*')
+        .join('users', { 'stories.authorId': 'users.userId' })
+        .where({ isPublished: postType, authorId: userId })
+        .orderBy('lastModified', 'desc')
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(reject);
+    });
   }
 
   getPost(id, postType) {

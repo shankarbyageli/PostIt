@@ -129,8 +129,17 @@ describe('getPost', () => {
 
 describe('getUsersPosts', () => {
   it('should give error if database failure', (done) => {
-    const db = { all: sinon.stub().callsArgOnWith(1, null, 'error') };
-    const database = new Database(db);
+    const orderBy = sinon.stub().rejects('error');
+    const where = sinon.stub().returns({ orderBy });
+    const join = sinon.stub().returns({ where });
+    const select = sinon.stub().returns({ join });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
+    database.getUsersPosts(1, 1).then((actual) => {
+      assert.deepStrictEqual(actual, [{}, {}]);
+      done();
+    }, null);
     database.getUsersPosts(1, 1).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -138,8 +147,13 @@ describe('getUsersPosts', () => {
   });
 
   it('should get all the posts of given type from database', (done) => {
-    const db = { all: sinon.stub().callsArgOnWith(1, null, null, [{}, {}]) };
-    const database = new Database(db);
+    const orderBy = sinon.stub().resolves([{}, {}]);
+    const where = sinon.stub().returns({ orderBy });
+    const join = sinon.stub().returns({ where });
+    const select = sinon.stub().returns({ join });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getUsersPosts(1, 1).then((actual) => {
       assert.deepStrictEqual(actual, [{}, {}]);
       done();

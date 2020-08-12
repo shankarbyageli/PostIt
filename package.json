@@ -8,8 +8,7 @@
   },
   "scripts": {
     "start": "export db=postitDB.db; export knex_development=./database/postitDB.db; export knex_env=development; node server.js",
-    "test": " rm -f database/testDB.db; export knex_test=./database/testDb.db;touch $knex_test; npm run setupKnex;export knex_env=test; export db=testDB.db;  ./shell_scripts/setTestDb.sh database/testDB.db; nyc mocha;",
-    "setupKnex": " knex migrate:latest --env test;",
+    "test": " export db=testDB.db; rm -f database/testDB.db; export knex_env=test;export knex_test=./database/testDb.db; knex migrate:latest --env test; touch $knex_test; ./shell_scripts/setTestDb.sh database/testDB.db; nyc mocha;",
     "lint": "eslint . --ext .js",
     "preCommit": "npm test && npm run lint"
   },

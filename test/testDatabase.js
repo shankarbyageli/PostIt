@@ -229,8 +229,12 @@ describe('addUser', () => {
 
 describe('getUser', () => {
   it('should give error if database failure', (done) => {
-    const db = { get: sinon.stub().callsArgOnWith(1, null, 'error') };
-    const database = new Database(db);
+    const first = sinon.stub().rejects('error');
+    const where = sinon.stub().returns({ first });
+    const select = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getUser('mama').then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -238,10 +242,12 @@ describe('getUser', () => {
   });
 
   it('should get user details of given id', (done) => {
-    const db = {
-      get: sinon.stub().callsArgOnWith(1, null, null, { userId: 7 }),
-    };
-    const database = new Database(db);
+    const first = sinon.stub().resolves({ userId: 7 });
+    const where = sinon.stub().returns({ first });
+    const select = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getUser('mama').then((actual) => {
       assert.deepStrictEqual(actual, { userId: 7 });
       done();
@@ -249,10 +255,14 @@ describe('getUser', () => {
   });
 
   it('should return false if user id does not exist', (done) => {
-    const db = { get: sinon.stub().callsArgOnWith(1, null, null, null) };
-    const database = new Database(db);
+    const first = sinon.stub().resolves();
+    const where = sinon.stub().returns({ first });
+    const select = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getUser('mama').then((actual) => {
-      assert.equal(actual, false);
+      assert.ok(!actual);
       done();
     }, null);
   });
@@ -284,8 +294,13 @@ describe('getLatestPosts', () => {
 
 describe('getComments', () => {
   it('should get the post from database', (done) => {
-    const db = { all: sinon.stub().callsArgOnWith(1, null, null, true) };
-    const database = new Database(db);
+    const orderBy = sinon.stub().resolves([1]);
+    const where = sinon.stub().returns({ orderBy });
+    const join = sinon.stub().returns({ where });
+    const select = sinon.stub().returns({ join });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getComments(1).then((actual) => {
       assert.ok(actual);
       done();
@@ -293,8 +308,13 @@ describe('getComments', () => {
   });
 
   it('should give error for database failure ', (done) => {
-    const db = { all: sinon.stub().callsArgOnWith(1, null, 'error') };
-    const database = new Database(db);
+    const orderBy = sinon.stub().rejects('error');
+    const where = sinon.stub().returns({ orderBy });
+    const join = sinon.stub().returns({ where });
+    const select = sinon.stub().returns({ join });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getComments('ab').then(null, (actual) => {
       assert.equal(actual, 'error');
       done();

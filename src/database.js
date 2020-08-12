@@ -156,21 +156,25 @@ class Database {
 
   getUser(username) {
     return new Promise((resolve, reject) => {
-      this.db.get(queries.getUser(username), (err, row) => {
-        if (err) {
-          reject(err);
-        }
-        if (row) {
-          resolve(row);
-        } else {
-          resolve(false);
-        }
-      });
+      this.newDb('users')
+        .select('*')
+        .where({ username })
+        .first()
+        .then(resolve)
+        .catch(reject);
     });
   }
 
-  getComments(blogId) {
-    return this.all(queries.getComments(blogId));
+  getComments(storyId) {
+    return new Promise((resolve, reject) => {
+      this.newDb('comments')
+        .select('*')
+        .join('users', { 'comments.commentBy': 'users.userId' })
+        .where({ commentOn: storyId })
+        .orderBy('id', 'desc')
+        .then((data) => resolve(data))
+        .catch(reject);
+    });
   }
 
   addComment(comment, blogId, userId, date) {

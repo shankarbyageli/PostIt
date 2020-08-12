@@ -109,8 +109,13 @@ describe('publishPost', () => {
 
 describe('getPost', () => {
   it('should give error if database failure', (done) => {
-    const db = { get: sinon.stub().callsArgOnWith(1, null, 'error') };
-    const database = new Database(db);
+    const first = sinon.stub().rejects('error');
+    const where = sinon.stub().returns({ first });
+    const join = sinon.stub().returns({ where });
+    const select = sinon.stub().returns({ join });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getPost(2, 1).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -118,8 +123,13 @@ describe('getPost', () => {
   });
 
   it('should get the post from database', (done) => {
-    const db = { get: sinon.stub().callsArgOnWith(1, null, null, true) };
-    const database = new Database(db);
+    const first = sinon.stub().resolves(true);
+    const where = sinon.stub().returns({ first });
+    const join = sinon.stub().returns({ where });
+    const select = sinon.stub().returns({ join });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getPost(2, 1).then((actual) => {
       assert.ok(actual);
       done();
@@ -470,12 +480,11 @@ describe('updateProfile', () => {
 
 describe('getPostDetails', () => {
   it('should give error if database failure', (done) => {
-    const db = {
-      serialize: sinon.stub().callsArgOnWith(0, null),
-      all: sinon.stub().callsArgOnWith(1, null, null),
-      get: sinon.stub().callsArgOnWith(1, null, 'error'),
-    };
-    const database = new Database(db);
+    const where = sinon.stub().rejects('error');
+    const select = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getPostDetails(1, 1).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -483,12 +492,11 @@ describe('getPostDetails', () => {
   });
 
   it('should give error if database failure', (done) => {
-    const db = {
-      serialize: sinon.stub().callsArgOnWith(0, null),
-      all: sinon.stub().callsArgOnWith(1, null, 'error'),
-      get: sinon.stub().callsArgOnWith(1, null, null, { imagePath: 'path' }),
-    };
-    const database = new Database(db);
+    const where = sinon.stub().rejects('error');
+    const select = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ select });
+    const database = new Database(null, newDb);
+
     database.getPostDetails(1, 1).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -496,14 +504,12 @@ describe('getPostDetails', () => {
   });
 
   it('should add the tags to details if tags are there', (done) => {
-    const db = {
-      serialize: sinon.stub().callsArgOnWith(0, null),
-      all: sinon
-        .stub()
-        .callsArgOnWith(1, null, null, [{ tag: 't1' }, { tag: 't2' }]),
-      get: sinon.stub().callsArgOnWith(1, null, null, { imagePath: 'path' }),
-    };
-    const database = new Database(db);
+    const where = sinon
+      .stub()
+      .resolves([{ tag: 't1', imagePath: 'path' }, { tag: 't2' }]);
+    const select = sinon.stub().returns({ where });
+    const newDb = sinon.stub().returns({ select });
+    const database = new Database(null, newDb);
     database.getPostDetails(1, 1).then((actual) => {
       assert.deepStrictEqual(actual, { imagePath: 'path', tags: ['t1', 't2'] });
       done();

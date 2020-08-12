@@ -81,10 +81,6 @@ class Database {
     });
   }
 
-  // getUsersPosts(userId, postType) {
-  //   return this.all(queries.getUsersPosts(userId, postType));
-  // }
-
   getUsersPosts(userId, postType) {
     return new Promise((resolve, reject) => {
       this.newDb('stories')
@@ -100,30 +96,37 @@ class Database {
   }
 
   getPost(id, postType) {
-    return this.get(queries.getPost(id, postType));
+    return new Promise((resolve, reject) => {
+      this.newDb('stories')
+        .select('*')
+        .join('users', { 'stories.authorId': 'users.userId' })
+        .where({ isPublished: postType, id })
+        .first()
+        .then((data) => resolve(data))
+        .catch(reject);
+    });
   }
 
-  getPostDetails(blogId, imageId) {
+  async getPostDetails(storyId, imageId) {
     const details = { tags: [] };
-    return new Promise((resolve, reject) => {
-      this.db.serialize(() => {
-        this.db.get(queries.imageQuery(imageId), (err, row) => {
-          if (err) {
-            reject(err);
-          }
-          details.imagePath = row.imagePath;
-        });
+    await this.newDb('images')
+      .select('*')
+      .where({ imageId })
+      .then(([data]) => {
+        details.imagePath = data.imagePath;
+      });
 
-        this.db.all(queries.tagsQuery(blogId), (err, rows) => {
-          if (err) {
-            reject(err);
-          }
+    return new Promise((resolve, reject) => {
+      this.newDb('tags')
+        .select('*')
+        .where({ storyId })
+        .then((rows) => {
           rows.forEach((row) => {
             details.tags.push(row.tag);
           });
           resolve(details);
-        });
-      });
+        })
+        .catch(reject);
     });
   }
 

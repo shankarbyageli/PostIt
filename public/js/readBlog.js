@@ -19,7 +19,8 @@ const render = function (data) {
   });
 };
 
-const renderClap = function ({ clapped, clapsCount }) {
+const renderClap = function (clappedDetails) {
+  const { clapped, clapsCount } = JSON.parse(clappedDetails);
   document.getElementById('clapCount').innerText = `${clapsCount} Claps`;
   if (clapped) {
     document.getElementById('clap').src = '/images/clapBlack.svg';

@@ -346,7 +346,15 @@ class Database {
   }
 
   getClapsCount(postId) {
-    return this.get(queries.getClapsCount(postId));
+    return new Promise((resolve, reject) => {
+      this.newDb('claps')
+        .where({ storyId: postId })
+        .count('storyId', { as: 'count' })
+        .then(([count]) => {
+          resolve(count);
+        })
+        .catch(reject);
+    });
   }
 
   getFollowersCount(userId) {
@@ -378,7 +386,13 @@ class Database {
   }
 
   getFollowers(userId) {
-    return this.all(queries.getFollowers(userId));
+    return new Promise((resolve, reject) => {
+      this.newDb('followers')
+        .join('users', 'users.userId', 'followers.followerId')
+        .where({ 'followers.userId': userId })
+        .then(resolve)
+        .catch(reject);
+    });
   }
 
   async updateProfile(userId, userDetails) {
@@ -389,11 +403,24 @@ class Database {
   }
 
   getFollowing(userId) {
-    return this.all(queries.getFollowing(userId));
+    return new Promise((resolve, reject) => {
+      this.newDb('followers')
+        .join('users', 'users.userId', 'followers.followerId')
+        .where({ 'followers.followerId': userId })
+        .then(resolve)
+        .catch(reject);
+    });
   }
 
   getClappedPosts(userId) {
-    return this.all(queries.getClappedPosts(userId));
+    return new Promise((resolve, reject) => {
+      this.newDb('claps')
+        .join('stories', 'stories.id', 'claps.storyId')
+        .join('users', 'users.userId', 'stories.authorId')
+        .where({ clappedBy: userId })
+        .then(resolve)
+        .catch(reject);
+    });
   }
 
   getCommentedPosts(userId) {

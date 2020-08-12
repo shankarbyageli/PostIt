@@ -2,7 +2,8 @@ const follow = function (userId) {
   sendReq(
     'GET',
     `/user/follow/${userId}`,
-    ({ followed, followersCount }) => {
+    (followDetails) => {
+      const { followed, followersCount } = JSON.parse(followDetails);
       document.getElementById(
         'followers'
       ).innerText = `${followersCount} followers`;

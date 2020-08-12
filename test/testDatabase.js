@@ -413,8 +413,11 @@ describe('addTags', () => {
 
 describe('isClapped', () => {
   it('should give error if database failure', (done) => {
-    const db = { get: sinon.stub().callsArgOnWith(1, null, 'error') };
-    const database = new Database(db);
+    const where = sinon.stub().rejects('error');
+    const newDb = sinon.stub().returns({ where });
+
+    const database = new Database(null, newDb);
+
     database.isClapped(1, 2).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -424,10 +427,71 @@ describe('isClapped', () => {
   it(
     'should give false if the user is already clapped',
     (done) => {
-      const db = { get: sinon.stub().callsArgOnWith(1, null, null, false) };
-      const database = new Database(db);
+      const where = sinon.stub().resolves([]);
+      const newDb = sinon.stub().returns({ where });
+
+      const database = new Database(null, newDb);
       database.isClapped(3, 1).then((actual) => {
         assert.equal(actual, false);
+        done();
+      });
+    },
+    null
+  );
+
+  it(
+    'should give true if the user is not clapped',
+    (done) => {
+      const where = sinon.stub().resolves([1]);
+      const newDb = sinon.stub().returns({ where });
+
+      const database = new Database(null, newDb);
+      database.isClapped(3, 1).then((actual) => {
+        assert.equal(actual, true);
+        done();
+      });
+    },
+    null
+  );
+});
+
+describe('isFollowing', () => {
+  it('should give error if database failure', (done) => {
+    const where = sinon.stub().rejects('error');
+    const newDb = sinon.stub().returns({ where });
+
+    const database = new Database(null, newDb);
+
+    database.isFollowing(1, 2).then(null, (actual) => {
+      assert.equal(actual, 'error');
+      done();
+    });
+  });
+
+  it(
+    'should give false if the user is already following',
+    (done) => {
+      const where = sinon.stub().resolves([]);
+      const newDb = sinon.stub().returns({ where });
+
+      const database = new Database(null, newDb);
+      database.isFollowing(3, 1).then((actual) => {
+        assert.equal(actual, false);
+        done();
+      });
+    },
+    null
+  );
+
+  it(
+    'should give true if the user is not following',
+    (done) => {
+      const where = sinon.stub().resolves([1]);
+      const newDb = sinon.stub().returns({ where });
+
+      const database = new Database(null, newDb);
+      database.isFollowing(3, 1).then((actual) => {
+        assert.equal(actual, true);
         done();
       });
     },
@@ -437,8 +501,12 @@ describe('isClapped', () => {
 
 describe('clapOnPost', () => {
   it('should give error if database failure', (done) => {
-    const db = { run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, 'error') };
-    const database = new Database(db);
+    const del = sinon.stub().rejects('error');
+    const where = sinon.stub().returns({ del });
+    const newDb = sinon.stub().returns({ where });
+
+    const database = new Database(null, newDb);
+
     database.isClapped = sinon.fake.resolves(true);
     database.clapOnPost(1, 2).then(null, (actual) => {
       assert.equal(actual, 'error');
@@ -449,8 +517,12 @@ describe('clapOnPost', () => {
   it(
     'should be able to unclap on post if the user is already clapped',
     (done) => {
-      const db = { run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, null) };
-      const database = new Database(db);
+      const del = sinon.stub().resolves();
+      const where = sinon.stub().returns({ del });
+      const newDb = sinon.stub().returns({ where });
+
+      const database = new Database(null, newDb);
+
       database.isClapped = sinon.fake.resolves(true);
       database.clapOnPost(3, 1).then((actual) => {
         assert.equal(actual, false);
@@ -463,8 +535,11 @@ describe('clapOnPost', () => {
   it(
     'should be able to clap on post if the user is not already clapped',
     (done) => {
-      const db = { run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, null) };
-      const database = new Database(db);
+      const insert = sinon.stub().resolves([1]);
+      const newDb = sinon.stub().returns({ insert });
+
+      const database = new Database(null, newDb);
+
       database.isClapped = sinon.fake.resolves(false);
       database.clapOnPost(3, 1).then((actual) => {
         assert.equal(actual, true);

@@ -300,48 +300,47 @@ class Database {
 
   isClapped(postId, userId) {
     return new Promise((resolve, reject) => {
-      this.db.get(queries.selectClaps(postId, userId), (err, row) => {
-        if (err) {
-          reject(err);
-        }
-        if (row) {
-          resolve(true);
-        }
-        resolve(false);
-      });
+      this.newDb('claps')
+        .where({ storyId: postId, clappedBy: userId })
+        .then(([row]) => {
+          if (row) {
+            resolve(true);
+          }
+          resolve(false);
+        })
+        .catch(reject);
     });
   }
 
   isFollowing(userId, followerId) {
     return new Promise((resolve, reject) => {
-      this.db.get(queries.selectFollowers(userId, followerId), (err, row) => {
-        if (err) {
-          reject(err);
-        }
-        if (row) {
-          resolve(true);
-        }
-        resolve(false);
-      });
+      this.newDb('followers')
+        .where({ followerId, userId })
+        .then(([row]) => {
+          if (row) {
+            resolve(true);
+          }
+          resolve(false);
+        })
+        .catch(reject);
     });
   }
 
   clapOnPost(postId, userId) {
-    let queryString = queries.insertClap(postId, userId);
-    let status = true;
     return new Promise((resolve, reject) => {
       this.isClapped(postId, userId).then((row) => {
         if (row) {
-          queryString = queries.deleteClap(postId, userId);
-          status = false;
+          this.newDb('claps')
+            .where({ storyId: postId, clappedBy: userId })
+            .del()
+            .then(() => resolve(false))
+            .catch(reject);
+        } else {
+          this.newDb('claps')
+            .insert({ storyId: postId, clappedBy: userId })
+            .then(() => resolve(true))
+            .catch(reject);
         }
-        this.db.run(queryString, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(status);
-          }
-        });
       });
     });
   }

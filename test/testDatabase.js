@@ -369,12 +369,15 @@ describe('getSearchedPosts', () => {
   });
 
   it('should get the user posts', (done) => {
-    const db = {
-      all: sinon
-        .stub()
-        .callsArgOnWith(1, null, null, [{ username: 'ramu', id: 7 }]),
-    };
-    const database = new Database(db);
+    const orderBy = sinon.stub().resolves([{ username: 'ramu', id: 7 }]);
+    const where = sinon.stub();
+    const join = sinon.stub();
+    where.returns({ orderBy, where });
+    join.returns({ where, join });
+    const select = sinon.stub().returns({ join });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getSearchedPosts('author', 'ramu').then((actual) => {
       assert.deepStrictEqual(actual, [{ username: 'ramu', id: 7 }]);
       done();

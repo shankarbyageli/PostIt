@@ -207,12 +207,59 @@ class Database {
 
   getSearchedPosts(filteringOption, searchedText) {
     const queryString = {
-      tag: queries.getPostsByTag(searchedText),
-      title: queries.getPostsByTitle(searchedText),
-      author: queries.getPostsByAuthor(searchedText),
+      tag: this.getPostsByTag.bind(this),
+      title: this.getPostsByTitle.bind(this),
+      author: this.getPostsByAuthor.bind(this),
     };
+    return new Promise((resolve, reject) => {
+      if (!queryString[filteringOption]) {
+        reject('error');
+      }
+      queryString[filteringOption](searchedText).then(resolve).catch(reject);
+    });
+  }
 
-    return this.all(queryString[filteringOption]);
+  getPostsByTag(tag) {
+    return new Promise((resolve, reject) => {
+      this.newDb('tags')
+        .select('*')
+        .join('stories', { 'tags.storyId': 'stories.id' })
+        .join('users', { 'stories.authorId': 'users.userId' })
+        .join('images', { 'stories.coverImageId': 'images.imageId' })
+        .where({ isPublished: 1 })
+        .where('tag', 'like', `%${tag}%`)
+        .orderBy('lastModified', 'desc')
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
+  getPostsByTitle(title) {
+    return new Promise((resolve, reject) => {
+      this.newDb('stories')
+        .select('*')
+        .join('users', { 'stories.authorId': 'users.userId' })
+        .join('images', { 'stories.coverImageId': 'images.imageId' })
+        .where({ isPublished: 1 })
+        .where('title', 'like', `%${title}%`)
+        .orderBy('id', 'desc')
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
+  getPostsByAuthor(author) {
+    return new Promise((resolve, reject) => {
+      this.newDb('stories')
+        .select('*')
+        .join('users', { 'stories.authorId': 'users.userId' })
+        .join('images', { 'stories.coverImageId': 'images.imageId' })
+        .where({ isPublished: 1 })
+        .where('username', 'like', `%${author}%`)
+        .orderBy('id', 'desc')
+        .then(resolve)
+        .catch(reject);
+    });
   }
 
   addImage(fileName) {

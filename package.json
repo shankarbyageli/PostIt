@@ -7,10 +7,12 @@
     "test": "test"
   },
   "scripts": {
+    "test": "(export knex_test='./database/testDb.db'; rm -f $knex_test;export knex_env='test';export db='testDb.db';npm run setUpKnex;./shell_scripts/setTestDb.sh $knex_test ;nyc mocha)",
+    "setUpKnex": "touch $knex_test; NODE_ENV=test npm run knex migrate:latest;",
     "start": "export db=postitDB.db; export knex_development=./database/postitDB.db; export knex_env=development; node server.js",
-    "test": " export db=testDB.db; rm -f database/testDB.db; export knex_env=test;export knex_test=./database/testDb.db; knex migrate:latest --env test; touch $knex_test; ./shell_scripts/setTestDb.sh database/testDB.db; nyc mocha;",
     "lint": "eslint . --ext .js",
-    "preCommit": "npm test && npm run lint"
+    "preCommit": "npm test && npm run lint",
+    "knex": "knex"
   },
   "repository": {
     "type": "git",

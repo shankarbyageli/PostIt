@@ -1,5 +1,4 @@
 const queries = require('./queries');
-const e = require('express');
 
 class Database {
   constructor(db, newDb) {

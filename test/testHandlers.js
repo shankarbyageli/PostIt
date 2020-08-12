@@ -8,6 +8,7 @@ const { status } = require('../src/statusCodes');
 beforeEach(() => {
   app.locals.sessions = new Sessions({ '1234': { userId: 1 } });
 });
+
 after(() => app.locals.db.destroy());
 
 afterEach(() => {
@@ -446,5 +447,16 @@ describe('GET /profile/:id/comments', () => {
       .get('/user/profile/1/comments')
       .set('Cookie', 'sId=1234')
       .expect(/Comment on this/, done);
+  });
+});
+
+describe('POST /user/updateProfile', () => {
+  it('should update the displayName of the user', (done) => {
+    request(app)
+      .post('/user/updateProfile')
+      .set('Cookie', 'sId=1234')
+      .send(JSON.stringify({ displayName: 'sriRam' }))
+      .expect(status.REDIRECT)
+      .expect('Location', '/user/profile/1', done);
   });
 });

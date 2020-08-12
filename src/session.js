@@ -38,11 +38,7 @@ class Sessions {
   }
 
   removeSession(sessionId) {
-    if (this.sessions[sessionId]) {
-      delete this.sessions[sessionId];
-      return true;
-    }
-    return false;
+    return delete this.sessions[sessionId];
   }
 
   updateSession(sessionId, details) {

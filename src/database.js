@@ -178,11 +178,31 @@ class Database {
   }
 
   addComment(comment, blogId, userId, date) {
-    return this.run(queries.addComment(blogId, userId, date, comment));
+    return new Promise((resolve, reject) => {
+      this.newDb('comments')
+        .insert({
+          commentOn: blogId,
+          commentBy: userId,
+          commentedAt: date,
+          comment,
+        })
+        .then(() => resolve(true))
+        .catch(reject);
+    });
   }
 
   getLatestPosts(count) {
-    return this.all(queries.getLatestPosts(count));
+    return new Promise((resolve, reject) => {
+      this.newDb('stories')
+        .select('*')
+        .join('users', { 'stories.authorId': 'users.userId' })
+        .join('images', { 'stories.coverImageId': 'images.imageId' })
+        .where({ isPublished: 1 })
+        .orderBy('lastModified', 'desc')
+        .limit(count)
+        .then(resolve)
+        .catch(reject);
+    });
   }
 
   getSearchedPosts(filteringOption, searchedText) {

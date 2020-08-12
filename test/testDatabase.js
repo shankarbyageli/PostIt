@@ -270,8 +270,15 @@ describe('getUser', () => {
 
 describe('getLatestPosts', () => {
   it('should give error if database failure', (done) => {
-    const db = { all: sinon.stub().callsArgOnWith(1, null, 'error') };
-    const database = new Database(db);
+    const limit = sinon.stub().rejects('error');
+    const orderBy = sinon.stub().returns({ limit });
+    const where = sinon.stub().returns({ orderBy });
+    const join = sinon.stub();
+    join.returns({ where, join });
+    const select = sinon.stub().returns({ join });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getLatestPosts(5).then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -279,12 +286,15 @@ describe('getLatestPosts', () => {
   });
 
   it('should get the latest posts', (done) => {
-    const db = {
-      all: sinon
-        .stub()
-        .callsArgOnWith(1, null, null, [{ username: 'ramu', id: 7 }]),
-    };
-    const database = new Database(db);
+    const limit = sinon.stub().resolves([{ username: 'ramu', id: 7 }]);
+    const orderBy = sinon.stub().returns({ limit });
+    const where = sinon.stub().returns({ orderBy });
+    const join = sinon.stub();
+    join.returns({ where, join });
+    const select = sinon.stub().returns({ join });
+    const newDb = sinon.stub().returns({ select });
+
+    const database = new Database(null, newDb);
     database.getLatestPosts(5).then((actual) => {
       assert.deepStrictEqual(actual, [{ username: 'ramu', id: 7 }]);
       done();
@@ -324,14 +334,27 @@ describe('getComments', () => {
 
 describe('addComment', () => {
   it('should give error if database failure', (done) => {
-    const db = { run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, 'error') };
-    const database = new Database(db);
+    const insert = sinon.stub().rejects('error');
+    const newDb = sinon.stub().returns({ insert });
+
+    const database = new Database(null, newDb);
     database
-      .addComment({ comment: 'Hi user !', blogId: 'sdd' })
+      .addComment('Hi user !', 'sdd', '1000', '2019')
       .then(null, (actual) => {
         assert.equal(actual, 'error');
         done();
       });
+  });
+
+  it('should add the comment', (done) => {
+    const insert = sinon.stub().resolves(true);
+    const newDb = sinon.stub().returns({ insert });
+
+    const database = new Database(null, newDb);
+    database.addComment('Hi user !', '2', '7', '2019').then((actual) => {
+      assert.ok(actual);
+      done();
+    }, null);
   });
 });
 

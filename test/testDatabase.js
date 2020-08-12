@@ -369,25 +369,9 @@ describe('getSearchedPosts', () => {
 
 describe('addImage', () => {
   it('should give error if database failure', (done) => {
-    const db = {
-      get: sinon.stub().callsArgOnWith(1, null, 'error'),
-      run: sinon.stub().callsArgOnWith(1, null, null, true),
-      serialize: sinon.stub().callsArgOnWith(0, null),
-    };
-    const database = new Database(db);
-    database.addImage('myFile').then(null, (actual) => {
-      assert.equal(actual, 'error');
-      done();
-    });
-  });
-
-  it('should give error if database failure', (done) => {
-    const db = {
-      get: sinon.stub().callsArgOnWith(1, null, null),
-      run: sinon.stub().callsArgOnWith(1, null, 'error'),
-      serialize: sinon.stub().callsArgOnWith(0, null),
-    };
-    const database = new Database(db);
+    const insert = sinon.stub().rejects('error');
+    const newDb = sinon.stub().returns({ insert });
+    const database = new Database(null, newDb);
     database.addImage('myFile').then(null, (actual) => {
       assert.equal(actual, 'error');
       done();
@@ -395,12 +379,9 @@ describe('addImage', () => {
   });
 
   it('should add image to the database', (done) => {
-    const db = {
-      serialize: sinon.stub().callsArgOnWith(0, null),
-      get: sinon.stub().callsArgOnWith(1, null, null, 1),
-      run: sinon.stub().callsArgOnWith(1, { lastID: 1 }, null),
-    };
-    const database = new Database(db);
+    const insert = sinon.stub().resolves([1]);
+    const newDb = sinon.stub().returns({ insert });
+    const database = new Database(null, newDb);
     database.addImage('myFile').then((actual) => {
       assert.equal(actual, 1);
       done();

@@ -264,20 +264,10 @@ class Database {
 
   addImage(fileName) {
     return new Promise((resolve, reject) => {
-      this.db.serialize(() => {
-        this.db.run(queries.insertImage(fileName), (err) => {
-          if (err) {
-            reject(err);
-          }
-        });
-        this.db.get(queries.selectImages(), (err, row) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(row);
-          }
-        });
-      });
+      this.newDb('images')
+        .insert({ imagePath: fileName })
+        .then(([imageId]) => resolve(imageId))
+        .catch(reject);
     });
   }
 

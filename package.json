@@ -27,7 +27,7 @@
   "homepage": "https://github.com/shankarbyageli/PostIt#readme",
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.4.0",
     "nyc": "^15.1.0",
     "supertest": "^4.0.2"
   },
